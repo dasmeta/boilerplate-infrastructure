@@ -1,11 +1,11 @@
 source: dasmeta/rds/aws
 version: 1.0.0
 variables:
-  db_name: "dbdev"
+  db_name: "boilerplate-postgres"
   engine: "postgres"
   engine_version: "14"
-  identifier: "dbdev"
-  db_username: "userTerraform"
+  identifier: "boilerplate-postgres"
+  db_username: "boilerplate"
   db_password: "passwordTerraform12!"
   parameter_group_name: "rds-pg-12"
   vpc_id: ${1-environments/dev-1/vpc.id}
