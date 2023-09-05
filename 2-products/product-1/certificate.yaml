@@ -1,8 +1,10 @@
-source: dasmeta/dns/aws
-version: 1.0.2
+source: dasmeta/modules/aws//modules/ssl-certificate
+version: 2.6.2
 variables:
-  create_zone: true
+  domain: "boilerplate.yourdomain.com"
   zone: "boilerplate.yourdomain.com"
+  alternative_domains: ["*.boilerplate.yourdomain.com"]
+  alternative_zones: ["boilerplate.yourdomain.com"]
 providers:
   - name: aws
     version: ~> 4.0

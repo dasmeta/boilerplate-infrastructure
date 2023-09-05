@@ -1,0 +1,27 @@
+source: dasmeta/rds/aws
+version: 1.0.0
+variables:
+  db_name: "boilerplate"
+  engine: "mysql"
+  engine_version: "5.7"
+  identifier: "boilerplate"
+  db_username: "boilerplate"
+  db_password: "passwordTerraform12!"
+  parameter_group_name: "default.mysql5.7"
+  vpc_id: ${1-environments/dev-1/vpc.id}
+  backup_retention_period: 30
+  subnet_ids: ${1-environments/dev-1/vpc.private_subnets}
+  apply_immediately: true
+  enabled_cloudwatch_logs_exports: ["general"]
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: boilerplate
+          ManageLevel: product
+linked_workspaces:
+    - 1-environments/dev-1/vpc

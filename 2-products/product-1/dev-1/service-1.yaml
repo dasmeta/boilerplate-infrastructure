@@ -1,0 +1,13 @@
+source: "terraform-module/release/helm"
+version: "2.6.0"
+variables:
+  namespace: "dev"
+  repository:  "https://charts.truecharts.org/"
+  app:
+    name: "truecharts/strapi"
+    version: "2.0.15"
+    chart: "strapi"
+    force_update: true
+    wait: false
+  set: []
+  set_sensitive: []
