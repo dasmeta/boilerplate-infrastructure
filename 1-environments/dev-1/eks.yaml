@@ -33,7 +33,6 @@ providers:
     version: ~> 4.0
     module_nested_provider: true
     variables:
-      region: eu-central-1
       default_tags:
         tags:
           Account: boilerplate
