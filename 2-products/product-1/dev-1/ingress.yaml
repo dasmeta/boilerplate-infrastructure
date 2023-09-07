@@ -1,5 +1,5 @@
 source: dasmeta/modules/aws//modules/ingress
-version: 1.1.4
+version: 2.6.2
 variables:
   name: "boilerplate"
   hostname: "boilerplate.yourdomain.com"
@@ -27,7 +27,6 @@ providers:
     variables:
       cluster_ca_certificate: ${1-environments/dev-1/eks.cluster_certificate}
       host: ${1-environments/dev-1/eks.cluster_host}
-      token: ${1-environments/dev-1/eks.cluster_token}
     blocks:
       exec:
         api_version: "client.authentication.k8s.io/v1beta1"
@@ -37,7 +36,7 @@ providers:
           - "eu-central-1"
           - "get-token"
           - "--cluster-name"
-          - ${1-environments/dev-1/eks.cluster_name}
+          - "eks-dev"
         command: "aws"
 output:
   sensitive: true
