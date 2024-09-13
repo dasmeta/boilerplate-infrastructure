@@ -45,7 +45,7 @@ providers:
     version: ~> 4.0
     module_nested_provider: true
     variables:
-      region: us-east-1
+      region: eu-central-1
       access_key: <AWS-ACCESS-KEY>
       secret_key: <AWS-SECRET-KEY>
       default_tags:
