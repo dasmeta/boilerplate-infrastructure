@@ -1,0 +1,56 @@
+source: dasmeta/eks/aws
+version: 2.15.0
+variables:
+  # Account id
+  account_id: "000000000000"
+  cluster_name: "demo-eks"
+  cluster_version: "1.29"
+  send_alb_logs_to_cloudwatch: false
+  autoscaler_image_patch: 1
+  alarms:
+    sns_topic: "Default"
+  # map_roles:
+  #   - rolearn: "<ROLE-ARN>"
+  #     username: "<ROLE-NAME>"
+  #     groups:
+  #       - system:masters
+  metrics_exporter: "adot"
+  adot_config:
+    accept_namespace_regex: "(default|kube-system)"
+    additional_metrics: []
+  cluster_enabled_log_types: ["audit"]
+  vpc:
+    link:
+      id: ${0-accounts/root/vpc.id}
+      private_subnet_ids: ${0-accounts/root/vpc.private_subnets}
+  node_groups:
+    dev_nodes_on_spot:
+      min_size: 1
+      desired_size: 1
+      max_size: 1
+      max_capacity: 1
+      capacity_type: "SPOT"
+      block_device_mappings:
+        xvda:
+          device_name: "/dev/xvda"
+          ebs:
+            volume_size: 100
+            volume_type: "gp2"
+  node_groups_default:
+    disk_size: 50
+    instance_types: ["t3.xlarge"]
+    capacity_type: "SPOT"
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: boilerplate
+          ManageLevel: environment
+output:
+  sensitive: true
+linked_workspaces:
+  - 0-accounts/root/vpc

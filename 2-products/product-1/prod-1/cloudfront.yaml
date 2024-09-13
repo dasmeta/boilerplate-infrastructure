@@ -1,0 +1,54 @@
+source: dasmeta/modules/aws//modules/cloudfront
+version: 2.15.4
+variables:
+  targets: 
+    # - target: "<INGRESS-ALB>"
+    #   pattern: "/admin*"
+    # - target: "<INGRESS-ALB>"
+    #   pattern: "/api*"
+    - target: "<FRONTEND-HOST>"
+      pattern: "/"
+  origins:
+    - target: "<INGRESS-ALB>"
+      domain_name: "<INGRESS-ALB-DOMAIN>"
+      type: "alb"
+      custom_origin_config:
+        - http_port: 80
+          https_port: 443
+          origin_keepalive_timeout: 5
+          origin_protocol_policy: "http-only"
+          origin_read_timeout: 30
+          origin_ssl_protocols:
+            - "TLSv1.2"
+    - target: "<FRONTEND-HOST>"
+      domain_name: "<FRONTEND-DOMAIN>"
+      type: "bucket"
+      custom_origin_config:
+        - http_port: 80
+          https_port: 443
+          origin_keepalive_timeout: 5
+          origin_protocol_policy: "http-only"
+          origin_read_timeout: 30
+          origin_ssl_protocols:
+            - "SSLv3"
+            - "TLSv1"
+            - "TLSv1.1"
+            - "TLSv1.2"
+  default_target_origin_id: "<FRONTEND-HOST>"
+  ordered_allowed_methods: ["GET", "HEAD", "OPTIONS","DELETE", "PATCH", "POST", "PUT"]
+  ordered_viewer_protocol_policy: "allow-all"
+  domain_names: 
+    - boilerplate.yourdomain.com
+  acm_cert_arn: <CRT-ARN>
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      region: us-east-1
+      access_key: <AWS-ACCESS-KEY>
+      secret_key: <AWS-SECRET-KEY>
+      default_tags:
+        tags:
+          Account: boilerplate
+          ManageLevel: product

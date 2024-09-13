@@ -1,21 +1,24 @@
 source: dasmeta/dns/aws
-version: 1.0.2
+version: 1.0.4
 variables:
-  create_zone: false
+  create_zone: true
   zone: "boilerplate.yourdomain.com"
   records:
-    - name: "local"
-      type:  "A"
-      value: ["127.0.0.1"]
-    - name: ""
+    - name: admin-api
       target_type: "alb"
-      alb: ${2-products/product-1/dev-1/ingress.name}
+      alb: boilerplate.yourdomain.com
+    - name: api
+      target_type: "alb"
+      alb: boilerplate.yourdomain.com
+
 providers:
   - name: aws
-    version: ~> 4.0
+    version: ~> 5.0
     module_nested_provider: true
     variables:
       region: eu-central-1
+      access_key: <AWS-ACCESS-KEY>
+      secret_key: <AWS-SECRET-KEY>
       default_tags:
         tags:
           Account: boilerplate
