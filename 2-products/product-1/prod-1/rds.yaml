@@ -1,0 +1,49 @@
+source: dasmeta/rds/aws
+version: 1.3.5
+variables:
+  engine: "postgres"
+  engine_version: "15"
+  identifier: "prod"
+  db_name: "prod"
+  db_username: "dbadmin"
+  db_password: "jK"
+  parameter_group_name: "rds-pg-15"
+  vpc_id: ${0-accounts/root/vpc.id}
+  subnet_ids: ${0-accounts/root/vpc.private_subnets}
+    # - "subnet-0bd8d434295f83c45"
+    # - "subnet-04b994829c1560a51"
+    # - "subnet-03d89e3f96d7dc7d8"
+  apply_immediately: true
+  cloudwatch_log_group_retention_in_days: 90
+  create_cloudwatch_log_group: true
+  enabled_cloudwatch_logs_exports: ["postgresql"]
+  create_security_group: true
+  ingress_with_cidr_blocks:
+    - description: "5432 from VPC"
+      from_port: 5432
+      to_port: 5432
+      protocol: "tcp"
+      # cidr_blocks: ${0-accounts/root/vpc.cidr_block}
+      cidr_blocks: "10.16.0.0/16"
+  egress_with_cidr_blocks:
+    - from_port: 0
+      to_port: 0
+      protocol: "-1"
+      cidr_blocks: "[0.0.0.0/0]"
+  alarms:
+    enabled: true
+    sns_topic: account-alarms-handling
+providers:
+  - name: aws
+    version: ">= 4.0"
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      access_key: <AWS-ACCESS-KEY>
+      secret_key: <AWS-SECRET-KEY>
+      default_tags:
+        tags:
+          Account: boilerplate
+          ManageLevel: product
+linked_workspaces:
+    - 0-accounts/root/vpc
