@@ -1,0 +1,28 @@
+source: dasmeta/vpc/aws
+version: 1.0.1
+variables:
+  name: "prod-vpc"
+  availability_zones:
+    - "eu-central-1a"
+    - "eu-central-1b"
+  private_subnets:
+    - "10.17.1.0/24"
+    - "10.17.2.0/24"
+  public_subnets:
+    - "10.17.3.0/24"
+    - "10.17.4.0/24"
+  cidr: "10.17.0.0/16"
+  public_subnet_tags:
+    "kubernetes.io/cluster/eks-prod": "shared"
+    "kubernetes.io/role/elb": "1"
+  private_subnet_tags:
+    "kubernetes.io/cluster/eks-prod": "shared"
+    "kubernetes.io/role/internal-elb": "1"
+providers:
+  - name: aws
+    version: ~> 4.0
+    variables:
+      default_tags:
+        tags:
+          Account: Dasmeta-demo
+          ManageLevel: account

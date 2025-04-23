@@ -1,0 +1,15 @@
+source: dasmeta/dns/aws
+version: 1.0.4
+variables:
+  create_zone: true
+  zone: "demo.dasmeta.com"
+  records: []
+providers:
+  - name: aws
+    version: ~> 5.0
+    module_nested_provider: true
+    variables:
+      default_tags:
+        tags:
+          Account: Dasmeta-demo
+          ManageLevel: account
