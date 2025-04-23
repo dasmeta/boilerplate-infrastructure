@@ -11,5 +11,5 @@ providers:
     variables:
       default_tags:
         tags:
-          Account: Dasmeta-demo
-          ManageLevel: account
+          Account: Dasmeta-Demo
+          ManageLevel: environment
