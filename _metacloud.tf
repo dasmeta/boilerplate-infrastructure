@@ -35,7 +35,7 @@ module "metacloud" {
   git_repo     = var.git_repo
   git_token    = var.git_token
 
-  auto_apply   = false
+  auto_apply   = true
 
   aws = {
     access_key_id     = var.access_key_id
