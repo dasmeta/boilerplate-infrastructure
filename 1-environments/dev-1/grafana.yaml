@@ -1,0 +1,112 @@
+source: dasmeta/grafana/onpremise
+version: 1.16.1
+variables:
+  name: dev-grafana
+  grafana_admin_password: ${0-accounts/dev/secret-reader.secrets.GRAFANA_PASS}
+  alerts:
+    rules:
+      - name: "Talk High CPU Alert"
+        datasource: "aeim87v5y6adcf"
+        expr: sum(rate(container_cpu_usage_seconds_total{namespace=\"dev\",pod=~\"talk.*\"}[5m]))
+        function: Last
+        equation: gt
+        threshold: 95
+    contact_points:
+      slack:
+        - name: "slack-contact"
+          webhook_url: "slack webhook uri"
+    notifications:
+      contact_point: "slack-contact"
+  grafana_configs:
+    ingress_configs:
+      annotations:
+        alb.ingress.kubernetes.io/group.name: "dev-ingress"
+      hosts:
+        - "grafana.example.com"
+      alb_certificate: "certificate_arn"
+    redundency:
+      enabled: true
+    datasources:
+      - type: "cloudwatch"
+        name: "Cloudwatch"
+  prometheus_configs:
+    enabled: true
+    storage_class: "gp2"
+    storage_size: "10Gi"
+    resources:
+      request:
+        cpu: "1"
+        mem: "1Gi"
+      limit:
+        cpu: "1500m"
+        mem: "1500"
+    replicas: 1
+  tempo_configs:
+    enabled: true
+    bucket_name: "bucket-name"
+    oidc_provider_arn: ${1-environments/dev-1/eks.oidc_provider_arn}
+  loki_configs:
+    enabled: true
+  aws_region: "us-east-1"
+providers:
+  - name: aws
+    version: ~> 5.0
+    module_nested_provider: true
+    variables:
+      region: us-east-1
+      access_key: ${0-accounts/root/iam-dev.iam_access_key_id}
+      secret_key: ${0-accounts/root/iam-dev.iam_access_key_secret}
+      default_tags:
+        tags:
+          Account: grafana-dev
+          ManageLevel: account
+          Env: dev
+  - name: kubernetes
+    version: ~> 2.23
+    module_nested_provider: true
+    source: "hashicorp/kubernetes"
+    variables:
+      cluster_ca_certificate: ${1-environments/dev-1/eks.cluster_certificate}
+      host: ${1-environments/dev-1/eks.cluster_host}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args:
+          - "eks"
+          - "--region"
+          - "us-east-1"
+          - "get-token"
+          - "--cluster-name"
+          - "eks-dev"
+        command: "aws"
+  - name: helm
+    version: ~> 2.5
+    source: "hashicorp/helm"
+    blocks:
+      kubernetes:
+        cluster_ca_certificate: ${1-environments/dev-1/eks.cluster_certificate}
+        host: ${1-environments/dev-1/eks.cluster_host}
+        blocks:
+          exec:
+            api_version: "client.authentication.k8s.io/v1beta1"
+            args:
+              - "eks"
+              - "--region"
+              - "us-east-1"
+              - "get-token"
+              - "--cluster-name"
+              - "eks-dev"
+            command: "aws"
+  - name: grafana
+    version: ~> 3.0
+    source: grafana/grafana
+    variables:
+      url: "https://grafana.example.com"
+      auth: admin:${0-accounts/dev/secret-reader.secrets.GRAFANA_PASS}
+output:
+  sensitive: true
+linked_workspaces:
+  - 0-accounts/dev/secret-reader
+  - 1-environments/dev-1/eks
+  - 0-accounts/root/iam-dev
+
