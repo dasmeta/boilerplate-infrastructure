@@ -25,4 +25,4 @@ providers:
       default_tags:
         tags:
           Account: Dasmeta-demo
-          ManageLevel: environmentt
+          ManageLevel: environment
