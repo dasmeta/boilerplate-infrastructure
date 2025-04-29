@@ -1,0 +1,70 @@
+source: dasmeta/eks/aws
+version: 2.21.1
+variables:
+  # Account id
+  account_id: "817342036967"
+  cluster_name: "eks-prod"
+  # cluster_version: "1.29"
+  # send_alb_logs_to_cloudwatch: false
+  # autoscaler_image_patch: 1
+  users:
+    - username: terraform
+  alarms:
+    sns_topic: "Default"
+  map_roles:
+    - rolearn: "arn:aws:iam::817342036967:role/AWSReservedSSO_AdministratorAccess_78a9f6cd5bce880a"
+      username: "AWSReservedSSO_AdministratorAccess_78a9f6cd5bce880a"
+      groups:
+        - system:masters
+  adot_config:
+    accept_namespace_regex: "(prod)"
+    additional_metrics: []
+    log_group_name: "adot-logs"
+  enable_kube_state_metrics: true
+  prometheus_metrics:
+    - kube_node_status_condition
+    - kube_node_status_capacity
+    - kube_deployment_spec_replicas
+    - kube_deployment_status_replicas_available
+  cluster_enabled_log_types: ["audit"]
+  vpc:
+    link:
+      id: ${1-environments/prod/vpc.id}
+      private_subnet_ids: ${1-environments/prod/vpc.private_subnets}
+  node_groups:
+    prod_nodes_on_demond:
+      min_size: 1
+      desired_size: 1
+      max_size: 1
+      max_capacity: 1
+      capacity_type: "ON_DEMAND"
+  karpenter:
+    enabled: true
+    configs:
+      replicas: 1
+    resource_configs_defaults:
+      limits:
+        cpu: 100
+    resource_configs:
+      nodePools:
+        general:
+          weight: 1
+  node_groups_default:
+    disk_size: 50
+    instance_types: ["t3.large"]
+    capacity_type: "SPOT"
+providers:
+  - name: aws
+    version: ~> 5.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: environmentt
+output:
+  sensitive: true
+linked_workspaces:
+  - 1-environments/prod/vpc
+

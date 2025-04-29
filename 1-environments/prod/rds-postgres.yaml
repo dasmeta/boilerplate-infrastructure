@@ -1,0 +1,55 @@
+source: dasmeta/rds/aws
+version: 1.4.4
+variables:
+  allocated_storage: 20
+  storage_type: "gp2"
+  storage_encrypted: true
+  engine: "postgres"
+  engine_version: "15.10"
+  instance_class: "db.t3.medium"
+  multi_az: false
+  identifier: "proddb"
+  db_name: "proddb"
+  db_username: "postgres"
+  db_password: ${0-accounts/prod/master-secret.secrets.POSTGRESS_PASS}
+  apply_immediately: true
+  skip_final_snapshot: true
+  create_cloudwatch_log_group: false
+  port: "5432"
+  slow_queries:
+    enabled: false
+    query_duration: 1
+  create_security_group: true
+  vpc_id: "vpc-0ee768628e3fd8fee"
+  subnet_ids:
+    - subnet-0cf6d18944ec3f120
+    - subnet-09346f4544a1b75ca
+  ingress_with_cidr_blocks:
+    - description: "5432 from VPN"
+      from_port: 5432
+      to_port: 5432
+      protocol: "tcp"
+      # cidr_blocks: ${1-environments/dev/vpc.cidr_block}
+      cidr_blocks: "195.250.69.234/32"
+  egress_with_cidr_blocks:
+    - from_port: 0
+      to_port: 0
+      protocol: "-1"
+      cidr_blocks: "0.0.0.0/0"
+  alarms:
+    enabled: true
+    sns_topic: "account-alarms-handling"
+output:
+  sensitive: true
+providers:
+  - name: aws
+    version: ~> 5.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: environmentt
+linked_workspaces:
+  - 0-accounts/prod/master-secret
