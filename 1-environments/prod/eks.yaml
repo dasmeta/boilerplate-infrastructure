@@ -62,7 +62,7 @@ providers:
       default_tags:
         tags:
           Account: Dasmeta-Demo
-          ManageLevel: environmentt
+          ManageLevel: environment
 output:
   sensitive: true
 linked_workspaces:

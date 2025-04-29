@@ -50,6 +50,6 @@ providers:
       default_tags:
         tags:
           Account: Dasmeta-Demo
-          ManageLevel: environmentt
+          ManageLevel: environment
 linked_workspaces:
   - 0-accounts/prod/master-secret
