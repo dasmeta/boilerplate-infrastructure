@@ -15,7 +15,7 @@ providers:
       default_tags:
         tags:
           Account: Dasmeta-Demo
-          ManageLevel: accountt
+          ManageLevel: account
     blocks:
       assume_role:
         role_arn: "arn:aws:iam::817342036967:role/OrganizationAccountAccessRole"

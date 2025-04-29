@@ -17,6 +17,6 @@ session_name = "AssumeRoleSession"
 
   default_tags {
 
-    tags = {"Account":"Dasmeta-Demo","AppliedFrom":"terraform-cloud","ManageLevel":"accountt","ManagedBy":"terraform","TerraformCloudWorkspace":"0-accounts_prod_iam","TerraformModuleSource":"terraform-aws-modules/iam/aws//modules/iam-user","TerraformModuleVersion":"5.30.0"}
+    tags = {"Account":"Dasmeta-Demo","AppliedFrom":"terraform-cloud","ManageLevel":"account","ManagedBy":"terraform","TerraformCloudWorkspace":"0-accounts_prod_iam","TerraformModuleSource":"terraform-aws-modules/iam/aws//modules/iam-user","TerraformModuleVersion":"5.30.0"}
   }
 }
