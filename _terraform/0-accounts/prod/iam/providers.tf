@@ -4,16 +4,6 @@ provider "aws" {
 
 
 
-  assume_role {
-
-
-external_id = "817342036967"
-
-role_arn = "arn:aws:iam::817342036967:role/OrganizationAccountAccessRole"
-
-session_name = "AssumeRoleSession"
-
-  }
 
   default_tags {
 

@@ -16,8 +16,3 @@ providers:
         tags:
           Account: Dasmeta-Demo
           ManageLevel: account
-    blocks:
-      assume_role:
-        role_arn: "arn:aws:iam::817342036967:role/OrganizationAccountAccessRole"
-        session_name: "AssumeRoleSession"
-        external_id: "817342036967"
