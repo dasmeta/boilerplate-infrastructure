@@ -14,8 +14,8 @@ provider "aws" {
 provider "kubernetes" {
 
 
-  cluster_ca_certificate = "${data.tfe_outputs.this["1-environments/prod/eks"].values.results.ca_certificate}"
-  host = "${data.tfe_outputs.this["1-environments/prod/eks"].values.results.host}"
+  cluster_ca_certificate = "${data.tfe_outputs.this["1-environments/prod/eks"].values.results.cluster_certificate}"
+  host = "${data.tfe_outputs.this["1-environments/prod/eks"].values.results.cluster_host}"
 
   exec {
 

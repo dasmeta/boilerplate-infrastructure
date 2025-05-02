@@ -29,8 +29,8 @@ providers:
     module_nested_provider: true
     source: "hashicorp/kubernetes"
     variables:
-      cluster_ca_certificate: ${1-environments/prod/eks.ca_certificate}
-      host: ${1-environments/prod/eks.host}
+      cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+      host: ${1-environments/prod/eks.cluster_host}
     blocks:
       exec:
         api_version: "client.authentication.k8s.io/v1beta1"
