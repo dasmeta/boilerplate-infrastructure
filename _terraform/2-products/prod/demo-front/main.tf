@@ -7,7 +7,7 @@ module "this" {
   alarms = {"enabled":false,"sns_topic":"Default"}
   cluster_name = "eks-prod"
   create_namespace = true
-  helm_values = {"containerPort":80,"image":{"repository":"public.ecr.aws/r0j4a4t3/demo-frontend","tag":"latest"},"podAnnotations":{"linkerd.io/inject":"enabled"},"service":{"annotations":{"linkerd.io/inject":"enabled"},"port":80}}
+  helm_values = {"containerPort":80,"image":{"repository":"public.ecr.aws/r0j4a4t3/demo-frontend","tag":"latest"},"service":{"port":80}}
   name = "frontend"
   namespace = "frontend"
   providers = {"aws":"aws","kubernetes":"kubernetes"}

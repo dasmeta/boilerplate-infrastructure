@@ -12,13 +12,9 @@ variables:
     image:
       repository: public.ecr.aws/r0j4a4t3/demo-frontend
       tag: latest
-    podAnnotations:
-      linkerd.io/inject: enabled
     containerPort: 80
     service:
       port: 80
-      annotations:
-        linkerd.io/inject: enabled
 providers:
   - name: aws
     version: ~> 4.0
