@@ -1,18 +1,25 @@
-source: terraform/any/shared//modules/service
+source: dasmeta/service/aws
 version: 1.1.1
 variables:
   name: frontend
+  create_namespace: true
   namespace: frontend
   cluster_name: "eks-prod"
   alarms:
-    sns_topic: "Default"
+    enabled: false
   helm_values:
     image:
       repository: public.ecr.aws/r0j4a4t3/demo-frontend
       tag: latest
+    podAnnotations:
+      linkerd.io/inject: enabled
     containerPort: 80
     service:
       port: 80
+      annotations:
+        linkerd.io/inject: enabled
+    config:
+      NODE_ENV: dev
 providers:
   - name: aws
     version: ~> 4.0

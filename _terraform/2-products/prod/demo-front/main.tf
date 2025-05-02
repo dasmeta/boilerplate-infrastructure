@@ -1,12 +1,13 @@
 ## This file and its content are generated based on config, pleas check README.md for more details
 
 module "this" {
-  source  = "terraform/any/shared//modules/service"
+  source  = "dasmeta/service/aws"
   version = "1.1.1"
 
-  alarms = {"sns_topic":"Default"}
+  alarms = {"enabled":false}
   cluster_name = "eks-prod"
-  helm_values = {"containerPort":80,"image":{"repository":"public.ecr.aws/r0j4a4t3/demo-frontend","tag":"latest"},"service":{"port":80}}
+  create_namespace = true
+  helm_values = {"config":{"NODE_ENV":"dev"},"containerPort":80,"image":{"repository":"public.ecr.aws/r0j4a4t3/demo-frontend","tag":"latest"},"podAnnotations":{"linkerd.io/inject":"enabled"},"service":{"annotations":{"linkerd.io/inject":"enabled"},"port":80}}
   name = "frontend"
   namespace = "frontend"
   providers = {"aws":"aws","kubernetes":"kubernetes"}

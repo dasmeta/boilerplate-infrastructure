@@ -7,7 +7,7 @@ provider "aws" {
 
   default_tags {
 
-    tags = {"Account":"prod","AppliedFrom":"terraform-cloud","ManageLevel":"product","ManagedBy":"terraform","TerraformCloudWorkspace":"2-products_prod_demo-front","TerraformModuleSource":"terraform/any/shared//modules/service","TerraformModuleVersion":"1.1.1"}
+    tags = {"Account":"prod","AppliedFrom":"terraform-cloud","ManageLevel":"product","ManagedBy":"terraform","TerraformCloudWorkspace":"2-products_prod_demo-front","TerraformModuleSource":"dasmeta/service/aws","TerraformModuleVersion":"1.1.1"}
   }
 }
 provider "kubernetes" {
