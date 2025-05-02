@@ -1,0 +1,62 @@
+source: terraform/any/shared//modules/service
+version: 1.1.1
+variables:
+  name: frontend
+  namespace: frontend
+  cluster_name: "eks-prod"
+  alarms:
+    sns_topic: "Default"
+  helm_values:
+    image:
+      repository: public.ecr.aws/r0j4a4t3/demo-frontend
+      tag: latest
+    containerPort: 80
+    service:
+      port: 80
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      default_tags:
+        tags:
+          Account: prod
+          ManageLevel: product
+  - name: kubernetes
+    version: ~> 2.23
+    module_nested_provider: true
+    source: "hashicorp/kubernetes"
+    variables:
+      cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+      host: ${1-environments/prod/eks.cluster_host}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args:
+          - "eks"
+          - "--region"
+          - "eu-central-1"
+          - "get-token"
+          - "--cluster-name"
+          - "eks-prod"
+        command: "aws"
+  - name: helm
+    version: "2.10.1"
+    source: "hashicorp/helm"
+    blocks:
+      kubernetes:
+        cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+        host: ${1-environments/prod/eks.cluster_host}
+        blocks:
+          exec:
+            api_version: "client.authentication.k8s.io/v1beta1"
+            args:
+              - "eks"
+              - "--region"
+              - "eu-central-1"
+              - "get-token"
+              - "--cluster-name"
+              - "eks-dev"
+            command: "aws"
+linked_workspaces:
+  - 1-environments/prod/eks
