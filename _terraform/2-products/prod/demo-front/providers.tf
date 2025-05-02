@@ -46,7 +46,7 @@ exec {
   
   api_version = "client.authentication.k8s.io/v1beta1"
   
-  args = ["eks","--region","eu-central-1","get-token","--cluster-name","eks-dev"]
+  args = ["eks","--region","eu-central-1","get-token","--cluster-name","eks-prod"]
   
   command = "aws"
   }

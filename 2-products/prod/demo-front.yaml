@@ -62,7 +62,7 @@ providers:
               - "eu-central-1"
               - "get-token"
               - "--cluster-name"
-              - "eks-dev"
+              - "eks-prod"
             command: "aws"
 linked_workspaces:
   - 1-environments/prod/eks
