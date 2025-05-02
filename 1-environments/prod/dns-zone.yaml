@@ -4,7 +4,7 @@ variables:
   create_zone: true
   zone: "demo.dasmeta.com"
   records:
-    - name: demo-dasmeta.com
+    - name: demo.dasmeta.com
       alb: prod-ingress
       target_type: alb
 providers:
