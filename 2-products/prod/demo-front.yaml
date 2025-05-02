@@ -7,6 +7,7 @@ variables:
   cluster_name: "eks-prod"
   alarms:
     enabled: false
+    sns_topic: "Default"
   helm_values:
     image:
       repository: public.ecr.aws/r0j4a4t3/demo-frontend
