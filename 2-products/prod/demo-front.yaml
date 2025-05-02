@@ -1,5 +1,5 @@
 source: dasmeta/service/aws
-version: 1.1.1
+version: 1.1.4
 variables:
   name: frontend
   create_namespace: true
@@ -18,8 +18,6 @@ variables:
       port: 80
       annotations:
         linkerd.io/inject: enabled
-    config:
-      NODE_ENV: dev
 providers:
   - name: aws
     version: ~> 4.0

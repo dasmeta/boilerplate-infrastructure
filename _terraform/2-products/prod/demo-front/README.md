@@ -6,5 +6,5 @@
 ```txt
 tf cloud workspace name: 2-products_prod_demo-front
 tf module source: dasmeta/service/aws
-tf_module version: 1.1.1
+tf_module version: 1.1.4
 ```
