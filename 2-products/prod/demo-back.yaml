@@ -10,8 +10,8 @@ variables:
     sns_topic: "Default"
   helm_values:
     image:
-      repository: naskio/strapi
-      tag: latest
+      repository: vshadbolt/strapi
+      tag:  5.12.7
     containerPort: 1337
     service:
       port: 1337

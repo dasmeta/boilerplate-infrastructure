@@ -7,7 +7,7 @@ module "this" {
   alarms = {"enabled":false,"sns_topic":"Default"}
   cluster_name = "eks-prod"
   create_namespace = false
-  helm_values = {"containerPort":1337,"image":{"repository":"naskio/strapi","tag":"latest"},"ingress":{"annotations":{"alb.ingress.kubernetes.io/group.name":"prod-ingress","alb.ingress.kubernetes.io/group.order":"10","alb.ingress.kubernetes.io/healthcheck-path":"/","alb.ingress.kubernetes.io/listen-ports":"[{\"HTTPS\":443}, {\"HTTP\":80}]","alb.ingress.kubernetes.io/success-codes":"200-399","kubernetes.io/ingress.class":"alb"},"enabled":true,"hosts":[{"host":"api.demo.dasmeta.com","paths":[{"backend":{"service":{"name":"backend","port":"http"}},"path":"/","pathType":"Prefix"}]}]},"service":{"port":1337}}
+  helm_values = {"containerPort":1337,"image":{"repository":"vshadbolt/strapi","tag":"5.12.7"},"ingress":{"annotations":{"alb.ingress.kubernetes.io/group.name":"prod-ingress","alb.ingress.kubernetes.io/group.order":"10","alb.ingress.kubernetes.io/healthcheck-path":"/","alb.ingress.kubernetes.io/listen-ports":"[{\"HTTPS\":443}, {\"HTTP\":80}]","alb.ingress.kubernetes.io/success-codes":"200-399","kubernetes.io/ingress.class":"alb"},"enabled":true,"hosts":[{"host":"api.demo.dasmeta.com","paths":[{"backend":{"service":{"name":"backend","port":"http"}},"path":"/","pathType":"Prefix"}]}]},"service":{"port":1337}}
   name = "backend"
   namespace = "demo"
   providers = {"aws":"aws","kubernetes":"kubernetes"}
