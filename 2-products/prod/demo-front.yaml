@@ -1,7 +1,7 @@
 source: dasmeta/service/aws
 version: 1.1.4
 variables:
-  name: demo
+  name: frontend
   create_namespace: true
   namespace: demo
   cluster_name: "eks-prod"
