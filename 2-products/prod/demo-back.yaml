@@ -12,6 +12,16 @@ variables:
     image:
       repository: vshadbolt/strapi
       tag:  5.12.7
+    strapi:
+      env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "1337"
+        - name: STRAPI_ADMIN_BACKEND_URL
+          value: "https://api.demo.dasmeta.com"
+        - name: STRAPI_PUBLIC_URL
+          value: "https://api.demo.dasmeta.com"
     containerPort: 1337
     service:
       port: 1337
