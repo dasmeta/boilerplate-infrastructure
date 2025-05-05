@@ -23,6 +23,7 @@ variables:
         alb.ingress.kubernetes.io/group.order: "10"
         alb.ingress.kubernetes.io/healthcheck-path: /
         kubernetes.io/ingress.class: alb
+      enabled: true
       hosts:
       - host: api.demo.dasmeta.com
         paths:
