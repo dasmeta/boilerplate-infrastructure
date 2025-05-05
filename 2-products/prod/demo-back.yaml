@@ -24,6 +24,8 @@ variables:
           value: "https://api.demo.dasmeta.com"
         - name: TRUST_PROXY
           value: "true"
+        - name: NODE_ENV
+          value: "production"
     containerPort: 1337
     service:
       port: 1337
