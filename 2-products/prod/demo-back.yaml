@@ -22,6 +22,8 @@ variables:
           value: "https://api.demo.dasmeta.com"
         - name: STRAPI_ADMIN_BACKEND_URL
           value: "https://api.demo.dasmeta.com"
+        - name: TRUST_PROXY
+          value: "true"
     containerPort: 1337
     service:
       port: 1337
