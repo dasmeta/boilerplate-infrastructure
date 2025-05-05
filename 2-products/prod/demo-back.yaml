@@ -2,36 +2,35 @@ source: dasmeta/service/aws
 version: 1.1.4
 variables:
   name: demo
-  create_namespace: true
-  namespace: frontend
+  create_namespace: false
+  namespace: demo
   cluster_name: "eks-prod"
   alarms:
     enabled: false
     sns_topic: "Default"
   helm_values:
     image:
-      repository: public.ecr.aws/r0j4a4t3/demo-frontend
-      tag: version5
-    containerPort: 80
+      repository: strapi/strapi
+      tag: latest
+    containerPort: 1337
     service:
-      port: 80
+      port: 1337
     ingress:
       annotations:
         alb.ingress.kubernetes.io/group.name: prod-ingress
         alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
         alb.ingress.kubernetes.io/success-codes: 200-399
-        alb.ingress.kubernetes.io/group.order: "20"
-        alb.ingress.kubernetes.io/healthcheck-path: /health
+        alb.ingress.kubernetes.io/group.order: "10"
+        alb.ingress.kubernetes.io/healthcheck-path: /
         kubernetes.io/ingress.class: alb
-      enabled: true
       hosts:
-      - host: demo.dasmeta.com
+      - host: api.demo.dasmeta.com
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: frontend
+                name: strapi
                 port: http
 providers:
   - name: aws
