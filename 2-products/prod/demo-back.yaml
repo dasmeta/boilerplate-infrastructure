@@ -30,7 +30,7 @@ variables:
             pathType: Prefix
             backend:
               service:
-                name: strapi
+                name: backend
                 port: http
 providers:
   - name: aws

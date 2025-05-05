@@ -7,6 +7,9 @@ variables:
     - name: demo.dasmeta.com
       alb: prod-ingress
       target_type: alb
+    - name: api.demo.dasmeta.com
+      alb: prod-ingress
+      target_type: alb
 providers:
   - name: aws
     version: ~> 5.0
