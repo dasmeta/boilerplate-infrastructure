@@ -10,8 +10,8 @@ variables:
     sns_topic: "Default"
   helm_values:
     image:
-      repository: vshadbolt/strapi
-      tag:  5.12.7
+      repository: strapi/base
+      tag:  latest
     strapi:
       env:
         - name: HOST
