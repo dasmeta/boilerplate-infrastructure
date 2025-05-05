@@ -24,6 +24,18 @@ variables:
           value: "https://api.demo.dasmeta.com"
         - name: TRUST_PROXY
           value: "true"
+        - name: ADMIN_URL 
+          value: "https://api.demo.dasmeta.com/admin"
+        - name: APP_HOST
+          value: "0.0.0.0"
+        - name: APP_URL
+          value: "https://api.demo.dasmeta.com/admin"
+        - name: BACKEND_URL
+          value: https://api.demo.dasmeta.com
+        - name: ENV
+          value: "production"
+        - name: PUBLIC_URL
+          value: "https://api.demo.dasmeta.com"
         - name: NODE_ENV
           value: "production"
     containerPort: 1337
