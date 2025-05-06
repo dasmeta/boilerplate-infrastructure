@@ -84,6 +84,9 @@ variables:
                 service:
                   name: backend
                   number: 1337
+        integrations:
+          traefik:
+            enabled: false
 providers:
   - name: aws
     version: ~> 4.0
