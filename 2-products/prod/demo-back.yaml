@@ -10,7 +10,7 @@ variables:
     sns_topic: "Default"
   chart: "strapi"
   chart_version: "16.2.4"
-  repository: "https://charts.truecharts.org"
+  repository: "oci://tccr.io/truecharts"
   helm_values:
     cnpg:
       main:
