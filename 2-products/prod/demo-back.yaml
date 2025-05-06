@@ -42,7 +42,9 @@ variables:
                 ADMIN_URL: https://backend.demo.dasmeta.com/admin
                 API_TOKEN_SALT: HV6KKFaPAE5JElSLWVVJtLZah6Ezi2bC
                 APP_HOST: 0.0.0.0
-                APP_KEYS: '["keya", "keyb"]'
+                APP_KEYS:
+                  - keya
+                  - keyb
                 APP_URL: https://backend.demo.dasmeta.com/admin
                 BACKEND_URL: https://backend.demo.dasmeta.com
                 DATABASE_CLIENT: postgres
