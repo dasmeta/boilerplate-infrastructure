@@ -55,12 +55,11 @@ variables:
                 DATABASE_SSL: "true"
                 DATABASE_SSL_REJECT_UNAUTHORIZED: "false"
                 DATABASE_USERNAME: postgres
-                ENV: production
                 EXTRA_ARGS: ""
                 FAST_REFRESH: false
                 HOST: 0.0.0.0
                 JWT_SECRET: my_jwt_secret
-                NODE_ENV: production
+                NODE_ENV: development
                 PORT: 1337
                 PUBLIC_URL: https://backend.demo.dasmeta.com
                 STRAPI_ADMIN_BACKEND_URL: https://backend.demo.dasmeta.com
