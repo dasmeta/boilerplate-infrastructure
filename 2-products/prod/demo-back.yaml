@@ -9,38 +9,38 @@ variables:
     enabled: false
     sns_topic: "Default"
   helm_values:
-    image:
-      repository: strapi/base
-      tag:  latest
-    strapi:
-      env:
-        - name: HOST
-          value: "0.0.0.0"
-        - name: PORT
-          value: "1337"
-        - name: STRAPI_PUBLIC_URL
-          value: "https://api.demo.dasmeta.com"
-        - name: STRAPI_ADMIN_BACKEND_URL
-          value: "https://api.demo.dasmeta.com"
-        - name: TRUST_PROXY
-          value: "true"
-        - name: ADMIN_URL 
-          value: "https://api.demo.dasmeta.com/admin"
-        - name: APP_HOST
-          value: "0.0.0.0"
-        - name: APP_URL
-          value: "https://api.demo.dasmeta.com/admin"
-        - name: BACKEND_URL
-          value: https://api.demo.dasmeta.com
-        - name: ENV
-          value: "production"
-        - name: PUBLIC_URL
-          value: "https://api.demo.dasmeta.com"
-        - name: NODE_ENV
-          value: "production"
-    containerPort: 1337
-    service:
-      port: 1337
+    # image:
+    #   repository: strapi/base
+    #   tag:  latest
+    # strapi:
+    #   env:
+    #     - name: HOST
+    #       value: "0.0.0.0"
+    #     - name: PORT
+    #       value: "1337"
+    #     - name: STRAPI_PUBLIC_URL
+    #       value: "https://api.demo.dasmeta.com"
+    #     - name: STRAPI_ADMIN_BACKEND_URL
+    #       value: "https://api.demo.dasmeta.com"
+    #     - name: TRUST_PROXY
+    #       value: "true"
+    #     - name: ADMIN_URL 
+    #       value: "https://api.demo.dasmeta.com/admin"
+    #     - name: APP_HOST
+    #       value: "0.0.0.0"
+    #     - name: APP_URL
+    #       value: "https://api.demo.dasmeta.com/admin"
+    #     - name: BACKEND_URL
+    #       value: https://api.demo.dasmeta.com
+    #     - name: ENV
+    #       value: "production"
+    #     - name: PUBLIC_URL
+    #       value: "https://api.demo.dasmeta.com"
+    #     - name: NODE_ENV
+    #       value: "production"
+    # containerPort: 1337
+    # service:
+    #   port: 1337
     ingress:
       annotations:
         alb.ingress.kubernetes.io/group.name: prod-ingress
@@ -51,13 +51,13 @@ variables:
         kubernetes.io/ingress.class: alb
       enabled: true
       hosts:
-      - host: api.demo.dasmeta.com
+      - host: backend.demo.dasmeta.com
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: backend
+                name: strapi
                 port: http
 providers:
   - name: aws
