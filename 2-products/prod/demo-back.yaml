@@ -66,23 +66,24 @@ variables:
                 STRAPI_ADMIN_BACKEND_URL: https://backend.demo.dasmeta.com
                 STRAPI_DISABLE_UPDATE_NOTIFICATION: true
     ingress:
-      annotations:
-        alb.ingress.kubernetes.io/group.name: prod-ingress
-        alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
-        alb.ingress.kubernetes.io/success-codes: 200-399
-        alb.ingress.kubernetes.io/group.order: "10"
-        alb.ingress.kubernetes.io/healthcheck-path: /
-        kubernetes.io/ingress.class: alb
-      enabled: true
-      hosts:
-      - host: backend.demo.dasmeta.com
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: backend
-                port: 1337
+      main:
+        enabled: true
+        annotations:
+          alb.ingress.kubernetes.io/group.name: prod-ingress
+          alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+          alb.ingress.kubernetes.io/success-codes: 200-399
+          alb.ingress.kubernetes.io/group.order: "10"
+          alb.ingress.kubernetes.io/healthcheck-path: /
+          kubernetes.io/ingress.class: alb
+        hosts:
+        - host: backend.demo.dasmeta.com
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: backend
+                  number: 1337
 providers:
   - name: aws
     version: ~> 4.0
