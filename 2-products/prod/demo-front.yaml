@@ -11,7 +11,7 @@ variables:
   helm_values:
     image:
       repository: public.ecr.aws/r0j4a4t3/demo-frontend
-      tag: version6
+      tag: version7
     containerPort: 80
     service:
       port: 80
