@@ -82,8 +82,9 @@ variables:
               pathType: Prefix
               backend:
                 service:
-                  name: backend
-                  number: 1337
+                  name: backend-strapi
+                  port:
+                    number: 1337
         integrations:
           traefik:
             enabled: false
