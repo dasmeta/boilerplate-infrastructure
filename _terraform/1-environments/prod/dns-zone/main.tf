@@ -5,7 +5,7 @@ module "this" {
   version = "1.0.4"
 
   create_zone = true
-  records = [{"alb":"prod-ingress","name":"demo.dasmeta.com","target_type":"alb"},{"alb":"prod-ingress","name":"api.demo.dasmeta.com","target_type":"alb"}]
+  records = [{"alb":"prod-ingress","name":"demo.dasmeta.com","target_type":"alb"},{"alb":"prod-ingress","name":"backend.demo.dasmeta.com","target_type":"alb"}]
   zone = "demo.dasmeta.com"
   providers = {"aws":"aws"}
 }

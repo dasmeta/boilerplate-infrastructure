@@ -7,7 +7,7 @@ variables:
     - name: demo.dasmeta.com
       alb: prod-ingress
       target_type: alb
-    - name: api.demo.dasmeta.com
+    - name: backend.demo.dasmeta.com
       alb: prod-ingress
       target_type: alb
 providers:

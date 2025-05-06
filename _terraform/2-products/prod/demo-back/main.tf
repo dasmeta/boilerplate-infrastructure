@@ -7,7 +7,7 @@ module "this" {
   alarms = {"enabled":false,"sns_topic":"Default"}
   cluster_name = "eks-prod"
   create_namespace = false
-  helm_values = {"ingress":{"annotations":{"alb.ingress.kubernetes.io/group.name":"prod-ingress","alb.ingress.kubernetes.io/group.order":"10","alb.ingress.kubernetes.io/healthcheck-path":"/","alb.ingress.kubernetes.io/listen-ports":"[{\"HTTPS\":443}, {\"HTTP\":80}]","alb.ingress.kubernetes.io/success-codes":"200-399","kubernetes.io/ingress.class":"alb"},"enabled":true,"hosts":[{"host":"backend.demo.dasmeta.com","paths":[{"backend":{"service":{"name":"strapi","port":"http"}},"path":"/","pathType":"Prefix"}]}]}}
+  helm_values = {"ingress":{"annotations":{"alb.ingress.kubernetes.io/group.name":"prod-ingress","alb.ingress.kubernetes.io/group.order":"10","alb.ingress.kubernetes.io/healthcheck-path":"/","alb.ingress.kubernetes.io/listen-ports":"[{\"HTTPS\":443}, {\"HTTP\":80}]","alb.ingress.kubernetes.io/success-codes":"200-399","kubernetes.io/ingress.class":"alb"},"enabled":true,"hosts":[{"host":"backend.demo.dasmeta.com","paths":[{"backend":{"service":{"name":"strapi","port":1337}},"path":"/","pathType":"Prefix"}]}]}}
   name = "backend"
   namespace = "demo"
   providers = {"aws":"aws","kubernetes":"kubernetes"}

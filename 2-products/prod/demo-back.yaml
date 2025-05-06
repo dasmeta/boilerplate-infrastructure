@@ -58,7 +58,7 @@ variables:
             backend:
               service:
                 name: strapi
-                port: http
+                port: 1337
 providers:
   - name: aws
     version: ~> 4.0
