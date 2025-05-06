@@ -8,39 +8,61 @@ variables:
   alarms:
     enabled: false
     sns_topic: "Default"
+  chart: "strapi"
+  chart_version: "16.2.4"
+  repository: "https://charts.truecharts.org"
   helm_values:
-    # image:
-    #   repository: strapi/base
-    #   tag:  latest
-    # strapi:
-    #   env:
-    #     - name: HOST
-    #       value: "0.0.0.0"
-    #     - name: PORT
-    #       value: "1337"
-    #     - name: STRAPI_PUBLIC_URL
-    #       value: "https://api.demo.dasmeta.com"
-    #     - name: STRAPI_ADMIN_BACKEND_URL
-    #       value: "https://api.demo.dasmeta.com"
-    #     - name: TRUST_PROXY
-    #       value: "true"
-    #     - name: ADMIN_URL 
-    #       value: "https://api.demo.dasmeta.com/admin"
-    #     - name: APP_HOST
-    #       value: "0.0.0.0"
-    #     - name: APP_URL
-    #       value: "https://api.demo.dasmeta.com/admin"
-    #     - name: BACKEND_URL
-    #       value: https://api.demo.dasmeta.com
-    #     - name: ENV
-    #       value: "production"
-    #     - name: PUBLIC_URL
-    #       value: "https://api.demo.dasmeta.com"
-    #     - name: NODE_ENV
-    #       value: "production"
-    # containerPort: 1337
-    # service:
-    #   port: 1337
+    cnpg:
+      main:
+        database: strapi
+        enabled: false
+        user: strapi
+    persistence:
+      data:
+        enabled: false
+        mountPath: /srv/app
+    securityContext:
+      container:
+        readOnlyRootFilesystem: false
+        runAsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+    service:
+      main:
+        ports:
+          main:
+            port: 1337
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                ADMIN_JWT_SECRET: my_admin_jwt_secret
+                ADMIN_URL: https://backend.demo.dasmeta.com/admin
+                API_TOKEN_SALT: HV6KKFaPAE5JElSLWVVJtLZah6Ezi2bC
+                APP_HOST: 0.0.0.0
+                APP_KEYS: '["keya", "keyb"]'
+                APP_URL: https://backend.demo.dasmeta.com/admin
+                BACKEND_URL: https://backend.demo.dasmeta.com
+                DATABASE_CLIENT: postgres
+                DATABASE_HOST: proddb.crackyiwez7c.eu-central-1.rds.amazonaws.com
+                DATABASE_NAME: proddb
+                DATABASE_PASSWORD: demopostgress
+                DATABASE_PORT: 5432
+                DATABASE_SSL: "true"
+                DATABASE_SSL_REJECT_UNAUTHORIZED: "false"
+                DATABASE_USERNAME: postgres
+                ENV: production
+                EXTRA_ARGS: ""
+                FAST_REFRESH: false
+                HOST: 0.0.0.0
+                JWT_SECRET: my_jwt_secret
+                NODE_ENV: production
+                PORT: 1337
+                PUBLIC_URL: https://backend.demo.dasmeta.com
+                STRAPI_ADMIN_BACKEND_URL: https://backend.demo.dasmeta.com
+                STRAPI_DISABLE_UPDATE_NOTIFICATION: true
     ingress:
       annotations:
         alb.ingress.kubernetes.io/group.name: prod-ingress
@@ -57,7 +79,7 @@ variables:
             pathType: Prefix
             backend:
               service:
-                name: strapi
+                name: backend
                 port: 1337
 providers:
   - name: aws
