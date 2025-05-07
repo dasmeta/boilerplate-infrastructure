@@ -77,7 +77,7 @@ variables:
           alb.ingress.kubernetes.io/group.order: "10"
           alb.ingress.kubernetes.io/healthcheck-path: /
           kubernetes.io/ingress.class: alb
-          alb.ingress.kubernetes.io/load-balancer-attributes: "routing.http.response.access_control_allow_origin.header_value=*,routing.http.response.access_control_allow_headers.header_value=*,routing.http.response.access_control_allow_methods.header_value=POST"
+          alb.ingress.kubernetes.io/listener-attributes.HTTPS-443: "routing.http.response.access_control_allow_origin.header_value=*,routing.http.response.access_control_allow_headers.header_value=*,routing.http.response.access_control_allow_methods.header_value=POST"
         hosts:
         - host: backend.demo.dasmeta.com
           paths:
