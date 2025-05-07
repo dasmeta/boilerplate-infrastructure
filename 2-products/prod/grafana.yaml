@@ -23,7 +23,6 @@ variables:
     ingress:
       annotations:
         alb.ingress.kubernetes.io/group.name: "prod-ingress"
-      alb_certificate: "${1-environments/prod/certificate.arn}"
       hosts:
         - "grafana.demo.dasmeta.com"
     redundency:
