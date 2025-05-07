@@ -12,6 +12,9 @@ variables:
   chart_version: "16.2.4"
   repository: "oci://tccr.io/truecharts"
   helm_values:
+    image:
+      repository: docker.io/vshadbolt/strapi
+      tag: 4.25.22
     cnpg:
       main:
         database: strapi
