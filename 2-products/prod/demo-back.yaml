@@ -14,7 +14,7 @@ variables:
   helm_values:
     image:
       repository: docker.io/vshadbolt/strapi
-      tag: 4.25.22
+      tag: 4.25.6
     cnpg:
       main:
         database: strapi
