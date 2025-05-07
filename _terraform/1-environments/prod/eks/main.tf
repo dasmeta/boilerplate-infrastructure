@@ -13,7 +13,7 @@ module "this" {
   karpenter = {"configs":{"replicas":1},"enabled":true,"resource_configs":{"nodePools":{"general":{"weight":1}}},"resource_configs_defaults":{"limits":{"cpu":100}}}
   map_roles = [{"groups":["system:masters"],"rolearn":"arn:aws:iam::817342036967:role/AWSReservedSSO_AdministratorAccess_78a9f6cd5bce880a","username":"AWSReservedSSO_AdministratorAccess_78a9f6cd5bce880a"}]
   node_groups = {"prod_nodes_on_demond":{"capacity_type":"ON_DEMAND","desired_size":1,"max_capacity":1,"max_size":1,"min_size":1}}
-  node_groups_default = {"capacity_type":"SPOT","disk_size":50,"instance_types":["t3.large"]}
+  node_groups_default = {"capacity_type":"SPOT","disk_size":50,"instance_types":["t3.large","t3.medium","t3a.large","m5.large"]}
   prometheus_metrics = ["kube_node_status_condition","kube_node_status_capacity","kube_deployment_spec_replicas","kube_deployment_status_replicas_available"]
   users = [{"username":"terraform"}]
   vpc = {"link":{"id":"${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.id}","private_subnet_ids":"${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.private_subnets}"}}
