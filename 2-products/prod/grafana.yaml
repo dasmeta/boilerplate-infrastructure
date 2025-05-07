@@ -3,7 +3,6 @@ version: 1.16.1
 variables:
   name: demo-prod-grafana
   grafana_admin_password: "password"
-  cluster_name: "eks-prod"
   alerts:
     rules:
       - name: "Frontend High CPU Alert"
