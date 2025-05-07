@@ -28,7 +28,7 @@ variables:
     redundency:
       enabled: true
     datasources:
-      - type: "Prometheus"
+      - type: "prometheus"
         name: "Prometheus"
   prometheus_configs:
     enabled: true
