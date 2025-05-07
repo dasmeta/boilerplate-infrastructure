@@ -18,7 +18,7 @@ module "this" {
 
 
 data "tfe_outputs" "this" {
-  for_each = { for workspace in ["1-environments/prod/certificate.arn","1-environments/prod/eks"] : workspace => workspace }
+  for_each = { for workspace in ["1-environments/prod/eks"] : workspace => workspace }
 
   organization = "Demo-Dasmeta"
   workspace    = replace(each.value, "/[^a-zA-Z0-9_-]+/", "_")
