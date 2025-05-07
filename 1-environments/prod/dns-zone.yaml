@@ -10,6 +10,9 @@ variables:
     - name: backend.demo.dasmeta.com
       alb: prod-ingress
       target_type: alb
+    - name: grafana.demo.dasmeta.com
+      alb: prod-ingress
+      target_type: alb
 providers:
   - name: aws
     version: ~> 5.0
