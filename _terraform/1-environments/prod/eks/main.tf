@@ -2,7 +2,7 @@
 
 module "this" {
   source  = "dasmeta/eks/aws"
-  version = "2.21.1"
+  version = "2.21.2"
 
   account_id = "817342036967"
   adot_config = {"accept_namespace_regex":"(prod)","additional_metrics":[],"log_group_name":"adot-logs"}
