@@ -8,7 +8,7 @@ variables:
   engine_version: "15.10"
   instance_class: "db.t3.medium"
   multi_az: false
-  identifier: "proddb"
+  identifier: "rds-proddb"
   db_name: "proddb"
   db_username: "postgres"
   db_password: ${0-accounts/prod/master-secret.secrets.POSTGRESS_PASS}
