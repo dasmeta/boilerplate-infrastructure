@@ -27,9 +27,6 @@ variables:
         - "grafana.demo.dasmeta.com"
     redundency:
       enabled: true
-    datasources:
-      - type: "prometheus"
-        name: "prometheus"
   prometheus_configs:
     enabled: true
     storage_class: "gp2"
