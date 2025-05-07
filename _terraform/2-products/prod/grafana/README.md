@@ -6,5 +6,5 @@
 ```txt
 tf cloud workspace name: 2-products_prod_grafana
 tf module source: dasmeta/grafana/onpremise
-tf_module version: 1.16.3
+tf_module version: 1.16.1
 ```

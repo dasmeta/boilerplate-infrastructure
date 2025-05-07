@@ -8,7 +8,7 @@ provider "aws" {
 
   default_tags {
 
-    tags = {"Account":"Dasmeta-Demo","AppliedFrom":"terraform-cloud","ManageLevel":"environment","ManagedBy":"terraform","TerraformCloudWorkspace":"2-products_prod_grafana","TerraformModuleSource":"dasmeta/grafana/onpremise","TerraformModuleVersion":"1.16.3"}
+    tags = {"Account":"Dasmeta-Demo","AppliedFrom":"terraform-cloud","ManageLevel":"environment","ManagedBy":"terraform","TerraformCloudWorkspace":"2-products_prod_grafana","TerraformModuleSource":"dasmeta/grafana/onpremise","TerraformModuleVersion":"1.16.1"}
   }
 }
 provider "kubernetes" {

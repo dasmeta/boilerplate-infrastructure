@@ -1,5 +1,5 @@
 source: dasmeta/grafana/onpremise
-version: 1.16.3
+version: 1.16.1
 variables:
   name: demo-prod-grafana
   grafana_admin_password: "password"
@@ -27,6 +27,9 @@ variables:
         - "grafana.demo.dasmeta.com"
     redundency:
       enabled: true
+    datasources:
+      - type: "prometheus"
+        name: "prometheus"
   prometheus_configs:
     enabled: true
     storage_class: "gp2"
