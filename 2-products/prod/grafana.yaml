@@ -12,6 +12,9 @@ variables:
         equation: gt
         threshold: 95
   grafana_configs:
+    enabled: true
+    persistence:
+      storage_class: "gp2"
     resources:
       request:
         cpu: "1"
