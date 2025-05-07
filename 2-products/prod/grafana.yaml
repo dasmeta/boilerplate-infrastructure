@@ -29,7 +29,7 @@ variables:
       enabled: true
     datasources:
       - type: "prometheus"
-        name: "Prometheus"
+        name: "prometheus"
   prometheus_configs:
     enabled: true
     storage_class: "gp2"
