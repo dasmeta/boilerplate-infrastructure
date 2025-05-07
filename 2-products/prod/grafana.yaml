@@ -28,8 +28,8 @@ variables:
     redundency:
       enabled: true
     datasources:
-      - type: "cloudwatch"
-        name: "cloudwatch"
+      - type: "Prometheus"
+        name: "Prometheus"
   prometheus_configs:
     enabled: true
     storage_class: "gp2"
