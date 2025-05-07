@@ -32,6 +32,7 @@ variables:
         runAsUser: 0
     service:
       main:
+        type: NodePort 
         ports:
           main:
             port: 1337
