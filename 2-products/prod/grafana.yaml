@@ -30,7 +30,7 @@ variables:
       hosts:
         - "grafana.demo.dasmeta.com"
     redundency:
-      enabled: false
+      enabled: true
     datasources:
       - type: "cloudwatch"
         name: "cloudwatch"
