@@ -1,0 +1,145 @@
+source: dasmeta/service/aws
+version: 1.1.4
+variables:
+  name: backend
+  create_namespace: false
+  namespace: demo
+  cluster_name: "eks-prod"
+  alarms:
+    enabled: false
+    sns_topic: "Default"
+  chart: "strapi"
+  chart_version: "16.2.4"
+  repository: "oci://tccr.io/truecharts"
+  helm_values:
+    image:
+      repository: docker.io/vshadbolt/strapi
+      tag: 4.25.6
+    cnpg:
+      main:
+        database: strapi
+        enabled: false
+        user: strapi
+    persistence:
+      data:
+        enabled: false
+        mountPath: /srv/app
+    securityContext:
+      container:
+        readOnlyRootFilesystem: false
+        runAsGroup: 0
+        runAsNonRoot: false
+        runAsUser: 0
+    service:
+      main:
+        type: NodePort 
+        ports:
+          main:
+            port: 1337
+            targetPort: 1337
+            nodePort: 31337
+    workload:
+      main:
+        podSpec:
+          containers:
+            main:
+              env:
+                ADMIN_JWT_SECRET: ${0-accounts/prod/master-secret.secrets.ADMIN_JWT_SECRET}
+                ADMIN_URL: https://backend.demo.dasmeta.com/admin
+                API_TOKEN_SALT: ${0-accounts/prod/master-secret.secrets.API_TOKEN_SALT}
+                APP_HOST: 0.0.0.0
+                APP_KEYS:
+                  - keya
+                  - keyb
+                APP_URL: https://backend.demo.dasmeta.com/admin
+                BACKEND_URL: https://backend.demo.dasmeta.com
+                DATABASE_CLIENT: postgres
+                DATABASE_HOST: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_address}
+                DATABASE_NAME: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_name}
+                DATABASE_PASSWORD: ${0-accounts/prod/master-secret.secrets.POSTGRESS_PASS}
+                DATABASE_PORT: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_port}
+                DATABASE_SSL: "true"
+                DATABASE_SSL_REJECT_UNAUTHORIZED: "false"
+                DATABASE_USERNAME: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_username}
+                EXTRA_ARGS: ""
+                FAST_REFRESH: false
+                HOST: 0.0.0.0
+                JWT_SECRET: ${0-accounts/prod/master-secret.secrets.JWT_SECRET}
+                NODE_ENV: development
+                PORT: 1337
+                PUBLIC_URL: https://backend.demo.dasmeta.com
+                STRAPI_ADMIN_BACKEND_URL: https://backend.demo.dasmeta.com
+                STRAPI_DISABLE_UPDATE_NOTIFICATION: true
+    ingress:
+      main:
+        enabled: true
+        annotations:
+          alb.ingress.kubernetes.io/group.name: prod-ingress
+          alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+          alb.ingress.kubernetes.io/success-codes: 200-399
+          alb.ingress.kubernetes.io/group.order: "10"
+          alb.ingress.kubernetes.io/healthcheck-path: /
+          kubernetes.io/ingress.class: alb
+          alb.ingress.kubernetes.io/listener-attributes.HTTPS-443: "routing.http.response.access_control_allow_origin.header_value=*,routing.http.response.access_control_allow_headers.header_value=*,routing.http.response.access_control_allow_methods.header_value=POST"
+        hosts:
+        - host: backend.demo.dasmeta.com
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: backend-strapi
+                  port:
+                    number: 1337
+        integrations:
+          traefik:
+            enabled: false
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      default_tags:
+        tags:
+          Account: prod
+          ManageLevel: product
+  - name: kubernetes
+    version: ~> 2.23
+    module_nested_provider: true
+    source: "hashicorp/kubernetes"
+    variables:
+      cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+      host: ${1-environments/prod/eks.cluster_host}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args:
+          - "eks"
+          - "--region"
+          - "eu-central-1"
+          - "get-token"
+          - "--cluster-name"
+          - "eks-prod"
+        command: "aws"
+  - name: helm
+    version: "2.17.0"
+    source: "hashicorp/helm"
+    blocks:
+      kubernetes:
+        cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+        host: ${1-environments/prod/eks.cluster_host}
+        blocks:
+          exec:
+            api_version: "client.authentication.k8s.io/v1beta1"
+            args:
+              - "eks"
+              - "--region"
+              - "eu-central-1"
+              - "get-token"
+              - "--cluster-name"
+              - "eks-prod"
+            command: "aws"
+linked_workspaces:
+  - 0-accounts/prod/master-secret
+  - 1-environments/prod/eks
+  - 1-environments/prod/rds-postgres
