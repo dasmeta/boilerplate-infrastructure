@@ -55,7 +55,7 @@ variables:
                 BACKEND_URL: https://backend.demo.dasmeta.com
                 DATABASE_CLIENT: postgres
                 DATABASE_HOST: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_address} #rds-proddb.crackyiwez7c.eu-central-1.rds.amazonaws.com
-                DATABASE_NAME: ${1-environments/prod/rds-postgres.db_instance_address[0].db_name} #proddb
+                DATABASE_NAME: proddb
                 DATABASE_PASSWORD: ${0-accounts/prod/master-secret.secrets.POSTGRESS_PASS} #demopostgress
                 DATABASE_PORT: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_port} #5432
                 DATABASE_SSL: "true"
