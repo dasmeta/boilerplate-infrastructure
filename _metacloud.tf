@@ -18,10 +18,11 @@ variable "access_key_id" {}
 variable "secret_access_key" {}
 variable "session_token" {}
 variable "security_token" {}
+variable "git_branch" {}
 
 module "metacloud" {
   source  = "dasmeta/cloud/tfe"
-  version = "2.5.1"
+  version = "2.5.2"
 
   org   = var.tfc_org
   token = var.tfc_token
@@ -34,6 +35,7 @@ module "metacloud" {
   git_org      = var.git_org
   git_repo     = var.git_repo
   git_token    = var.git_token
+  git_branch   = var.git_branch
 
   auto_apply   = true
 
