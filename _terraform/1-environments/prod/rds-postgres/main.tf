@@ -24,7 +24,7 @@ module "this" {
   slow_queries = {"enabled":false,"query_duration":1}
   storage_encrypted = true
   storage_type = "gp2"
-  subnet_ids = "${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.private_subnets}"
+  subnet_ids = "${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.public_subnets}"
   vpc_id = "${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.id}"
   providers = {"aws":"aws"}
 }
