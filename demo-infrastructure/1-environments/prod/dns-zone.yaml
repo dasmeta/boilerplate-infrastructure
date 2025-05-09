@@ -2,15 +2,15 @@ source: dasmeta/dns/aws
 version: 1.0.4
 variables:
   create_zone: true
-  zone: "demo.dasmeta.com"
+  zone: "demo.yourdomain.com"
   records: []
-    # - name: demo.dasmeta.com
+    # - name: demo.yourdomain.com
     #   alb: prod-ingress
     #   target_type: alb
-    # - name: backend.demo.dasmeta.com
+    # - name: backend.demo.yourdomain.com
     #   alb: prod-ingress
     #   target_type: alb
-    # - name: grafana.demo.dasmeta.com
+    # - name: grafana.demo.yourdomain.com
     #   alb: prod-ingress
     #   target_type: alb
 providers:
