@@ -139,6 +139,8 @@ providers:
               - "--cluster-name"
               - "eks-prod"
             command: "aws"
+output:
+  sensitive: true
 linked_workspaces:
   - 0-accounts/prod/master-secret
   - 1-environments/prod/eks
