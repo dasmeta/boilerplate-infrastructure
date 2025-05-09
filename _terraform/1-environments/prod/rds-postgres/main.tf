@@ -16,7 +16,7 @@ module "this" {
   engine = "postgres"
   engine_version = "15.10"
   identifier = "rds-proddb"
-  ingress_with_cidr_blocks = [{"cidr_blocks":"${1-environments/prod/vpc.cidr_block}","description":"5432 from VPN","from_port":5432,"protocol":"tcp","to_port":5432}]
+  ingress_with_cidr_blocks = [{"cidr_blocks":"${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.cidr_block}","description":"5432 from VPN","from_port":5432,"protocol":"tcp","to_port":5432}]
   instance_class = "db.t3.medium"
   multi_az = false
   port = "5432"
@@ -24,14 +24,14 @@ module "this" {
   slow_queries = {"enabled":false,"query_duration":1}
   storage_encrypted = true
   storage_type = "gp2"
-  subnet_ids = "${1-environments/prod/vpc.private_subnets}"
-  vpc_id = "${1-environments/prod/vpc.id}"
+  subnet_ids = "${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.private_subnets}"
+  vpc_id = "${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.id}"
   providers = {"aws":"aws"}
 }
 
 
 data "tfe_outputs" "this" {
-  for_each = { for workspace in ["0-accounts/prod/master-secret"] : workspace => workspace }
+  for_each = { for workspace in ["0-accounts/prod/master-secret","1-environments/prod/vpc"] : workspace => workspace }
 
   organization = "Demo-Dasmeta"
   workspace    = replace(each.value, "/[^a-zA-Z0-9_-]+/", "_")

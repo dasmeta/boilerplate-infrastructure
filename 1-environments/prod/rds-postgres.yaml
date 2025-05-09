@@ -53,3 +53,4 @@ providers:
           ManageLevel: environment
 linked_workspaces:
   - 0-accounts/prod/master-secret
+  - 1-environments/prod/vpc
