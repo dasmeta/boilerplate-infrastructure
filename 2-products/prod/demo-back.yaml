@@ -65,7 +65,7 @@ variables:
                 FAST_REFRESH: false
                 HOST: 0.0.0.0
                 JWT_SECRET: ${0-accounts/prod/master-secret.secrets.JWT_SECRET} #my_jwt_secret
-                NODE_ENV: development
+                NODE_ENV: development1
                 PORT: 1337
                 PUBLIC_URL: https://backend.demo.dasmeta.com
                 STRAPI_ADMIN_BACKEND_URL: https://backend.demo.dasmeta.com
