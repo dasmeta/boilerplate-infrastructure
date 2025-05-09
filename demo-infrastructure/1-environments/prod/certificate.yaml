@@ -1,10 +1,10 @@
 source: dasmeta/modules/aws//modules/ssl-certificate
 version: 2.6.2
 variables:
-  domain: "demo.dasmeta.com"
-  zone: "demo.dasmeta.com"
-  alternative_domains: ["*.demo.dasmeta.com"]
-  alternative_zones: ["demo.dasmeta.com"]
+  domain: "demo.yourdomain.com"
+  zone: "demo.yourdomain.com"
+  alternative_domains: ["*.demo.yourdomain.com"]
+  alternative_zones: ["demo.yourdomain.com"]
 providers:
   - name: aws
     version: ~> 5.0

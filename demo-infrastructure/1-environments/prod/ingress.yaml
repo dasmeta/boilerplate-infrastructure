@@ -2,15 +2,15 @@ source: dasmeta/modules/aws//modules/ingress
 version: 2.14.7
 variables:
   name: "prod-ingress"
-  hostname: "demo.dasmeta.com"
+  hostname: "demo.yourdomain.com"
   additional_hostnames:
-    - "*.demo.dasmeta.com"
+    - "*.demo.yourdomain.com"
   namespace: "frontend"
   certificate_arn: ${1-environments/prod/certificate.arn}
   healthcheck_path: "/"
   healthcheck_success_codes: "200-399"
   tls_hosts:
-    - "*.demo.dasmeta.com"
+    - "*.demo.yourdomain.com"
   alarms:
     enabled: false
     sns_topic: "Default"
