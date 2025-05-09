@@ -6,7 +6,7 @@ variables:
   additional_hostnames:
     - "*.demo.dasmeta.com"
   namespace: "frontend"
-  certificate_arn: "arn:aws:acm:eu-central-1:817342036967:certificate/dc6e23c5-a0a4-45d2-ac39-81ee643619fe"
+  certificate_arn: ${1-environments/prod/certificate.arn} #"arn:aws:acm:eu-central-1:817342036967:certificate/dc6e23c5-a0a4-45d2-ac39-81ee643619fe"
   healthcheck_path: "/"
   healthcheck_success_codes: "200-399"
   tls_hosts:
@@ -44,3 +44,4 @@ providers:
         command: "aws"
 linked_workspaces:
   - 1-environments/prod/eks
+  - 1-environments/prod/certificate
