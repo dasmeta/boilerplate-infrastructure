@@ -20,17 +20,17 @@ variables:
     enabled: false
     query_duration: 1
   create_security_group: true
-  vpc_id: "vpc-0ee768628e3fd8fee"
-  subnet_ids:
-    - subnet-0cf6d18944ec3f120
-    - subnet-09346f4544a1b75ca
+  vpc_id: ${1-environments/prod/vpc.id} #"vpc-0ee768628e3fd8fee"
+  subnet_ids: ${1-environments/prod/vpc.private_subnets}
+#    - subnet-0cf6d18944ec3f120
+#    - subnet-09346f4544a1b75ca
   ingress_with_cidr_blocks:
     - description: "5432 from VPN"
       from_port: 5432
       to_port: 5432
       protocol: "tcp"
       # cidr_blocks: ${1-environments/dev/vpc.cidr_block}
-      cidr_blocks: "195.250.69.234/32"
+      cidr_blocks: ${1-environments/prod/vpc.cidr_block} #"195.250.69.234/32"
   egress_with_cidr_blocks:
     - from_port: 0
       to_port: 0

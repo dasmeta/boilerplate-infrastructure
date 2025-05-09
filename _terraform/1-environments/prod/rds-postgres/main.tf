@@ -16,7 +16,7 @@ module "this" {
   engine = "postgres"
   engine_version = "15.10"
   identifier = "rds-proddb"
-  ingress_with_cidr_blocks = [{"cidr_blocks":"195.250.69.234/32","description":"5432 from VPN","from_port":5432,"protocol":"tcp","to_port":5432}]
+  ingress_with_cidr_blocks = [{"cidr_blocks":"${1-environments/prod/vpc.cidr_block}","description":"5432 from VPN","from_port":5432,"protocol":"tcp","to_port":5432}]
   instance_class = "db.t3.medium"
   multi_az = false
   port = "5432"
@@ -24,8 +24,8 @@ module "this" {
   slow_queries = {"enabled":false,"query_duration":1}
   storage_encrypted = true
   storage_type = "gp2"
-  subnet_ids = ["subnet-0cf6d18944ec3f120","subnet-09346f4544a1b75ca"]
-  vpc_id = "vpc-0ee768628e3fd8fee"
+  subnet_ids = "${1-environments/prod/vpc.private_subnets}"
+  vpc_id = "${1-environments/prod/vpc.id}"
   providers = {"aws":"aws"}
 }
 
