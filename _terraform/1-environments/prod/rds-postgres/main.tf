@@ -16,7 +16,7 @@ module "this" {
   engine = "postgres"
   engine_version = "15.10"
   identifier = "rds-proddb"
-  ingress_with_cidr_blocks = [{"cidr_blocks":"${data.tfe_outputs.this["1-environments/prod/vpc"].values.results.cidr_block}","description":"5432 from VPN","from_port":5432,"protocol":"tcp","to_port":5432}]
+  ingress_with_cidr_blocks = [{"cidr_blocks":"195.250.69.234/32","description":"5432 from VPN","from_port":5432,"protocol":"tcp","to_port":5432}]
   instance_class = "db.t3.medium"
   multi_az = false
   port = "5432"

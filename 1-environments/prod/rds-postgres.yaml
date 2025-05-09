@@ -29,8 +29,7 @@ variables:
       from_port: 5432
       to_port: 5432
       protocol: "tcp"
-      # cidr_blocks: ${1-environments/dev/vpc.cidr_block}
-      cidr_blocks: ${1-environments/prod/vpc.cidr_block} #"195.250.69.234/32"
+      cidr_blocks: "195.250.69.234/32"
   egress_with_cidr_blocks:
     - from_port: 0
       to_port: 0

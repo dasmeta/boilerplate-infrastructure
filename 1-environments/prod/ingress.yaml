@@ -42,6 +42,8 @@ providers:
           - "--cluster-name"
           - "eks-prod"
         command: "aws"
+output:
+  sensitive: true
 linked_workspaces:
   - 1-environments/prod/eks
   - 1-environments/prod/certificate
