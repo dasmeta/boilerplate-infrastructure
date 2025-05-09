@@ -1,0 +1,17 @@
+source: dasmeta/modules/aws//modules/ssl-certificate
+version: 2.6.2
+variables:
+  domain: "demo.yourdomain.com"
+  zone: "demo.yourdomain.com"
+  alternative_domains: ["*.demo.yourdomain.com"]
+  alternative_zones: ["demo.yourdomain.com"]
+providers:
+  - name: aws
+    version: ~> 5.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: environment

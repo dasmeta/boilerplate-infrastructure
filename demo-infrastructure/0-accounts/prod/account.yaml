@@ -1,0 +1,26 @@
+source: dasmeta/account/aws
+version: 1.2.2
+variables:
+  secrets:
+    enabled: true
+    values: {} # values will be filled from SM ui in aws web console
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: account
+  - name: aws
+    alias: virginia
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      region: us-east-1
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: account
