@@ -2,5 +2,5 @@
 
 output "results" {
   value = module.this
-
+  sensitive = true
 }
