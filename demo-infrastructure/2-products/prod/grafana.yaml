@@ -1,0 +1,109 @@
+source: dasmeta/grafana/onpremise
+version: 1.16.3
+variables:
+  name: demo-prod-grafana
+  grafana_admin_password: "password"
+  cluster_name: "eks-prod"
+  alerts:
+    rules:
+      - name: "Frontend High CPU Alert"
+        datasource: "prometheus"
+        expr: sum(rate(container_cpu_usage_seconds_total{namespace=\"demo\",pod=~\"frontend.*\"}[5m]))
+        function: Last
+        equation: gt
+        threshold: 95
+  grafana_configs:
+    persistence:
+      enabled: true
+      size: "10Gi"
+      storage_class: "gp2"
+    resources:
+      request:
+        cpu: "1"
+        mem: "2Gi"
+      limits:
+        cpu: "1"
+        mem: "2Gi"
+    ingress:
+      annotations:
+        alb.ingress.kubernetes.io/group.name: "prod-ingress"
+      hosts:
+        - "grafana.demo.dasmeta.com"
+    redundency:
+      enabled: true
+    datasources:
+      - type: "cloudwatch"
+        name: "cloudwatch"
+  prometheus_configs:
+    enabled: true
+    storage_class: "gp2"
+    storage_size: "10Gi"
+    resources:
+      request:
+        cpu: "1"
+        mem: "1Gi"
+      limit:
+        cpu: "1500m"
+        mem: "1.5Gi"
+    replicas: 1
+  tempo_configs:
+    enabled: false
+  loki_configs:
+    enabled: true
+  aws_region: "eu-central-1"
+providers:
+  - name: aws
+    version: ~> 5.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: environment
+  - name: kubernetes
+    version: ~> 2.23
+    module_nested_provider: true
+    source: "hashicorp/kubernetes"
+    variables:
+      cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+      host: ${1-environments/prod/eks.cluster_host}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args:
+          - "eks"
+          - "--region"
+          - "eu-central-1"
+          - "get-token"
+          - "--cluster-name"
+          - "eks-prod"
+        command: "aws"
+  - name: helm
+    version: ~> 2.5
+    source: "hashicorp/helm"
+    blocks:
+      kubernetes:
+        cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+        host: ${1-environments/prod/eks.cluster_host}
+        blocks:
+          exec:
+            api_version: "client.authentication.k8s.io/v1beta1"
+            args:
+              - "eks"
+              - "--region"
+              - "eu-central-1"
+              - "get-token"
+              - "--cluster-name"
+              - "eks-prod"
+            command: "aws"
+  - name: grafana
+    version: ~> 3.0
+    source: grafana/grafana
+    variables:
+      url: "https://grafana.demo.dasmeta.com"
+      auth: admin:password
+output:
+  sensitive: true
+linked_workspaces:
+  - 1-environments/prod/eks

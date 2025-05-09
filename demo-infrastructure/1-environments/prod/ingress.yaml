@@ -1,0 +1,49 @@
+source: dasmeta/modules/aws//modules/ingress
+version: 2.14.7
+variables:
+  name: "prod-ingress"
+  hostname: "demo.dasmeta.com"
+  additional_hostnames:
+    - "*.demo.dasmeta.com"
+  namespace: "frontend"
+  certificate_arn: ${1-environments/prod/certificate.arn}
+  healthcheck_path: "/"
+  healthcheck_success_codes: "200-399"
+  tls_hosts:
+    - "*.demo.dasmeta.com"
+  alarms:
+    enabled: false
+    sns_topic: "Default"
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      region: eu-central-1
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: environment
+  - name: kubernetes
+    version: ~> 2.23
+    module_nested_provider: true
+    source: "hashicorp/kubernetes"
+    variables:
+      cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+      host: ${1-environments/prod/eks.cluster_host}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args:
+          - "eks"
+          - "--region"
+          - "eu-central-1"
+          - "get-token"
+          - "--cluster-name"
+          - "eks-prod"
+        command: "aws"
+output:
+  sensitive: true
+linked_workspaces:
+  - 1-environments/prod/certificate
+  - 1-environments/prod/eks

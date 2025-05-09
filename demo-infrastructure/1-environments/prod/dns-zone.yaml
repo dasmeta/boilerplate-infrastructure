@@ -1,0 +1,24 @@
+source: dasmeta/dns/aws
+version: 1.0.4
+variables:
+  create_zone: true
+  zone: "demo.dasmeta.com"
+  records: []
+    # - name: demo.dasmeta.com
+    #   alb: prod-ingress
+    #   target_type: alb
+    # - name: backend.demo.dasmeta.com
+    #   alb: prod-ingress
+    #   target_type: alb
+    # - name: grafana.demo.dasmeta.com
+    #   alb: prod-ingress
+    #   target_type: alb
+providers:
+  - name: aws
+    version: ~> 5.0
+    module_nested_provider: true
+    variables:
+      default_tags:
+        tags:
+          Account: Dasmeta-Demo
+          ManageLevel: environment

@@ -1,0 +1,82 @@
+source: dasmeta/service/aws
+version: 1.1.4
+variables:
+  name: frontend
+  create_namespace: true
+  namespace: demo
+  cluster_name: "eks-prod"
+  alarms:
+    enabled: false
+    sns_topic: "Default"
+  helm_values:
+    image:
+      repository: public.ecr.aws/r0j4a4t3/demo-frontend
+      tag: version7
+    containerPort: 80
+    service:
+      port: 80
+    ingress:
+      annotations:
+        alb.ingress.kubernetes.io/group.name: prod-ingress
+        alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
+        alb.ingress.kubernetes.io/success-codes: 200-399
+        alb.ingress.kubernetes.io/group.order: "20"
+        alb.ingress.kubernetes.io/healthcheck-path: /health
+        kubernetes.io/ingress.class: alb
+      enabled: true
+      hosts:
+      - host: demo.dasmeta.com
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port: http
+providers:
+  - name: aws
+    version: ~> 4.0
+    module_nested_provider: true
+    variables:
+      default_tags:
+        tags:
+          Account: prod
+          ManageLevel: product
+  - name: kubernetes
+    version: ~> 2.23
+    module_nested_provider: true
+    source: "hashicorp/kubernetes"
+    variables:
+      cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+      host: ${1-environments/prod/eks.cluster_host}
+    blocks:
+      exec:
+        api_version: "client.authentication.k8s.io/v1beta1"
+        args:
+          - "eks"
+          - "--region"
+          - "eu-central-1"
+          - "get-token"
+          - "--cluster-name"
+          - "eks-prod"
+        command: "aws"
+  - name: helm
+    version: "2.10.1"
+    source: "hashicorp/helm"
+    blocks:
+      kubernetes:
+        cluster_ca_certificate: ${1-environments/prod/eks.cluster_certificate}
+        host: ${1-environments/prod/eks.cluster_host}
+        blocks:
+          exec:
+            api_version: "client.authentication.k8s.io/v1beta1"
+            args:
+              - "eks"
+              - "--region"
+              - "eu-central-1"
+              - "get-token"
+              - "--cluster-name"
+              - "eks-prod"
+            command: "aws"
+linked_workspaces:
+  - 1-environments/prod/eks
