@@ -11,7 +11,7 @@ variables:
   helm_values:
     image:
       repository: public.ecr.aws/r0j4a4t3/demo-frontend
-      tag: version7
+      tag: v8
     containerPort: 80
     service:
       port: 80
@@ -25,7 +25,7 @@ variables:
         kubernetes.io/ingress.class: alb
       enabled: true
       hosts:
-      - host: demo.dasmeta.com
+      - host: demo.yourdomain.com
         paths:
           - path: /
             pathType: Prefix

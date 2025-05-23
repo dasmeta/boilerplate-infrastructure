@@ -5,7 +5,7 @@ variables:
   hostname: "demo.yourdomain.com"
   additional_hostnames:
     - "*.demo.yourdomain.com"
-  namespace: "frontend"
+  namespace: "demo"
   certificate_arn: ${1-environments/prod/certificate.arn}
   healthcheck_path: "/"
   healthcheck_success_codes: "200-399"

@@ -45,14 +45,14 @@ variables:
             main:
               env:
                 ADMIN_JWT_SECRET: ${0-accounts/prod/master-secret.secrets.ADMIN_JWT_SECRET}
-                ADMIN_URL: https://backend.demo.dasmeta.com/admin
+                ADMIN_URL: https://backend.demo.yourdomain.com/admin
                 API_TOKEN_SALT: ${0-accounts/prod/master-secret.secrets.API_TOKEN_SALT}
                 APP_HOST: 0.0.0.0
                 APP_KEYS:
                   - keya
                   - keyb
-                APP_URL: https://backend.demo.dasmeta.com/admin
-                BACKEND_URL: https://backend.demo.dasmeta.com
+                APP_URL: https://backend.demo.yourdomain.com/admin
+                BACKEND_URL: https://backend.demo.yourdomain.com
                 DATABASE_CLIENT: postgres
                 DATABASE_HOST: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_address}
                 DATABASE_NAME: ${1-environments/prod/rds-postgres.db_instance_address[0].db_instance_name}
@@ -67,8 +67,8 @@ variables:
                 JWT_SECRET: ${0-accounts/prod/master-secret.secrets.JWT_SECRET}
                 NODE_ENV: development
                 PORT: 1337
-                PUBLIC_URL: https://backend.demo.dasmeta.com
-                STRAPI_ADMIN_BACKEND_URL: https://backend.demo.dasmeta.com
+                PUBLIC_URL: https://backend.demo.yourdomain.com
+                STRAPI_ADMIN_BACKEND_URL: https://backend.demo.yourdomain.com
                 STRAPI_DISABLE_UPDATE_NOTIFICATION: true
     ingress:
       main:
@@ -82,7 +82,7 @@ variables:
           kubernetes.io/ingress.class: alb
           alb.ingress.kubernetes.io/listener-attributes.HTTPS-443: "routing.http.response.access_control_allow_origin.header_value=*,routing.http.response.access_control_allow_headers.header_value=*,routing.http.response.access_control_allow_methods.header_value=POST"
         hosts:
-        - host: backend.demo.dasmeta.com
+        - host: backend.demo.yourdomain.com
           paths:
             - path: /
               pathType: Prefix

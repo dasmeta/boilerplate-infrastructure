@@ -1,7 +1,31 @@
 source: dasmeta/grafana/onpremise
-version: 1.16.3
+version: 1.17.0
 variables:
   name: demo-prod-grafana
+  application_dashboard:
+    rows:
+      - type: "block/sla"
+        name: "SLA"
+      - type: "block/alb_ingress"
+        name: "ALB"
+        load_balancer_arn: "<load_balancer_arn>"
+        region: "eu-central-1"
+      - type: "block/cloudwatch"
+        name: "Cloudwatch Metrics"
+        region: "eu-central-1"
+      - type: "block/service"
+        name: "backend-strapi"
+      - type: "block/service"
+        name: "frontend"
+    data_source:
+      uid: "prometheus"
+      type: "prometheus"
+    variables:
+      - name: "namespace"
+        options:
+        - selected: true
+          value: "demo"
+        - value: "demo"
   grafana_admin_password: "password"
   cluster_name: "eks-prod"
   alerts:
@@ -28,7 +52,7 @@ variables:
       annotations:
         alb.ingress.kubernetes.io/group.name: "prod-ingress"
       hosts:
-        - "grafana.demo.dasmeta.com"
+        - "grafana.demo.yourdomain.com"
     redundency:
       enabled: true
     datasources:
@@ -101,7 +125,7 @@ providers:
     version: ~> 3.0
     source: grafana/grafana
     variables:
-      url: "https://grafana.demo.dasmeta.com"
+      url: "https://grafana.demo.yourdomain.com"
       auth: admin:password
 output:
   sensitive: true
