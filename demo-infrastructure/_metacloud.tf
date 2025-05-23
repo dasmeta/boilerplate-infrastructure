@@ -25,7 +25,7 @@ module "metacloud" {
   org   = var.tfc_org
   token = var.tfc_token
 
-  rootdir   = "${path.module}/_terraform/" # should be default value
+  rootdir   = "${path.module}/demo-infrastructure/_terraform/"
   targetdir = "${path.module}/_terraform" # should be default value
   yamldir   = "${path.module}/."
 
