@@ -119,7 +119,7 @@ delivery artifacts are committed.
 
 Terraform Cloud is a first-class compatibility profile, not merely the legacy
 default. V1 targets the current `dasmeta/cloud/tfe` 2.5 release line (currently
-v2.5.10), requires `meta-cli >= 0.0.15`, and protects both modern and legacy
+v2.5.10), requires `meta-cli >= 0.0.16`, and protects both modern and legacy
 flows.
 
 The profile must distinguish three independent Terraform versions:
@@ -155,18 +155,14 @@ generated Terraform manually. Resolve the authoritative YAML and driver inputs,
 discard both generated sides, and regenerate with the fork's pinned toolchain.
 Review and commit the regenerated result.
 
-### Confirmed dependency gap
+### Dependency resolution
 
 `meta-cli` 0.0.15 passes `tfe_token_variable_set`, `aws.enabled`, and
-`auto_apply` from `metacloud.yaml` into generated `_metacloud.tf`. The current
-remaining gap is `git_branch` and `git_enabled`: the TFE module exposes both,
-but meta-cli does not normalise or render them.
-
-Recommended resolution: a small, separately reviewed `meta-cli` change adds
-schema, normalisation, HCL generation, and regression tests for these two Git
-settings. Boilerplate acceptance tests then consume that released meta-cli
-contract. Until it lands, the boilerplate must document the unavailable
-overrides rather than present ignored YAML as working configuration.
+`auto_apply` from `metacloud.yaml` into generated `_metacloud.tf`. The separate
+`meta-cli` DEV-2013 change adds schema, normalisation, HCL generation, and
+regression tests for `git_branch` and `git_enabled`. This boilerplate consumes
+that contract from `meta-cli >= 0.0.16` while preserving omitted-setting and
+legacy no-driver behavior.
 
 ## AI and skill surfaces
 
@@ -219,9 +215,8 @@ label it as non-canonical.
 4. Modernise the canonical seed and move non-active examples out of its active
    YAML discovery path; remove secret-like sample values.
 5. Add driver-specific generated-output and execution runbooks.
-6. Land `meta-cli` passthrough for `git_branch` and `git_enabled`, or explicitly
-   defer those two overrides with a tracked gap. Require at least meta-cli
-   0.0.15 for the already-released variable-set controls.
+6. Land the separate `meta-cli` passthrough for `git_branch` and `git_enabled`,
+   then release and require at least meta-cli 0.0.16.
 7. Run credential-free validation and record live TFC verification as a
    customer-fork acceptance step rather than pretending the template test
    proves remote execution.
