@@ -27,6 +27,9 @@ sources:
     owner: customer-platform-owner
 
 applicable_skills:
+  - name: infrastructure-bootstrap
+    source: skills/infrastructure-bootstrap/SKILL.md
+    required: true
   - name: infra-execution
     source: skills/infra-execution/SKILL.md
     required: true

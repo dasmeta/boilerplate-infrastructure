@@ -1,0 +1,19 @@
+image: node:20-bookworm
+
+definitions:
+  steps:
+    - step: &template-contract
+        name: Template contract
+        script:
+          - apt-get update
+          - apt-get install -y --no-install-recommends jq ripgrep ruby ca-certificates
+          - npm install --global @dasmeta/meta-cli@0.0.15
+          - bash scripts/ci/run-template-tests.sh
+
+pipelines:
+  pull-requests:
+    '**':
+      - step: *template-contract
+  branches:
+    main:
+      - step: *template-contract

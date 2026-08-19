@@ -64,6 +64,21 @@ bindings. It records one of `bound`, `read-only`, `planned`, `not-applicable`,
 or `gap` for every required management plane and derives repository readiness
 as `context-ready`, `execution-ready`, or `partial`.
 
+## Development-orchestrator reuse boundary
+
+Reuse the generic parent/fork mechanics already proven in
+`development-orchestrator`: root AI navigation, explicit upstream/fork path
+ownership, portable repository indexing, proposal status and unresolved
+questions, immutable approval tokens, read-only discovery before mutation, and
+a single cross-forge validation runner. Adapt those mechanics to infrastructure
+management planes and populate-in-place bootstrap.
+
+Do not copy development-specific feature manifests/status, delivery stages,
+mergeability, product role taxonomy, 00-05 repository materialization, or
+move/clone/symlink child-repository materialization. Those remain owned by
+development orchestration; the `.agents/skills` symlink remains part of this
+template's skill-discovery contract.
+
 Required management planes:
 
 | Plane | What the binding identifies |
@@ -193,6 +208,8 @@ AI-INDEX.md
 docs/runbooks/template-fork-contract.md
 docs/runbooks/terraform-cloud-compatibility.md
 schemas/customer-context.schema.json
+schemas/infrastructure-source-index.schema.json
+schemas/bootstrap-proposal.schema.json
 schemas/standards-binding.schema.json
 WORKSPACE.md
 metacloud.yaml
@@ -202,7 +219,10 @@ config/standards-binding.yaml
 1-environments/
 2-products/
 skills/infra-execution/{SKILL.md,PROVENANCE.md}
+skills/infrastructure-bootstrap/{SKILL.md,PROVENANCE.md}
 .agents/skills -> ../skills
+scripts/bootstrap/{validate-proposal.sh,validate-source-index.sh}
+scripts/ci/run-template-tests.sh
 tests/test-template-foundation.sh
 tests/fixtures/terraform-cloud/{current,legacy-without-driver}/
 ```
@@ -248,6 +268,8 @@ the live root discovery tree.
 - A fresh fork retains root-level `0-accounts/`, `1-environments/`, and
   `2-products/` YAML paths with `yaml_dir: .`.
 - Bootstrap examples cover every management plane and validate against schemas.
+- Bootstrap uses a validated proposal lifecycle, immutable confirmation token,
+  and portable infrastructure source index adapted from development-orchestrator.
 - A fork can select CloudBrowser or another asset-management provider.
 - `terraform-cloud`, `terramate`, and `terragrunt` have explicit lifecycle
   roles and generated-output rules.

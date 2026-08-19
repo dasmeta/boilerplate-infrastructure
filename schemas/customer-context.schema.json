@@ -111,14 +111,14 @@
     "stack_mapping": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "type", "repository", "infrastructure_scope", "status"],
+      "required": ["name", "type", "source_id", "infrastructure_scope", "status"],
       "properties": {
         "name": { "type": "string", "minLength": 1 },
         "type": {
           "type": "string",
           "enum": ["delivery-orchestrator", "data-platform", "application", "shared-platform", "other"]
         },
-        "repository": { "type": "string", "minLength": 1 },
+        "source_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
         "infrastructure_scope": { "type": "string", "minLength": 1 },
         "status": { "$ref": "#/$defs/binding_status" }
       }

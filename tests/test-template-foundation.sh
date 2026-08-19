@@ -48,16 +48,28 @@ for path in \
   .gitignore \
   metacloud.yaml \
   docs/runbooks/bootstrap-customer-context.md \
+  docs/runbooks/development-orchestrator-reuse.md \
   docs/runbooks/template-fork-contract.md \
   docs/runbooks/terraform-cloud-compatibility.md \
   docs/runbooks/terramate.md \
   docs/runbooks/terragrunt.md \
   schemas/customer-context.schema.json \
+  schemas/infrastructure-source-index.schema.json \
   schemas/standards-binding.schema.json \
   config/customer-context.yaml \
+  config/infrastructure-source-index.json \
   config/standards-binding.yaml \
+  schemas/bootstrap-proposal.schema.json \
   skills/infra-execution/SKILL.md \
   skills/infra-execution/PROVENANCE.md \
+  skills/infrastructure-bootstrap/SKILL.md \
+  skills/infrastructure-bootstrap/PROVENANCE.md \
+  scripts/bootstrap/validate-proposal.sh \
+  scripts/bootstrap/validate-source-index.sh \
+  scripts/ci/run-template-tests.sh \
+  .github/workflows/template-contract.yml \
+  .gitlab-ci.yml \
+  bitbucket-pipelines.yml \
   tests/fixtures/terraform-cloud/current/metacloud.yaml.fixture \
   tests/fixtures/terraform-cloud/current/version-contract.json \
   tests/fixtures/terraform-cloud/legacy-without-driver/metacloud.yaml.fixture
@@ -76,12 +88,17 @@ ruby "$ROOT/tests/validate-schema-example.rb" \
 ruby "$ROOT/tests/validate-schema-example.rb" \
   "$ROOT/schemas/standards-binding.schema.json" \
   "$ROOT/config/standards-binding.yaml"
+ruby "$ROOT/tests/validate-schema-example.rb" \
+  "$ROOT/schemas/infrastructure-source-index.schema.json" \
+  "$ROOT/config/infrastructure-source-index.json"
 
 grep -Fq '0-accounts/' "$ROOT/AGENTS.md"
 grep -Fq 'metacloud.yaml' "$ROOT/README.md"
 grep -Fq 'CloudBrowser is one supported adapter' "$ROOT/AGENTS.md"
 grep -Fq 'Prefer DasMeta modules' "$ROOT/skills/infra-execution/SKILL.md"
 grep -Fq 'approved, pinned alternatives' "$ROOT/skills/infra-execution/SKILL.md"
+grep -Fq 'populate' "$ROOT/skills/infrastructure-bootstrap/SKILL.md"
+grep -Fq 'must not move' "$ROOT/skills/infrastructure-bootstrap/SKILL.md"
 grep -Fq 'meta-cli >= 0.0.16' "$ROOT/docs/runbooks/terraform-cloud-compatibility.md"
 grep -Fqx 'git_branch: main' "$ROOT/tests/fixtures/terraform-cloud/current/metacloud.yaml.fixture"
 grep -Fqx 'git_enabled: true' "$ROOT/tests/fixtures/terraform-cloud/current/metacloud.yaml.fixture"
@@ -114,6 +131,15 @@ test ! -f "$ROOT/metacloud.example.yaml" || fail 'bootstrap must populate metacl
 if find "$ROOT/tests" -type f -name '*.yaml' -print | grep -q .; then
   fail 'test fixtures must not be discoverable as live root YAML'
 fi
+grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/.github/workflows/template-contract.yml"
+grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/.gitlab-ci.yml"
+grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/bitbucket-pipelines.yml"
+ruby -ryaml -e '
+  ARGV.each { |path| YAML.safe_load(File.read(path), permitted_classes: [], aliases: true) }
+' \
+  "$ROOT/.github/workflows/template-contract.yml" \
+  "$ROOT/.gitlab-ci.yml" \
+  "$ROOT/bitbucket-pipelines.yml"
 
 if rg -n "passwordTerraform12|db_password:[[:space:]]*[\"'][^$]" \
   "$SEED/0-accounts" \

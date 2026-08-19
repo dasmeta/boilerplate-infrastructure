@@ -9,7 +9,10 @@ discovery questions.
 1. Populate the existing `WORKSPACE.md` with the customer ID, accountable
    owner, authorised scope, and prohibited scope.
 2. Populate the existing `config/customer-context.yaml` and
-   `config/standards-binding.yaml`; do not create parallel example/active files.
+   `config/standards-binding.yaml`; populate
+   `config/infrastructure-source-index.json` with relevant repository roles,
+   authority, scope, and dependencies. Do not create parallel example/active
+   files.
 3. Replace every example identifier and unresolved placeholder.
 4. Bind each management plane to its authoritative system and record status,
    access mode, authority, freshness, owner, and gaps.
@@ -21,6 +24,13 @@ discovery questions.
    state/run evidence.
 8. Bind applicable standards, skills, approvals, and accepted exceptions.
 9. Validate the active files against the schemas and set readiness honestly.
+
+Use `skills/infrastructure-bootstrap/SKILL.md` for the reusable two-phase
+workflow. Draft a proposal from `templates/bootstrap/proposal.example.json`,
+keep unresolved questions explicit, validate it, show its immutable token, and
+obtain confirmation before populating active files. The token remains stable
+when a `ready` proposal is marked `approved`, but changes if any proposed
+binding, driver, source, or file action changes.
 
 ## Rules
 

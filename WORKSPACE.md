@@ -19,6 +19,7 @@ customer-context and standards-binding files rather than duplicating them.
 ## Source bindings
 
 - Customer context: `config/customer-context.yaml`
+- Infrastructure sources: `config/infrastructure-source-index.json`
 - Standards: `config/standards-binding.yaml`
 - IaC driver: active `metacloud.yaml`
 

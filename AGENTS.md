@@ -20,11 +20,13 @@ customer forks and generated workspace roots depend on them.
 
 1. This file and `AI-INDEX.md`.
 2. Fork-local `WORKSPACE.md`.
-3. `config/customer-context.yaml` and `config/standards-binding.yaml`, including
-   readiness and binding status.
+3. `config/customer-context.yaml`, `config/infrastructure-source-index.json`,
+   and `config/standards-binding.yaml`, including readiness, repository
+   authority/dependencies, and binding status.
 4. The active `metacloud.yaml`, relevant IaC YAML, and selected driver runbook.
-5. `skills/infra-execution/SKILL.md` plus applicable skills named by the
-   standards binding.
+5. For bootstrap/refresh, `skills/infrastructure-bootstrap/SKILL.md`; for
+   bounded IaC work, `skills/infra-execution/SKILL.md`; then applicable skills
+   named by the standards binding.
 
 If bootstrap context is unpopulated, missing, or `partial`, do not invent
 customer facts. Read-only reasoning may continue from authorised evidence, but
@@ -38,6 +40,8 @@ execution-ready.
   system may implement the same binding.
 - Provider APIs own observed resource state.
 - Git and IaC YAML own declared managed intent and review history.
+- The infrastructure source index owns repository roles, authority, scope, and
+  dependency mappings; it does not replace the content of those repositories.
 - The selected IaC platform owns state, plans, runs, and execution evidence.
 - Standards bindings own applicable policy, skills, approvals, and exceptions.
 

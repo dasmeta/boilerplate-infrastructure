@@ -14,7 +14,9 @@ not authorize execution.
 
 1. Populate `WORKSPACE.md` with customer identity, ownership, and scope.
 2. Populate `config/customer-context.yaml` and
-   `config/standards-binding.yaml` with non-secret source bindings.
+   `config/standards-binding.yaml` with non-secret source bindings, and populate
+   `config/infrastructure-source-index.json` with relevant repository authority,
+   scope, and dependencies.
 3. Populate `metacloud.yaml` with the selected driver, organization, repository,
    state/run platform, and generated paths.
 4. Adapt the existing root YAML trees to the customer; do not relocate them.
@@ -22,7 +24,9 @@ not authorize execution.
 
 CloudBrowser is one supported asset-management adapter; another system may
 implement the same binding contract. `skills/infra-execution/` is the locally
-discoverable execution contract, and `docs/runbooks/` defines driver behavior.
+discoverable execution contract; `skills/infrastructure-bootstrap/` provides
+the proposal/approval bootstrap workflow; and `docs/runbooks/` defines driver
+behavior.
 
 ```text
 metacloud.yaml
@@ -36,5 +40,5 @@ _terraform/    # generated delivery artifacts for Terraform Cloud
 Validate the fork-ready template contract with:
 
 ```bash
-bash tests/test-template-foundation.sh
+bash scripts/ci/run-template-tests.sh
 ```

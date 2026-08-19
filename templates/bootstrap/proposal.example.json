@@ -1,0 +1,44 @@
+{
+  "schema_version": "v1",
+  "proposal_id": "bootstrap-example-customer-v1",
+  "status": "needs-input",
+  "evidence_fingerprint": "0000000000000000000000000000000000000000000000000000000000000000",
+  "customer": {
+    "id": "example-customer",
+    "display_name": "Example Customer",
+    "accountable_owner": "customer-platform-owner"
+  },
+  "target_readiness": "partial",
+  "driver": "terraform-cloud",
+  "bindings": [
+    {"plane": "asset_service_context", "status": "planned", "provider": "asset-management-provider", "locator": null, "access_mode": "read-only", "authority": "authoritative", "freshness": "bootstrap-required", "owner": "customer-platform-owner"},
+    {"plane": "source_configuration", "status": "planned", "provider": "git", "locator": null, "access_mode": "read-write", "authority": "authoritative", "freshness": "bootstrap-required", "owner": "customer-platform-owner"},
+    {"plane": "iac_lifecycle", "status": "planned", "provider": "terraform-cloud", "locator": null, "access_mode": "execution", "authority": "authoritative", "freshness": "bootstrap-required", "owner": "customer-platform-owner"},
+    {"plane": "resource_control", "status": "planned", "provider": "cloud-provider", "locator": null, "access_mode": "read-only", "authority": "authoritative", "freshness": "bootstrap-required", "owner": "customer-cloud-owner"},
+    {"plane": "identity_access_secrets", "status": "planned", "provider": "customer-approved-systems", "locator": null, "access_mode": "read-only", "authority": "authoritative", "freshness": "bootstrap-required", "owner": "customer-security-owner"},
+    {"plane": "standards_policy_exceptions", "status": "planned", "provider": "infra-governance", "locator": "config/standards-binding.yaml", "access_mode": "read-only", "authority": "authoritative", "freshness": "bootstrap-required", "owner": "customer-platform-owner"},
+    {"plane": "change_delivery", "status": "planned", "provider": "customer-change-system", "locator": null, "access_mode": "read-only", "authority": "authoritative", "freshness": "bootstrap-required", "owner": "customer-change-owner"},
+    {"plane": "operational_assurance", "status": "planned", "provider": "customer-operations-systems", "locator": null, "access_mode": "read-only", "authority": "evidence", "freshness": "bootstrap-required", "owner": "customer-operations-owner"},
+    {"plane": "knowledge_evidence", "status": "planned", "provider": "customer-knowledge-systems", "locator": null, "access_mode": "read-only", "authority": "supporting", "freshness": "bootstrap-required", "owner": "customer-platform-owner"}
+  ],
+  "source_index": "config/infrastructure-source-index.json",
+  "planned_files": [
+    {"path": "WORKSPACE.md", "action": "populate"},
+    {"path": "config/customer-context.yaml", "action": "populate"},
+    {"path": "config/standards-binding.yaml", "action": "populate"},
+    {"path": "config/infrastructure-source-index.json", "action": "populate"},
+    {"path": "metacloud.yaml", "action": "populate"},
+    {"path": "0-accounts/", "action": "adapt-customer-yaml"},
+    {"path": "1-environments/", "action": "adapt-customer-yaml"},
+    {"path": "2-products/", "action": "adapt-customer-yaml"}
+  ],
+  "unresolved_questions": [
+    "Select and bind the customer asset-management provider.",
+    "Bind the authorized cloud scopes and IaC run platform."
+  ],
+  "approval": {
+    "confirmed": false,
+    "confirmed_at": null,
+    "confirmed_by": null
+  }
+}

@@ -1,0 +1,17 @@
+stages:
+  - test
+
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+template-contract:
+  stage: test
+  image: node:20-bookworm
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends jq ripgrep ruby ca-certificates
+    - npm install --global @dasmeta/meta-cli@0.0.15
+  script:
+    - bash scripts/ci/run-template-tests.sh

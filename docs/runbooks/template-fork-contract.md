@@ -6,8 +6,9 @@ Upstream owns tenant-neutral structure, schemas, bootstrap guidance, tests,
 driver compatibility profiles, packaged skill provenance, and safe placeholders.
 
 A customer fork owns `WORKSPACE.md`, active context and standards bindings,
-`metacloud.yaml`, customer IaC YAML, stack mappings, customer exceptions, and
-execution evidence. Fork-local facts and secrets must never flow back upstream.
+the infrastructure source index, `metacloud.yaml`, customer IaC YAML, stack
+mappings, customer exceptions, and execution evidence. Fork-local facts and
+secrets must never flow back upstream.
 
 ## Root layout contract
 
@@ -15,6 +16,12 @@ A clone or fork is already structurally operational. `WORKSPACE.md`,
 `metacloud.yaml`, `config/`, `0-accounts/`, `1-environments/`, and `2-products/`
 exist at their final paths. Bootstrap populates them in place. It must not create
 a nested seed, copy an example tree, or relocate customer YAML.
+
+Generic schemas, skills, scripts, tests, runbooks, and forge adapters remain
+upstream-owned. The active `WORKSPACE.md`, `config/*.yaml`,
+`config/infrastructure-source-index.json`, `metacloud.yaml`, and root IaC trees
+become fork-owned as soon as a customer fork is created. Upstream sync must not
+overwrite those populated files.
 
 ## Adoption contract
 

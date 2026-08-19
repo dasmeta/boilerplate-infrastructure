@@ -135,11 +135,11 @@ management_planes:
 stack_mappings:
   - name: development-orchestrator
     type: delivery-orchestrator
-    repository: https://github.com/example/development-orchestrator
+    source_id: development_orchestrator
     infrastructure_scope: application delivery stacks mapped into this fork
     status: planned
   - name: data-analytics-platform
     type: data-platform
-    repository: https://github.com/example/data-analytics-platform-orchestrator
+    source_id: data_analytics_platform
     infrastructure_scope: data platform stacks mapped into this fork
     status: planned
