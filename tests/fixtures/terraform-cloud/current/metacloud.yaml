@@ -1,5 +1,3 @@
-# Recommended Terraform Cloud profile. Copy to metacloud.yaml during bootstrap
-# and replace example identifiers. Never put tokens or cloud credentials here.
 driver: terraform-cloud
 terraform_cloud_org: example-organization
 terraform_cloud_workspace: infrastructure-management
@@ -8,13 +6,10 @@ git_org: example-organization
 git_repo: customer-infrastructure
 git_branch: main
 git_enabled: true
-yaml_dir: infrastructure
-root_dir: _terraform
+yaml_dir: .
 target_dir: _terraform
 handler_version: "~> 2.5.0"
 auto_apply: false
-
-# Supported by meta-cli >= 0.0.15.
 aws:
   enabled: false
 tfe_token_variable_set:

@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dasmeta/boilerplate-infrastructure/schemas/customer-context.schema.json",
+  "title": "Customer infrastructure context",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "readiness",
+    "customer",
+    "management_planes",
+    "stack_mappings"
+  ],
+  "properties": {
+    "schema_version": { "const": "v1" },
+    "readiness": {
+      "type": "string",
+      "enum": ["context-ready", "execution-ready", "partial"]
+    },
+    "customer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "display_name", "accountable_owner"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 },
+        "accountable_owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "management_planes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_service_context",
+        "source_configuration",
+        "iac_lifecycle",
+        "resource_control",
+        "identity_access_secrets",
+        "standards_policy_exceptions",
+        "change_delivery",
+        "operational_assurance",
+        "knowledge_evidence"
+      ],
+      "properties": {
+        "asset_service_context": { "$ref": "#/$defs/plane" },
+        "source_configuration": { "$ref": "#/$defs/plane" },
+        "iac_lifecycle": { "$ref": "#/$defs/plane" },
+        "resource_control": { "$ref": "#/$defs/plane" },
+        "identity_access_secrets": { "$ref": "#/$defs/plane" },
+        "standards_policy_exceptions": { "$ref": "#/$defs/plane" },
+        "change_delivery": { "$ref": "#/$defs/plane" },
+        "operational_assurance": { "$ref": "#/$defs/plane" },
+        "knowledge_evidence": { "$ref": "#/$defs/plane" }
+      }
+    },
+    "stack_mappings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/stack_mapping" }
+    }
+  },
+  "$defs": {
+    "plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "systems", "gaps"],
+      "properties": {
+        "status": { "$ref": "#/$defs/binding_status" },
+        "systems": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/system_binding" }
+        },
+        "gaps": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "binding_status": {
+      "type": "string",
+      "enum": ["bound", "read-only", "planned", "not-applicable", "gap"]
+    },
+    "system_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "provider",
+        "locator",
+        "access_mode",
+        "authority",
+        "freshness",
+        "owner"
+      ],
+      "properties": {
+        "role": { "type": "string", "minLength": 1 },
+        "provider": { "type": "string", "minLength": 1 },
+        "locator": { "type": ["string", "null"] },
+        "access_mode": {
+          "type": "string",
+          "enum": ["read-only", "read-write", "execution", "not-applicable"]
+        },
+        "authority": {
+          "type": "string",
+          "enum": ["authoritative", "supporting", "evidence"]
+        },
+        "freshness": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 },
+        "details": { "type": "object" }
+      }
+    },
+    "stack_mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "repository", "infrastructure_scope", "status"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": {
+          "type": "string",
+          "enum": ["delivery-orchestrator", "data-platform", "application", "shared-platform", "other"]
+        },
+        "repository": { "type": "string", "minLength": 1 },
+        "infrastructure_scope": { "type": "string", "minLength": 1 },
+        "status": { "$ref": "#/$defs/binding_status" }
+      }
+    }
+  }
+}

@@ -1,12 +1,28 @@
-# boilerplate-infrastructure
+# Canonical Customer Infrastructure Seed
+
+This directory becomes the active IaC root in a customer fork. Complete the
+repository's schema-backed bootstrap before adding infrastructure so customer
+scope, source bindings, standards, approvals, and the IaC lifecycle are known.
 
 ## Configure
-1. Copy metacloud.example.yaml metacloud.yaml
-2. Set right values in _metacloud.tf file
 
-## Run
-1. `export TF_TOKEN_app_terraform_io="<Terraform Cloud OAuth Token>"`
-2. `export TF_VAR_tfc_token="<Terraform Cloud OAuth Token>"`
-3. `export TF_VAR_git_token="<Terraform Cloud OAuth Token>"`
-4. `terraform init && terraform apply -auto-approve`
-5. `git add _terraform && git commit`
+1. Read `../AGENTS.md`, `../AI-INDEX.md`, and the fork contract.
+2. Create the fork-local `WORKSPACE.md` and validated context/standards files.
+3. Copy `metacloud.example.yaml` to `metacloud.yaml` and replace only non-secret
+   customer identifiers.
+4. Select the driver and follow its runbook under `../docs/runbooks/`.
+5. Put active IaC YAML under `infrastructure/` or change `yaml_dir` explicitly.
+
+For Terraform Cloud, install `meta-cli >= 0.0.16`, then use `meta exec` and `meta init` to generate
+`_metacloud.tf`. Do not edit generated HCL. Validate source YAML before the
+authorised generation workflow:
+
+```bash
+meta validate-yaml --yaml-dir infrastructure
+```
+
+For a VCS-driven HCP workspace, review and commit regenerated `_terraform/`
+delivery output together with its source YAML, then verify the remote run.
+
+The content under `examples/legacy-yaml/` is non-authoritative migration
+reference and is outside the active YAML root.

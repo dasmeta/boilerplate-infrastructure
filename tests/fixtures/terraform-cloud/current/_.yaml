@@ -1,0 +1,4 @@
+workspace:
+  agent_pool_name: example-infrastructure-agent
+variable_sets:
+  - tfe-token

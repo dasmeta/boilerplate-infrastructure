@@ -1,0 +1,45 @@
+schema_version: v1
+status: planned
+
+module_policy:
+  preference: dasmeta-preferred
+  alternatives_allowed: true
+  alternative_requirements:
+    - immutable version or digest
+    - source provenance
+    - accountable maintenance owner
+    - security and license review
+    - customer standards fit
+    - recorded reason for not using a suitable DasMeta module
+
+sources:
+  - name: infra-governance
+    kind: git-repository
+    locator: https://github.com/dasmeta/infra-governance
+    version: bootstrap-select-approved-revision
+    authority: authoritative
+    owner: infrastructure-governance-owner
+  - name: customer-infrastructure-overlay
+    kind: fork-local-configuration
+    locator: config/standards-binding.yaml
+    version: reviewed-git-revision
+    authority: authoritative
+    owner: customer-platform-owner
+
+applicable_skills:
+  - name: infra-execution
+    source: skills/infra-execution/SKILL.md
+    required: true
+
+approvals:
+  - scope: shared YAML and driver-wide defaults
+    authority_source: customer-change-binding
+    required: true
+  - scope: apply and destroy
+    authority_source: customer-change-binding
+    required: true
+  - scope: identity access and policy exceptions
+    authority_source: customer-security-binding
+    required: true
+
+exceptions: []

@@ -1,6 +1,6 @@
 # DEV-2013 — Customer Infrastructure-Management Boilerplate v1
 
-Status: proposed for review  
+Status: approved; implementation in progress
 Tracking: DEV-2013
 
 ## Outcome
@@ -252,8 +252,8 @@ label it as non-canonical.
   requirement.
 - TFE fixtures distinguish the management-workspace constraint, generated
   workspace version, and independently bound HCP executor version.
-- The bootstrap requires `meta-cli >= 0.0.15`; `git_branch` and `git_enabled`
-  are enabled only after the follow-up meta-cli contract is released.
+- The bootstrap requires `meta-cli >= 0.0.16`, including `git_branch` and
+  `git_enabled` passthrough to the TFE module.
 - The stale v2.0.2 hand-maintained bootstrap is no longer the recommended flow.
 - `infra-execution` is locally discoverable after cloning and enforces the
   bootstrapped customer standards and module policy.
@@ -271,7 +271,7 @@ label it as non-canonical.
 - Redefining the universal repository-authority schema owned by DEV-2012.
 - Supporting Windows checkouts without Git symlink support.
 
-## Review decisions requested
+## Approved review decisions
 
 1. Accept `boilerplate-infrastructure/` as the canonical seed and keep the
    current two-tree layout for v1.
@@ -279,5 +279,5 @@ label it as non-canonical.
 3. Accept provider-neutral asset-management binding with CloudBrowser as one
    adapter.
 4. Accept the TFC-specific generated-delivery-artifact commit policy.
-5. Approve the small `meta-cli` dependency change for `git_branch` and
-   `git_enabled`, with `meta-cli >= 0.0.15` as the boilerplate baseline.
+5. Land the small `meta-cli` dependency change for `git_branch` and
+   `git_enabled`, with `meta-cli >= 0.0.16` as the boilerplate baseline.
