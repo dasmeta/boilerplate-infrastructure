@@ -16,7 +16,7 @@
 | Terragrunt lifecycle | `docs/runbooks/terragrunt.md` |
 | Bounded IaC execution | `skills/infra-execution/SKILL.md` |
 | Canonical fork seed | `boilerplate-infrastructure/` |
-| Non-authoritative examples | `demo-infrastructure/` and `boilerplate-infrastructure/examples/` |
+| Non-authoritative examples | `demo-infrastructure/` |
 
 ## Readiness vocabulary
 

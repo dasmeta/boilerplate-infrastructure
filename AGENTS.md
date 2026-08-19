@@ -14,6 +14,11 @@ repository is not an application-delivery orchestrator, Terraform module
 library, asset-management product, generic governance repository, or secret
 store.
 
+The canonical seed's active YAML directories remain at
+`boilerplate-infrastructure/{0-accounts,1-environments,2-products}/`.
+Template updates must preserve these paths because customer forks and generated
+workspace roots depend on them.
+
 ## Mandatory read order
 
 1. This file and `AI-INDEX.md`.

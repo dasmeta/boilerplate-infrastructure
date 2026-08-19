@@ -6,8 +6,7 @@ variables:
   engine_version: "5.7"
   identifier: "boilerplate"
   db_username: "boilerplate"
-  # Replace with the customer's approved secret reference; never commit a value.
-  db_password: ${secret-reference-required}
+  # Bind db_password from the customer's approved secret system before use.
   parameter_group_name: "default.mysql5.7"
   vpc_id: ${1-environments/dev-1/vpc.id}
   backup_retention_period: 30

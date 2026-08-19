@@ -63,7 +63,7 @@ grep -Fq 'discard both generated sides' "$ROOT/docs/runbooks/template-fork-contr
 test ! -f "$SEED/_metacloud.tf" || fail 'canonical _metacloud.tf must be generated, not committed'
 grep -Fqx 'driver: terraform-cloud' "$SEED/metacloud.example.yaml"
 grep -Fq 'handler_version: "~> 2.5.0"' "$SEED/metacloud.example.yaml"
-grep -Fqx 'yaml_dir: infrastructure' "$SEED/metacloud.example.yaml"
+grep -Fqx 'yaml_dir: .' "$SEED/metacloud.example.yaml"
 grep -Fqx 'git_branch: main' "$SEED/metacloud.example.yaml"
 grep -Fqx 'git_enabled: true' "$SEED/metacloud.example.yaml"
 grep -Fq 'schema-backed bootstrap' "$SEED/README.md"
@@ -75,10 +75,10 @@ if git -C "$SEED" check-ignore --no-index -q _terraform/example.tf; then
   fail '_terraform must remain committable for VCS-driven Terraform Cloud'
 fi
 
-for old_active_path in 0-accounts 1-environments 2-products; do
-  test ! -d "$SEED/$old_active_path" || fail "$old_active_path must not remain active starter IaC"
+for root_yaml_path in 0-accounts 1-environments 2-products; do
+  test -d "$SEED/$root_yaml_path" || fail "$root_yaml_path must remain at the canonical seed root"
 done
-require_file "$SEED/examples/legacy-yaml/README.md"
+test ! -d "$SEED/examples/legacy-yaml" || fail 'root YAML directories must not be moved under examples'
 grep -Fqi 'non-authoritative' "$ROOT/demo-infrastructure/README.md"
 
 if rg -n "passwordTerraform12|db_password:[[:space:]]*[\"'][^$]" "$SEED"; then
@@ -91,6 +91,6 @@ test "$(jq -r '.hcp_executor.follows' "$ROOT/tests/fixtures/terraform-cloud/curr
 
 "$META_BIN" validate-yaml --yaml-dir "$ROOT/tests/fixtures/terraform-cloud/current"
 "$META_BIN" validate-yaml --yaml-dir "$ROOT/tests/fixtures/terraform-cloud/legacy-without-driver"
-"$META_BIN" validate-yaml --yaml-dir "$SEED/infrastructure"
+"$META_BIN" validate-yaml --yaml-dir "$SEED"
 
 printf 'PASS: template foundation contract\n'

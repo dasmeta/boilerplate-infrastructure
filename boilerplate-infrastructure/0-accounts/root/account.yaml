@@ -54,3 +54,7 @@
 #           ManageLevel: product
 # linked_workspaces:
 #     - 0-account/root/secret-reader
+
+# This example is intentionally disabled until customer account context and
+# approved secret bindings are bootstrapped. Keep the file as a valid mapping.
+{}

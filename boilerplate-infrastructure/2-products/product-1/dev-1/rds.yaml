@@ -6,8 +6,7 @@ variables:
   engine_version: "14"
   identifier: "boilerplate-postgres"
   db_username: "boilerplate"
-  # Replace with the customer's approved secret reference; never commit a value.
-  db_password: ${secret-reference-required}
+  # Bind db_password from the customer's approved secret system before use.
   parameter_group_name: "rds-pg-12"
   vpc_id: ${1-environments/dev-1/vpc.id}
   backup_retention_period: 30

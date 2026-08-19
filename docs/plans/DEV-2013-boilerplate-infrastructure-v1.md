@@ -203,17 +203,18 @@ tests/fixtures/terraform-cloud/{current,legacy-without-driver}/
 ```
 
 Inside `boilerplate-infrastructure/`, modernise `README.md`,
-`metacloud.example.yaml`, active YAML placement, generated-output policy, and
-unsafe/stale examples. Keep `demo-infrastructure/` operationally separate and
-label it as non-canonical.
+`metacloud.example.yaml`, generated-output policy, and unsafe/stale examples in
+place. Preserve the established root-level `0-accounts/`, `1-environments/`,
+and `2-products/` YAML paths. Keep `demo-infrastructure/` operationally
+separate and label it as non-canonical.
 
 ## Implementation sequence
 
 1. Add failing contract tests and current/legacy TFE fixtures.
 2. Add root role, authority, fork, AI navigation, and packaged skill surfaces.
 3. Add context and standards schemas plus guided bootstrap examples.
-4. Modernise the canonical seed and move non-active examples out of its active
-   YAML discovery path; remove secret-like sample values.
+4. Modernise the canonical seed in place, preserve its root YAML directory
+   contract, and remove secret-like sample values.
 5. Add driver-specific generated-output and execution runbooks.
 6. Land the separate `meta-cli` passthrough for `git_branch` and `git_enabled`,
    then release and require at least meta-cli 0.0.16.
@@ -232,12 +233,16 @@ label it as non-canonical.
 - Do not silently change shared `_.yaml`, backend, agent pool, auto-apply,
   identity/access, or policy-exception scope.
 - Preserve the current top-level repository layout during v1.
+- Preserve the canonical seed's root-level `0-accounts/`, `1-environments/`,
+  and `2-products/` YAML paths.
 - Keep customer secrets and copied cloud inventory out of Git.
 
 ## V1 acceptance criteria
 
 - A fresh fork explains its role, limits, sources of truth, read order, and
   approval boundaries without external tribal knowledge.
+- A fresh fork retains root-level `0-accounts/`, `1-environments/`, and
+  `2-products/` YAML paths with `yaml_dir: .`.
 - Bootstrap examples cover every management plane and validate against schemas.
 - A fork can select CloudBrowser or another asset-management provider.
 - `terraform-cloud`, `terramate`, and `terragrunt` have explicit lifecycle
