@@ -1,13 +1,14 @@
 # Customer Infrastructure Workspace
 
-Copy this file to `WORKSPACE.md` during customer bootstrap.
+Populate this file in place during customer bootstrap. Replace every placeholder
+before changing readiness; do not rename or relocate it.
 
 ## Identity
 
 - Customer: `<customer-id>`
 - Accountable owner: `<team-or-person>`
 - Readiness: `partial`
-- Active IaC root: `boilerplate-infrastructure/`
+- Active IaC root: `.`
 
 ## Operating boundary
 

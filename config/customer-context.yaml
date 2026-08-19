@@ -32,7 +32,7 @@ management_planes:
         freshness: current-default-branch
         owner: customer-platform-owner
         details:
-          yaml_root: boilerplate-infrastructure
+          yaml_root: .
     gaps:
       - Replace the example repository with the customer fork.
 

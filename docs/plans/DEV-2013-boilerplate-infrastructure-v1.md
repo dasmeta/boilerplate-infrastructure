@@ -1,6 +1,6 @@
 # DEV-2013 — Customer Infrastructure-Management Boilerplate v1
 
-Status: approved; implementation in progress
+Status: approved; implementation updated after compatibility review
 Tracking: DEV-2013
 
 ## Outcome
@@ -30,14 +30,14 @@ asset-management product, or owner of cross-customer infrastructure governance.
 
 ## Repository and fork contract
 
-The current repository contains two trees. V1 keeps that layout to avoid an
-unrelated migration:
+The repository root is the customer-fork seed. V1 aligns with the deployed
+DasMeta infrastructure repository shape: `metacloud.yaml`, `0-accounts/`,
+`1-environments/`, and `2-products/` are at root before and after bootstrap.
+Bootstrap populates customer values in place and never relocates the IaC tree.
+Nested demo YAML is excluded because `yaml_dir: .` would discover it as live
+infrastructure.
 
-- `boilerplate-infrastructure/` is the canonical customer-fork seed.
-- `demo-infrastructure/` is example material, not authoritative customer intent.
-- root AI entrypoints explain the distinction and route work correctly.
-
-The upstream owns role/boundary documentation, schemas, examples, bootstrap
+The upstream owns role/boundary documentation, schemas, placeholders, bootstrap
 guidance, compatibility fixtures, validation, and packaged skills. A customer
 fork owns its `WORKSPACE.md`, context/standards bindings, active
 `metacloud.yaml`, IaC YAML, stack mappings, customer exceptions, and execution
@@ -194,26 +194,30 @@ docs/runbooks/template-fork-contract.md
 docs/runbooks/terraform-cloud-compatibility.md
 schemas/customer-context.schema.json
 schemas/standards-binding.schema.json
-config/customer-context.example.yaml
-config/standards-binding.example.yaml
+WORKSPACE.md
+metacloud.yaml
+config/customer-context.yaml
+config/standards-binding.yaml
+0-accounts/
+1-environments/
+2-products/
 skills/infra-execution/{SKILL.md,PROVENANCE.md}
 .agents/skills -> ../skills
 tests/test-template-foundation.sh
 tests/fixtures/terraform-cloud/{current,legacy-without-driver}/
 ```
 
-Inside `boilerplate-infrastructure/`, modernise `README.md`,
-`metacloud.example.yaml`, generated-output policy, and unsafe/stale examples in
-place. Preserve the established root-level `0-accounts/`, `1-environments/`,
-and `2-products/` YAML paths. Keep `demo-infrastructure/` operationally
-separate and label it as non-canonical.
+Modernise root `README.md`, `metacloud.yaml`, generated-output policy, and
+unsafe/stale placeholders in place. Preserve root-level `0-accounts/`,
+`1-environments/`, and `2-products/` paths. Do not retain nested YAML demos in
+the live root discovery tree.
 
 ## Implementation sequence
 
 1. Add failing contract tests and current/legacy TFE fixtures.
 2. Add root role, authority, fork, AI navigation, and packaged skill surfaces.
-3. Add context and standards schemas plus guided bootstrap examples.
-4. Modernise the canonical seed in place, preserve its root YAML directory
+3. Add context and standards schemas plus active populate-in-place placeholders.
+4. Flatten and modernise the canonical seed once, preserve its root YAML directory
    contract, and remove secret-like sample values.
 5. Add driver-specific generated-output and execution runbooks.
 6. Land the separate `meta-cli` passthrough for `git_branch` and `git_enabled`,
@@ -232,9 +236,9 @@ separate and label it as non-canonical.
   both generated sides, and regenerating with the pinned fork toolchain.
 - Do not silently change shared `_.yaml`, backend, agent pool, auto-apply,
   identity/access, or policy-exception scope.
-- Preserve the current top-level repository layout during v1.
-- Preserve the canonical seed's root-level `0-accounts/`, `1-environments/`,
-  and `2-products/` YAML paths.
+- Preserve root-level `WORKSPACE.md`, `metacloud.yaml`, `config/`,
+  `0-accounts/`, `1-environments/`, and `2-products/` paths during bootstrap and
+  future template updates.
 - Keep customer secrets and copied cloud inventory out of Git.
 
 ## V1 acceptance criteria
@@ -271,10 +275,10 @@ separate and label it as non-canonical.
 - Redefining the universal repository-authority schema owned by DEV-2012.
 - Supporting Windows checkouts without Git symlink support.
 
-## Approved review decisions
+## Approved and revised review decisions
 
-1. Accept `boilerplate-infrastructure/` as the canonical seed and keep the
-   current two-tree layout for v1.
+1. Use repository root as the canonical seed, matching deployed infrastructure
+   repositories; bootstrap populates values without moving paths.
 2. Accept the management-plane schema and progressive readiness states.
 3. Accept provider-neutral asset-management binding with CloudBrowser as one
    adapter.

@@ -15,8 +15,8 @@
 | Terramate lifecycle | `docs/runbooks/terramate.md` |
 | Terragrunt lifecycle | `docs/runbooks/terragrunt.md` |
 | Bounded IaC execution | `skills/infra-execution/SKILL.md` |
-| Canonical fork seed | `boilerplate-infrastructure/` |
-| Non-authoritative examples | `demo-infrastructure/` |
+| Canonical IaC root | repository root |
+| Active YAML trees | `0-accounts/`, `1-environments/`, `2-products/` |
 
 ## Readiness vocabulary
 
@@ -32,8 +32,8 @@ Every management plane uses `bound`, `read-only`, `planned`,
 ## Validation and generated output
 
 Run `bash tests/test-template-foundation.sh` for upstream/template conformance.
-In a fork, validate only its configured IaC YAML root with
-`meta validate-yaml --yaml-dir <yaml_dir>` before generation.
+In a fork, validate the configured root with
+`meta validate-yaml --yaml-dir .` before generation.
 
 `_metacloud.tf`, `_terraform/`, and `_terragrunt/` are generated and never
 editing surfaces. Terraform Cloud may require `_terraform/` committed as a VCS

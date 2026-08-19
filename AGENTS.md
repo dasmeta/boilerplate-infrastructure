@@ -3,10 +3,8 @@
 ## Role
 
 This public repository is the tenant-neutral template for customer
-infrastructure-management forks. Its canonical seed is
-`boilerplate-infrastructure/`. `demo-infrastructure/` is non-authoritative
-example material and must not be treated as customer intent or copied without
-review.
+infrastructure-management forks. The repository root is the canonical IaC
+root; it has the same path contract before and after customer bootstrap.
 
 A customer fork owns declared IaC intent, customer-specific operating context,
 the selected IaC lifecycle, standards bindings, and execution evidence. This
@@ -14,24 +12,24 @@ repository is not an application-delivery orchestrator, Terraform module
 library, asset-management product, generic governance repository, or secret
 store.
 
-The canonical seed's active YAML directories remain at
-`boilerplate-infrastructure/{0-accounts,1-environments,2-products}/`.
-Template updates must preserve these paths because customer forks and generated
-workspace roots depend on them.
+The active YAML directories remain at `0-accounts/`, `1-environments/`, and
+`2-products/`. Template updates and bootstrap must preserve these paths because
+customer forks and generated workspace roots depend on them.
 
 ## Mandatory read order
 
 1. This file and `AI-INDEX.md`.
-2. Fork-local `WORKSPACE.md`, when present.
-3. `config/customer-context.yaml` and `config/standards-binding.yaml`, when
-   present, including readiness and binding status.
+2. Fork-local `WORKSPACE.md`.
+3. `config/customer-context.yaml` and `config/standards-binding.yaml`, including
+   readiness and binding status.
 4. The active `metacloud.yaml`, relevant IaC YAML, and selected driver runbook.
 5. `skills/infra-execution/SKILL.md` plus applicable skills named by the
    standards binding.
 
-If bootstrap context is missing or `partial`, do not invent customer facts.
-Read-only reasoning may continue from authorised evidence, but execution stops
-when a required plane is `gap` or approval/access is not execution-ready.
+If bootstrap context is unpopulated, missing, or `partial`, do not invent
+customer facts. Read-only reasoning may continue from authorised evidence, but
+execution stops when a required plane is `gap` or approval/access is not
+execution-ready.
 
 ## Sources of truth
 

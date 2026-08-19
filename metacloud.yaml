@@ -1,5 +1,5 @@
-# Recommended Terraform Cloud profile. Copy to metacloud.yaml during bootstrap
-# and replace example identifiers. Never put tokens or cloud credentials here.
+# Recommended Terraform Cloud profile. Populate example identifiers in place
+# during bootstrap. Never put tokens or cloud credentials here.
 driver: terraform-cloud
 terraform_cloud_org: example-organization
 terraform_cloud_workspace: infrastructure-management
