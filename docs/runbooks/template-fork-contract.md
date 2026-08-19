@@ -23,6 +23,21 @@ upstream-owned. The active `WORKSPACE.md`, `config/*.yaml`,
 become fork-owned as soon as a customer fork is created. Upstream sync must not
 overwrite those populated files.
 
+## Inherited forge validation
+
+Customer forks inherit the template contract adapters for GitHub, GitLab, and
+Bitbucket. They run schema, root-layout, generated-output, and YAML validation
+for pull requests and the default branch so customer changes cannot silently
+break the fork contract.
+
+GitLab uses only the canonical `.gitlab-ci.yml`. Its `template-contract` job
+runs first; the retained `apply` job runs on the default branch only after
+validation. Fork owners own deployment credentials and may add stricter
+approval rules, but must not bypass the template contract. GitHub and Bitbucket
+adapters in v1 run validation only. Empty legacy `.github.yaml`,
+`.bitbucket.yaml`, and non-default `.gitlab-ci.yaml` placeholders are not part
+of the fork contract.
+
 ## Adoption contract
 
 An upstream update may change generic structure or validation but must not

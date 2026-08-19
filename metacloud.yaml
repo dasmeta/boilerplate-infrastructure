@@ -14,7 +14,8 @@ target_dir: _terraform
 handler_version: "~> 2.5.0"
 auto_apply: false
 
-# Supported by meta-cli >= 0.0.15.
+# Git settings above require meta-cli >= 0.0.16. The variable-set controls
+# below are also supported by that baseline.
 aws:
   enabled: false
 tfe_token_variable_set:

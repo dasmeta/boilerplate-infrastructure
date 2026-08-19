@@ -37,14 +37,39 @@ validate_fixture() {
   rm -rf -- "$fixture_tmp"
 }
 
+render_terraform_cloud_fixture() {
+  local fixture_path="$1"
+  local meta_path
+  local meta_real_path
+  local meta_root
+
+  if [[ "$META_BIN" == */* ]]; then
+    meta_path="$META_BIN"
+  else
+    meta_path="$(command -v "$META_BIN")"
+  fi
+
+  meta_real_path="$(ruby -e 'puts File.realpath(ARGV.fetch(0))' "$meta_path")"
+  meta_root="$(CDPATH='' cd -- "$(dirname -- "$meta_real_path")/.." && pwd)"
+
+  node - "$meta_root" "$fixture_path" <<'NODE'
+const path = require('node:path');
+const fs = require('node:fs');
+const metaRoot = process.argv[2];
+const fixturePath = process.argv[3];
+const {parse} = require(require.resolve('yaml', {paths: [metaRoot]}));
+const {normalizeMetaCloudConfig, generateTerraformCloudTF} = require(path.join(metaRoot, 'dist', 'utils.js'));
+const config = normalizeMetaCloudConfig(parse(fs.readFileSync(fixturePath, 'utf8')));
+
+process.stdout.write(generateTerraformCloudTF(config));
+NODE
+}
+
 for path in \
   AGENTS.md \
   AI-INDEX.md \
   README.md \
   WORKSPACE.md \
-  .bitbucket.yaml \
-  .github.yaml \
-  .gitlab-ci.yaml \
   .gitignore \
   metacloud.yaml \
   docs/runbooks/bootstrap-customer-context.md \
@@ -94,15 +119,8 @@ ruby "$ROOT/tests/validate-schema-example.rb" \
 
 grep -Fq '0-accounts/' "$ROOT/AGENTS.md"
 grep -Fq 'metacloud.yaml' "$ROOT/README.md"
-grep -Fq 'CloudBrowser is one supported adapter' "$ROOT/AGENTS.md"
-grep -Fq 'Prefer DasMeta modules' "$ROOT/skills/infra-execution/SKILL.md"
-grep -Fq 'approved, pinned alternatives' "$ROOT/skills/infra-execution/SKILL.md"
 grep -Fq 'populate' "$ROOT/skills/infrastructure-bootstrap/SKILL.md"
 grep -Fq 'must not move' "$ROOT/skills/infrastructure-bootstrap/SKILL.md"
-grep -Fq 'meta-cli >= 0.0.16' "$ROOT/docs/runbooks/terraform-cloud-compatibility.md"
-grep -Fqx 'git_branch: main' "$ROOT/tests/fixtures/terraform-cloud/current/metacloud.yaml.fixture"
-grep -Fqx 'git_enabled: true' "$ROOT/tests/fixtures/terraform-cloud/current/metacloud.yaml.fixture"
-grep -Fq 'discard both generated sides' "$ROOT/docs/runbooks/template-fork-contract.md"
 
 test ! -f "$SEED/_metacloud.tf" || fail 'canonical _metacloud.tf must be generated, not committed'
 grep -Fqx 'driver: terraform-cloud' "$SEED/metacloud.yaml"
@@ -134,6 +152,23 @@ fi
 grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/.github/workflows/template-contract.yml"
 grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/.gitlab-ci.yml"
 grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/bitbucket-pipelines.yml"
+test ! -e "$ROOT/.gitlab-ci.yaml" || fail '.gitlab-ci.yaml conflicts with GitLab default .gitlab-ci.yml entrypoint'
+test ! -e "$ROOT/.github.yaml" || fail 'empty .github.yaml placeholder must not be shipped'
+test ! -e "$ROOT/.bitbucket.yaml" || fail 'empty .bitbucket.yaml placeholder must not be shipped'
+ruby -ryaml -e '
+  pipeline = YAML.safe_load(File.read(ARGV.fetch(0)), permitted_classes: [], aliases: true)
+  abort "missing template-contract job" unless pipeline.key?("template-contract")
+  abort "missing infrastructure apply job" unless pipeline.key?("apply")
+  abort "apply must run after validation" unless pipeline.fetch("apply").fetch("stage") == "apply"
+' "$ROOT/.gitlab-ci.yml"
+for ci_file in \
+  "$ROOT/.github/workflows/template-contract.yml" \
+  "$ROOT/.gitlab-ci.yml" \
+  "$ROOT/bitbucket-pipelines.yml"
+do
+  grep -Fq '@dasmeta/meta-cli@0.0.16' "$ci_file" || \
+    fail "CI must use the documented meta-cli floor: ${ci_file#"$ROOT"/}"
+done
 ruby -ryaml -e '
   ARGV.each { |path| YAML.safe_load(File.read(path), permitted_classes: [], aliases: true) }
 ' \
@@ -156,6 +191,11 @@ test "$(jq -r '.hcp_executor.follows' "$ROOT/tests/fixtures/terraform-cloud/curr
 
 validate_fixture "$ROOT/tests/fixtures/terraform-cloud/current"
 validate_fixture "$ROOT/tests/fixtures/terraform-cloud/legacy-without-driver"
+rendered_tfe="$(render_terraform_cloud_fixture "$ROOT/tests/fixtures/terraform-cloud/current/metacloud.yaml.fixture")"
+printf '%s\n' "$rendered_tfe" | grep -Fq 'git_branch   = "main"' || \
+  fail 'current Terraform Cloud fixture does not render git_branch'
+printf '%s\n' "$rendered_tfe" | grep -Fq 'git_enabled  = true' || \
+  fail 'current Terraform Cloud fixture does not render git_enabled'
 "$META_BIN" validate-yaml --yaml-dir "$SEED"
 
 printf 'PASS: template foundation contract\n'

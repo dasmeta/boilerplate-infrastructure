@@ -3,6 +3,21 @@
 Status: approved; implementation updated after compatibility review
 Tracking: DEV-2013
 
+## Decision revision record
+
+The first reviewed plan kept the historical two-tree repository layout for v1.
+During implementation compatibility review on 2026-08-19, the requester
+clarified that customer forks must match the deployed infrastructure repository
+shape: `metacloud.yaml`, `0-accounts/`, `1-environments/`, and `2-products/`
+must remain at repository root. That explicit compatibility decision supersedes
+the original two-tree decision; the implementation does not treat the plan edit
+as part of the previously reviewed approval.
+
+This revision also makes inherited forge behavior explicit: template contract
+validation runs for pull requests and the default branch in customer forks. The
+canonical GitLab entrypoint retains the existing infrastructure delivery job
+after validation instead of shadowing it with a second CI filename.
+
 ## Outcome
 
 Turn this repository into a tenant-neutral, customer-forkable infrastructure
