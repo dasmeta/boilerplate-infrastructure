@@ -1,0 +1,145 @@
+schema_version: v1
+readiness: partial
+customer:
+  id: example-customer
+  display_name: Example Customer
+  accountable_owner: customer-platform-owner
+
+management_planes:
+  asset_service_context:
+    status: planned
+    systems:
+      - role: asset-management
+        provider: cloudbrowser-or-compatible-adapter
+        locator: null
+        access_mode: read-only
+        authority: authoritative
+        freshness: bootstrap-required
+        owner: customer-platform-owner
+        details:
+          contract: customer-topology-ownership-and-service-scope
+    gaps:
+      - Select the authorised asset-management provider and client scope.
+
+  source_configuration:
+    status: planned
+    systems:
+      - role: declared-infrastructure-intent
+        provider: git
+        locator: https://github.com/example/customer-infrastructure
+        access_mode: read-write
+        authority: authoritative
+        freshness: current-default-branch
+        owner: customer-platform-owner
+        details:
+          yaml_root: .
+    gaps:
+      - Replace the example repository with the customer fork.
+
+  iac_lifecycle:
+    status: planned
+    systems:
+      - role: plans-runs-state-and-execution-evidence
+        provider: terraform-cloud-or-selected-driver
+        locator: null
+        access_mode: execution
+        authority: authoritative
+        freshness: live-at-execution
+        owner: customer-platform-owner
+        details:
+          supported_drivers:
+            - terraform-cloud
+            - terramate
+            - terragrunt
+    gaps:
+      - Select the driver and bind its backend, state, and run evidence.
+
+  resource_control:
+    status: planned
+    systems:
+      - role: observed-resource-state
+        provider: customer-cloud-provider
+        locator: null
+        access_mode: read-only
+        authority: authoritative
+        freshness: live-at-query
+        owner: customer-cloud-owner
+    gaps:
+      - Bind authorised accounts, projects, subscriptions, and regions.
+
+  identity_access_secrets:
+    status: planned
+    systems:
+      - role: identity-access-and-secret-references
+        provider: customer-approved-systems
+        locator: null
+        access_mode: read-only
+        authority: authoritative
+        freshness: live-at-execution
+        owner: customer-security-owner
+    gaps:
+      - Bind identity and secret systems without copying secret values.
+
+  standards_policy_exceptions:
+    status: planned
+    systems:
+      - role: infrastructure-standards
+        provider: infra-governance-and-customer-overlay
+        locator: config/standards-binding.yaml
+        access_mode: read-only
+        authority: authoritative
+        freshness: pinned-revision
+        owner: customer-platform-owner
+    gaps:
+      - Validate and approve the customer standards overlay.
+
+  change_delivery:
+    status: planned
+    systems:
+      - role: review-approval-and-promotion
+        provider: git-and-customer-change-system
+        locator: null
+        access_mode: read-only
+        authority: authoritative
+        freshness: current-change
+        owner: customer-change-owner
+    gaps:
+      - Bind approval authority for shared scope, apply, and destroy.
+
+  operational_assurance:
+    status: planned
+    systems:
+      - role: health-incident-recovery-and-post-change-evidence
+        provider: customer-operations-systems
+        locator: null
+        access_mode: read-only
+        authority: evidence
+        freshness: live-at-validation
+        owner: customer-operations-owner
+    gaps:
+      - Bind operational evidence appropriate to managed infrastructure.
+
+  knowledge_evidence:
+    status: planned
+    systems:
+      - role: documentation-decisions-and-evidence
+        provider: customer-knowledge-systems
+        locator: null
+        access_mode: read-only
+        authority: supporting
+        freshness: reviewed-at-bootstrap
+        owner: customer-platform-owner
+    gaps:
+      - Bind customer documentation and decision records.
+
+stack_mappings:
+  - name: development-orchestrator
+    type: delivery-orchestrator
+    source_id: development_orchestrator
+    infrastructure_scope: application delivery stacks mapped into this fork
+    status: planned
+  - name: data-analytics-platform
+    type: data-platform
+    source_id: data_analytics_platform
+    infrastructure_scope: data platform stacks mapped into this fork
+    status: planned

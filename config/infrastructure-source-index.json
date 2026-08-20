@@ -1,0 +1,61 @@
+{
+  "schema_version": "v1",
+  "customer_id": "example-customer",
+  "repositories": [
+    {
+      "id": "infrastructure_control",
+      "name": "Customer infrastructure",
+      "role": "infrastructure-control",
+      "description": "Authoritative YAML-first infrastructure intent and IaC lifecycle bindings.",
+      "locator": "https://github.com/example/customer-infrastructure",
+      "remotes": {
+        "origin": "https://github.com/example/customer-infrastructure"
+      },
+      "authority": ["declared-infrastructure-intent"],
+      "scope": ["customer accounts, environments, products, and shared infrastructure"],
+      "dependencies": ["infra_governance"],
+      "required": true,
+      "status": "planned",
+      "owner": "customer-platform-owner"
+    },
+    {
+      "id": "development_orchestrator",
+      "name": "Development orchestrator",
+      "role": "delivery-orchestrator",
+      "description": "Application delivery configuration whose deployed infrastructure is mapped into this repository.",
+      "locator": "https://github.com/example/development-orchestrator",
+      "authority": ["delivery-configuration", "application-contract"],
+      "scope": ["application delivery stacks and repository routing"],
+      "dependencies": ["infrastructure_control"],
+      "required": false,
+      "status": "planned",
+      "owner": "customer-technology-owner"
+    },
+    {
+      "id": "data_analytics_platform",
+      "name": "Data analytics platform orchestrator",
+      "role": "data-platform",
+      "description": "Data-platform configuration and contracts whose infrastructure dependencies are mapped here.",
+      "locator": "https://github.com/example/data-analytics-platform-orchestrator",
+      "authority": ["delivery-configuration", "data-platform-contract"],
+      "scope": ["data platform runtime and shared data infrastructure"],
+      "dependencies": ["infrastructure_control"],
+      "required": false,
+      "status": "planned",
+      "owner": "customer-data-owner"
+    },
+    {
+      "id": "infra_governance",
+      "name": "Infrastructure governance",
+      "role": "governance",
+      "description": "Canonical cross-customer infrastructure standards and applicable skills.",
+      "locator": "https://github.com/dasmeta/infra-governance",
+      "authority": ["standards-policy"],
+      "scope": ["infrastructure standards, skills, approvals, and exceptions"],
+      "dependencies": [],
+      "required": true,
+      "status": "planned",
+      "owner": "infrastructure-governance-owner"
+    }
+  ]
+}

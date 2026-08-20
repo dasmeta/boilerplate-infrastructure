@@ -1,0 +1,7 @@
+source: dasmeta/empty/null
+version: 1.2.2
+terraform_version: ">= 1.8.0"
+variables:
+  foundation_id: ${1-environments/dev/foundation.id}
+linked_workspaces:
+  - 1-environments/dev/foundation

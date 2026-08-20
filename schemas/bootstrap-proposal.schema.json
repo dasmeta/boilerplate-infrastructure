@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/dasmeta/boilerplate-infrastructure/schemas/bootstrap-proposal.schema.json",
+  "title": "Customer infrastructure bootstrap proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "proposal_id",
+    "status",
+    "evidence_fingerprint",
+    "customer",
+    "target_readiness",
+    "driver",
+    "bindings",
+    "source_index",
+    "planned_files",
+    "unresolved_questions",
+    "approval"
+  ],
+  "properties": {
+    "schema_version": { "const": "v1" },
+    "proposal_id": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "needs-input", "ready", "approved"]
+    },
+    "evidence_fingerprint": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "customer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "display_name", "accountable_owner"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "display_name": { "type": "string", "minLength": 1 },
+        "accountable_owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "target_readiness": {
+      "type": "string",
+      "enum": ["partial", "context-ready", "execution-ready"]
+    },
+    "driver": {
+      "type": "string",
+      "enum": ["terraform-cloud", "terramate", "terragrunt"]
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "items": { "$ref": "#/$defs/binding" }
+    },
+    "source_index": { "const": "config/infrastructure-source-index.json" },
+    "planned_files": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/planned_file" }
+    },
+    "unresolved_questions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["confirmed", "confirmed_at", "confirmed_by"],
+      "properties": {
+        "confirmed": { "type": "boolean" },
+        "confirmed_at": { "type": ["string", "null"] },
+        "confirmed_by": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plane", "status", "provider", "locator", "access_mode", "authority", "freshness", "owner"],
+      "properties": {
+        "plane": {
+          "type": "string",
+          "enum": [
+            "asset_service_context",
+            "source_configuration",
+            "iac_lifecycle",
+            "resource_control",
+            "identity_access_secrets",
+            "standards_policy_exceptions",
+            "change_delivery",
+            "operational_assurance",
+            "knowledge_evidence"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["bound", "read-only", "planned", "not-applicable", "gap"]
+        },
+        "provider": { "type": "string", "minLength": 1 },
+        "locator": { "type": ["string", "null"] },
+        "access_mode": {
+          "type": "string",
+          "enum": ["read-only", "read-write", "execution", "not-applicable"]
+        },
+        "authority": {
+          "type": "string",
+          "enum": ["authoritative", "supporting", "evidence"]
+        },
+        "freshness": { "type": "string", "minLength": 1 },
+        "owner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "planned_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "action"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "enum": [
+            "WORKSPACE.md",
+            "config/customer-context.yaml",
+            "config/standards-binding.yaml",
+            "config/infrastructure-source-index.json",
+            "metacloud.yaml",
+            "0-accounts/",
+            "1-environments/",
+            "2-products/"
+          ]
+        },
+        "action": {
+          "type": "string",
+          "enum": ["populate", "preserve", "adapt-customer-yaml"]
+        }
+      }
+    }
+  }
+}

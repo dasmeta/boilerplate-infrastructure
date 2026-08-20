@@ -1,0 +1,14 @@
+{
+  "driver_management": {
+    "required_version": "~> 1.8",
+    "source": "dasmeta/cloud/tfe 2.5"
+  },
+  "generated_workspace": {
+    "required_version": ">= 1.8.0",
+    "source": "workspace YAML terraform_version"
+  },
+  "hcp_executor": {
+    "follows": "independent",
+    "source": "HCP organisation default or explicit workspace binding"
+  }
+}

@@ -1,7 +1,22 @@
 # DEV-2013 — Customer Infrastructure-Management Boilerplate v1
 
-Status: proposed for review  
+Status: approved; implementation updated after compatibility review
 Tracking: DEV-2013
+
+## Decision revision record
+
+The first reviewed plan kept the historical two-tree repository layout for v1.
+During implementation compatibility review on 2026-08-19, the requester
+clarified that customer forks must match the deployed infrastructure repository
+shape: `metacloud.yaml`, `0-accounts/`, `1-environments/`, and `2-products/`
+must remain at repository root. That explicit compatibility decision supersedes
+the original two-tree decision; the implementation does not treat the plan edit
+as part of the previously reviewed approval.
+
+This revision also makes inherited forge behavior explicit: template contract
+validation runs for pull requests and the default branch in customer forks. The
+canonical GitLab entrypoint retains the existing infrastructure delivery job
+after validation instead of shadowing it with a second CI filename.
 
 ## Outcome
 
@@ -30,14 +45,14 @@ asset-management product, or owner of cross-customer infrastructure governance.
 
 ## Repository and fork contract
 
-The current repository contains two trees. V1 keeps that layout to avoid an
-unrelated migration:
+The repository root is the customer-fork seed. V1 aligns with the deployed
+DasMeta infrastructure repository shape: `metacloud.yaml`, `0-accounts/`,
+`1-environments/`, and `2-products/` are at root before and after bootstrap.
+Bootstrap populates customer values in place and never relocates the IaC tree.
+Nested demo YAML is excluded because `yaml_dir: .` would discover it as live
+infrastructure.
 
-- `boilerplate-infrastructure/` is the canonical customer-fork seed.
-- `demo-infrastructure/` is example material, not authoritative customer intent.
-- root AI entrypoints explain the distinction and route work correctly.
-
-The upstream owns role/boundary documentation, schemas, examples, bootstrap
+The upstream owns role/boundary documentation, schemas, placeholders, bootstrap
 guidance, compatibility fixtures, validation, and packaged skills. A customer
 fork owns its `WORKSPACE.md`, context/standards bindings, active
 `metacloud.yaml`, IaC YAML, stack mappings, customer exceptions, and execution
@@ -63,6 +78,21 @@ Bootstrap creates only durable, non-secret customer configuration and source
 bindings. It records one of `bound`, `read-only`, `planned`, `not-applicable`,
 or `gap` for every required management plane and derives repository readiness
 as `context-ready`, `execution-ready`, or `partial`.
+
+## Development-orchestrator reuse boundary
+
+Reuse the generic parent/fork mechanics already proven in
+`development-orchestrator`: root AI navigation, explicit upstream/fork path
+ownership, portable repository indexing, proposal status and unresolved
+questions, immutable approval tokens, read-only discovery before mutation, and
+a single cross-forge validation runner. Adapt those mechanics to infrastructure
+management planes and populate-in-place bootstrap.
+
+Do not copy development-specific feature manifests/status, delivery stages,
+mergeability, product role taxonomy, 00-05 repository materialization, or
+move/clone/symlink child-repository materialization. Those remain owned by
+development orchestration; the `.agents/skills` symlink remains part of this
+template's skill-discovery contract.
 
 Required management planes:
 
@@ -119,7 +149,7 @@ delivery artifacts are committed.
 
 Terraform Cloud is a first-class compatibility profile, not merely the legacy
 default. V1 targets the current `dasmeta/cloud/tfe` 2.5 release line (currently
-v2.5.10), requires `meta-cli >= 0.0.15`, and protects both modern and legacy
+v2.5.10), requires `meta-cli >= 0.0.16`, and protects both modern and legacy
 flows.
 
 The profile must distinguish three independent Terraform versions:
@@ -155,18 +185,14 @@ generated Terraform manually. Resolve the authoritative YAML and driver inputs,
 discard both generated sides, and regenerate with the fork's pinned toolchain.
 Review and commit the regenerated result.
 
-### Confirmed dependency gap
+### Dependency resolution
 
 `meta-cli` 0.0.15 passes `tfe_token_variable_set`, `aws.enabled`, and
-`auto_apply` from `metacloud.yaml` into generated `_metacloud.tf`. The current
-remaining gap is `git_branch` and `git_enabled`: the TFE module exposes both,
-but meta-cli does not normalise or render them.
-
-Recommended resolution: a small, separately reviewed `meta-cli` change adds
-schema, normalisation, HCL generation, and regression tests for these two Git
-settings. Boilerplate acceptance tests then consume that released meta-cli
-contract. Until it lands, the boilerplate must document the unavailable
-overrides rather than present ignored YAML as working configuration.
+`auto_apply` from `metacloud.yaml` into generated `_metacloud.tf`. The separate
+`meta-cli` DEV-2013 change adds schema, normalisation, HCL generation, and
+regression tests for `git_branch` and `git_enabled`. This boilerplate consumes
+that contract from `meta-cli >= 0.0.16` while preserving omitted-setting and
+legacy no-driver behavior.
 
 ## AI and skill surfaces
 
@@ -197,31 +223,40 @@ AI-INDEX.md
 docs/runbooks/template-fork-contract.md
 docs/runbooks/terraform-cloud-compatibility.md
 schemas/customer-context.schema.json
+schemas/infrastructure-source-index.schema.json
+schemas/bootstrap-proposal.schema.json
 schemas/standards-binding.schema.json
-config/customer-context.example.yaml
-config/standards-binding.example.yaml
+WORKSPACE.md
+metacloud.yaml
+config/customer-context.yaml
+config/standards-binding.yaml
+0-accounts/
+1-environments/
+2-products/
 skills/infra-execution/{SKILL.md,PROVENANCE.md}
+skills/infrastructure-bootstrap/{SKILL.md,PROVENANCE.md}
 .agents/skills -> ../skills
+scripts/bootstrap/{validate-proposal.sh,validate-source-index.sh}
+scripts/ci/run-template-tests.sh
 tests/test-template-foundation.sh
 tests/fixtures/terraform-cloud/{current,legacy-without-driver}/
 ```
 
-Inside `boilerplate-infrastructure/`, modernise `README.md`,
-`metacloud.example.yaml`, active YAML placement, generated-output policy, and
-unsafe/stale examples. Keep `demo-infrastructure/` operationally separate and
-label it as non-canonical.
+Modernise root `README.md`, `metacloud.yaml`, generated-output policy, and
+unsafe/stale placeholders in place. Preserve root-level `0-accounts/`,
+`1-environments/`, and `2-products/` paths. Do not retain nested YAML demos in
+the live root discovery tree.
 
 ## Implementation sequence
 
 1. Add failing contract tests and current/legacy TFE fixtures.
 2. Add root role, authority, fork, AI navigation, and packaged skill surfaces.
-3. Add context and standards schemas plus guided bootstrap examples.
-4. Modernise the canonical seed and move non-active examples out of its active
-   YAML discovery path; remove secret-like sample values.
+3. Add context and standards schemas plus active populate-in-place placeholders.
+4. Flatten and modernise the canonical seed once, preserve its root YAML directory
+   contract, and remove secret-like sample values.
 5. Add driver-specific generated-output and execution runbooks.
-6. Land `meta-cli` passthrough for `git_branch` and `git_enabled`, or explicitly
-   defer those two overrides with a tracked gap. Require at least meta-cli
-   0.0.15 for the already-released variable-set controls.
+6. Land the separate `meta-cli` passthrough for `git_branch` and `git_enabled`,
+   then release and require at least meta-cli 0.0.16.
 7. Run credential-free validation and record live TFC verification as a
    customer-fork acceptance step rather than pretending the template test
    proves remote execution.
@@ -236,14 +271,20 @@ label it as non-canonical.
   both generated sides, and regenerating with the pinned fork toolchain.
 - Do not silently change shared `_.yaml`, backend, agent pool, auto-apply,
   identity/access, or policy-exception scope.
-- Preserve the current top-level repository layout during v1.
+- Preserve root-level `WORKSPACE.md`, `metacloud.yaml`, `config/`,
+  `0-accounts/`, `1-environments/`, and `2-products/` paths during bootstrap and
+  future template updates.
 - Keep customer secrets and copied cloud inventory out of Git.
 
 ## V1 acceptance criteria
 
 - A fresh fork explains its role, limits, sources of truth, read order, and
   approval boundaries without external tribal knowledge.
+- A fresh fork retains root-level `0-accounts/`, `1-environments/`, and
+  `2-products/` YAML paths with `yaml_dir: .`.
 - Bootstrap examples cover every management plane and validate against schemas.
+- Bootstrap uses a validated proposal lifecycle, immutable confirmation token,
+  and portable infrastructure source index adapted from development-orchestrator.
 - A fork can select CloudBrowser or another asset-management provider.
 - `terraform-cloud`, `terramate`, and `terragrunt` have explicit lifecycle
   roles and generated-output rules.
@@ -252,8 +293,8 @@ label it as non-canonical.
   requirement.
 - TFE fixtures distinguish the management-workspace constraint, generated
   workspace version, and independently bound HCP executor version.
-- The bootstrap requires `meta-cli >= 0.0.15`; `git_branch` and `git_enabled`
-  are enabled only after the follow-up meta-cli contract is released.
+- The bootstrap requires `meta-cli >= 0.0.16`, including `git_branch` and
+  `git_enabled` passthrough to the TFE module.
 - The stale v2.0.2 hand-maintained bootstrap is no longer the recommended flow.
 - `infra-execution` is locally discoverable after cloning and enforces the
   bootstrapped customer standards and module policy.
@@ -271,13 +312,13 @@ label it as non-canonical.
 - Redefining the universal repository-authority schema owned by DEV-2012.
 - Supporting Windows checkouts without Git symlink support.
 
-## Review decisions requested
+## Approved and revised review decisions
 
-1. Accept `boilerplate-infrastructure/` as the canonical seed and keep the
-   current two-tree layout for v1.
+1. Use repository root as the canonical seed, matching deployed infrastructure
+   repositories; bootstrap populates values without moving paths.
 2. Accept the management-plane schema and progressive readiness states.
 3. Accept provider-neutral asset-management binding with CloudBrowser as one
    adapter.
 4. Accept the TFC-specific generated-delivery-artifact commit policy.
-5. Approve the small `meta-cli` dependency change for `git_branch` and
-   `git_enabled`, with `meta-cli >= 0.0.15` as the boilerplate baseline.
+5. Land the small `meta-cli` dependency change for `git_branch` and
+   `git_enabled`, with `meta-cli >= 0.0.16` as the boilerplate baseline.

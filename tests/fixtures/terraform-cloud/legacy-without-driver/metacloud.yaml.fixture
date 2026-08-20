@@ -1,0 +1,5 @@
+terraform_cloud_org: example-organization
+terraform_cloud_workspace: infrastructure-management
+git_provider: github
+git_org: example-organization
+git_repo: customer-infrastructure

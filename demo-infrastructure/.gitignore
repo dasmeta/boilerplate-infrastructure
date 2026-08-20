@@ -1,5 +1,0 @@
-terraform.tfvars
-**/.terraform
-.terraform
-.env
-env.sh

@@ -1,7 +1,0 @@
-# minimal values
-terraform_cloud_org: boilerplate-organisation
-terraform_cloud_workspace: boilerplate-infrastructure
-
-git_provider: github|gitlab|bitbucket
-git_org: boilerplate-organisation
-git_repo: boilerplate-infrastructure
