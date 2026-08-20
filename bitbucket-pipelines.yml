@@ -6,7 +6,7 @@ definitions:
         name: Template contract
         script:
           - apt-get update
-          - apt-get install -y --no-install-recommends jq ripgrep ruby ca-certificates
+          - apt-get install -y --no-install-recommends jq ruby ca-certificates
           - npm install --global @dasmeta/meta-cli@0.0.16
           - bash scripts/ci/run-template-tests.sh
 

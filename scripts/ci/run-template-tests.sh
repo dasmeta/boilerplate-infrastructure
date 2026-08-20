@@ -5,7 +5,7 @@ SCRIPT_DIR="$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)"
 ROOT="$(CDPATH='' cd -- "$SCRIPT_DIR/../.." && pwd)"
 META_BIN="${META_BIN:-meta}"
 
-for command_name in git jq rg ruby; do
+for command_name in git jq ruby; do
   if ! command -v "$command_name" >/dev/null 2>&1; then
     printf 'required template-test command is unavailable: %s\n' "$command_name" >&2
     exit 1

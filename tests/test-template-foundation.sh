@@ -152,6 +152,18 @@ fi
 grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/.github/workflows/template-contract.yml"
 grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/.gitlab-ci.yml"
 grep -Fq 'scripts/ci/run-template-tests.sh' "$ROOT/bitbucket-pipelines.yml"
+if grep -Eq 'for command_name .* rg([[:space:]]|;)' "$ROOT/scripts/ci/run-template-tests.sh"; then
+  fail 'template test runner must not require ripgrep'
+fi
+for ci_file in \
+  "$ROOT/.github/workflows/template-contract.yml" \
+  "$ROOT/.gitlab-ci.yml" \
+  "$ROOT/bitbucket-pipelines.yml"
+do
+  if grep -Fq 'ripgrep' "$ci_file"; then
+    fail "CI must not install unused ripgrep dependency: ${ci_file#"$ROOT"/}"
+  fi
+done
 test ! -e "$ROOT/.gitlab-ci.yaml" || fail '.gitlab-ci.yaml conflicts with GitLab default .gitlab-ci.yml entrypoint'
 test ! -e "$ROOT/.github.yaml" || fail 'empty .github.yaml placeholder must not be shipped'
 test ! -e "$ROOT/.bitbucket.yaml" || fail 'empty .bitbucket.yaml placeholder must not be shipped'
@@ -176,7 +188,7 @@ ruby -ryaml -e '
   "$ROOT/.gitlab-ci.yml" \
   "$ROOT/bitbucket-pipelines.yml"
 
-if rg -n "passwordTerraform12|db_password:[[:space:]]*[\"'][^$]" \
+if grep -REn "passwordTerraform12|db_password:[[:space:]]*[\"'][^$]" \
   "$SEED/0-accounts" \
   "$SEED/1-environments" \
   "$SEED/2-products" \

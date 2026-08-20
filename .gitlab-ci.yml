@@ -12,7 +12,7 @@ template-contract:
   image: node:20-bookworm
   before_script:
     - apt-get update
-    - apt-get install -y --no-install-recommends jq ripgrep ruby ca-certificates
+    - apt-get install -y --no-install-recommends jq ruby ca-certificates
     - npm install --global @dasmeta/meta-cli@0.0.16
   script:
     - bash scripts/ci/run-template-tests.sh
