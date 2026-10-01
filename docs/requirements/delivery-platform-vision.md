@@ -34,8 +34,10 @@ The account, environment, product, and service layers belong in the scope.
 
 A customer and DasMeta configure the foundation together. Customer developers
 and operators, DasMeta delivery managers, and support then use it under the
-agreed standards and capabilities. Public and independent adopters must also
-be able to configure and operate their own copies.
+agreed standards and capabilities. Existing independent and external adopters
+must be considered when deciding future distribution and access. DMVP-10650
+must decide whether the upstream remains public or is restricted to customers
+and other authorized users; this vision does not preselect that decision.
 
 Customer application teams may retain their own CI/CD for frequent service
 releases. Design must identify ownership and handoffs between that CI/CD and
@@ -61,8 +63,10 @@ must remain understandable.
 A possible journey is understanding and diagnosis, brainstorming and
 finalizing a proposal, review and approval, implementation preparation,
 execution approval where applicable, release, verification, and documentation.
-This is illustrative. Different request types may use different stages and
-human involvement; the exact stage and approval design remains open.
+This is illustrative. DMVP-10650 must agree the workflow steps, their purpose,
+human/AI responsibilities, and review/approval points, including useful variants
+for different request types. Detailed technical enforcement designs follow in
+the implementation tickets.
 
 For example, "the database is slow for these queries" should lead to evidence
 from traces, metrics, query behavior, database size/configuration, and dependent
@@ -105,40 +109,100 @@ the beginning. The target capabilities may arrive through successive batches.
 An increment must accurately describe its assurance limits rather than claim
 the whole vision is already implemented.
 
-## DMVP-10650 planning deliverables
+## DMVP-10650 deliverables and completion
 
-1. Review this vision with the requirement owner and developer and record the
-   decision and unresolved concerns.
+1. Review this vision with the requirement owner and developer and record
+   agreement, requested changes, and unresolved concerns.
 2. Assess the existing foundation, starting with the
    [DEV-2013 v1 baseline](../plans/DEV-2013-boilerplate-infrastructure-v1.md),
    bootstrap schemas, skills, YAML layers, CI validation, and driver runbooks.
-   Separate implemented behavior from documented intent and gaps.
-3. Examine representative recent delivery requests, referenced by the Jira meeting notes, and identify useful request categories, workflow needs, and operator friction. Keep
-   customer-specific evidence in authorized systems.
-4. Propose prioritized batches for workflow, skill, integration, automation,
-   security, review, audit, verification, and recovery improvements. Explain
-   user benefit, dependencies, risk reduction, and measurable acceptance for
-   each batch.
-5. Identify which work belongs in this repository versus shared modules,
-   drivers, Infra Governance, or customer/application repositories.
-6. Define a first bounded batch and the later improvement backlog. Verify
-   existing batch/version history before assigning v2/v3/v4/v5 labels.
-7. Propose how to measure delivery time, operator effort, autonomy, failed
-   changes, recovery, and traceability. Targets and the automation denominator
-   need developer review.
+   Distinguish implemented behavior from documented intent and target behavior.
+3. Examine representative recent delivery requests referenced by the Jira
+   meeting notes. Identify useful request categories, workflow variants, and
+   operator friction. Keep customer-specific evidence in authorized systems.
+4. Document a clear, visually well-presented delivery workflow in this
+   repository. Include a rendered diagram and accompanying step descriptions
+   that agree the inputs, outputs, responsible AI/human roles, decision criteria,
+   review/approval points, and evidence expected at each step. Show request
+   variants, blockers, failure/recovery paths, and handoffs where relevant.
+   Make the main journey easy to follow without requiring readers to decode
+   all technical detail.
+5. Maintain a gap register in the repository linking the target workflow to
+   current capabilities. Record each gap's evidence, operational impact,
+   priority, dependencies, owner, and implementation ticket or decision needed.
+   Readers must be able to see which workflow steps are supported now and which
+   depend on future work.
+6. Agree the implementation order with the requirement owner and developer.
+   Prioritize useful batches across workflow, skills, integrations, automation,
+   security, reviews, audit, verification, recovery, and adoption assistance.
+   Explain outcomes, dependencies, risk reduction, and measurable acceptance.
+   Identify ownership across this repository, shared modules, drivers, Infra
+   Governance, and customer/application repositories. Verify existing version
+   history before assigning v2/v3/v4/v5 labels.
+7. Create and link the implementation tickets for the agreed plan, including
+   the first bounded batch and identified later batches. Each ticket needs a
+   clear outcome, scope, acceptance criteria, dependencies, and responsible
+   team or repository. Link tickets to this planning ticket, the workflow, and
+   relevant gaps so that the plan can be executed and reviewed.
+8. Decide the repository access and distribution model within this ticket:
+   retaining public access or restricting future access to customers and other
+   authorized users. Record the alternatives, rationale, decision owner,
+   approval, consequences, and any transition work as described below.
+9. Propose measurements for delivery time, operator effort, autonomy, failed
+   changes, recovery, and traceability. Define the scope and denominator before
+   proposing an automation percentage.
+10. Publish the workflow, gap register, decisions, implementation order, and
+    ticket links as a coherent set of repository documents discoverable from
+    the repository index. Give internal delivery/support, developers, and the
+    intended customer stakeholders an authorized route to review and provide
+    feedback. Record feedback disposition and requirement-owner/developer
+    agreement on the workflow steps and implementation order.
 
-Completion of this ticket means an agreed vision, a grounded gap assessment,
-and a prioritized delivery plan. It does not require implementing the entire
-platform or all adapters, changing runtime authorization, or reaching 99%
-automation. Architecture, exact gates, role/permission rules, adapter contracts,
-and migration mechanisms must be proposed in the relevant design batches.
+Completion requires an agreed, documented visual workflow and implementation
+order, a grounded gap register, created and linked implementation tickets, and
+a recorded repository access/distribution decision. It also requires the
+requirement-owner and developer review records and a visible feedback route.
+These are deliverables to produce during DMVP-10650, not outputs already
+completed by this vision document.
+
+Runtime controls, adapter implementations, technical enforcement designs, and
+migration mechanisms are delivered and verified in the subsequent tickets.
+The planning ticket does not require implementing the entire platform or
+reaching 99% automation.
+
+## Repository access and distribution decision
+
+Assess whether public distribution supports the intended business and support
+model, or whether future upstream access should be limited to customers and
+explicitly authorized people. Review at least:
+
+- How customers and external collaborators receive, bootstrap, update, and
+  provide feedback on their copies under each option.
+- Authorization ownership, customer onboarding/offboarding, support access,
+  and upgrade availability without assuming central access to customer copies.
+- Existing public forks/copies, current licensing and distribution terms,
+  shared dependencies, release/package channels, automation credentials, and
+  the effect of a visibility change on repository features and integrations.
+- The migration effort, communication needs, and resulting implementation
+  tasks, including the intended access to workflow documentation and tickets.
+
+Changing upstream visibility must not be treated as proof that only authorized
+people can use previously distributed material. GitHub states that existing
+public forks are detached into a new network when the upstream becomes
+private; see [GitHub repository visibility guidance](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility).
+Evaluate access to future releases and permitted use/distribution explicitly.
+
+Record the decision and its approval within DMVP-10650, even if the outcome is
+to retain public access. Any visibility change must follow that approved
+decision and its transition plan.
 
 ## Developer review
 
 Review whether the target operator experience is feasible and where customer
 context, integration, or runtime controls are missing. Challenge scope,
 ownership, compatibility, failure behavior, and adoption assumptions, and
-recommend the first valuable increment and subsequent sequence.
+agree the workflow steps and implementation sequence, review the linked
+implementation tickets and gaps, and resolve the access/distribution decision.
 
 Tigran's review is pending. This document must not be presented as developer
 approved until the review decision is recorded.
