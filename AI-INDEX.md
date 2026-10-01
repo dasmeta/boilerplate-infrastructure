@@ -5,6 +5,7 @@
 | Need | Canonical source |
 | --- | --- |
 | Repository role, authority, limits | `AGENTS.md` |
+| Proposed delivery vision and planning requirements (developer review pending) | `docs/requirements/delivery-platform-vision.md` |
 | Template/fork ownership | `docs/runbooks/template-fork-contract.md` |
 | Development-orchestrator reuse boundary | `docs/runbooks/development-orchestrator-reuse.md` |
 | Bootstrap procedure | `docs/runbooks/bootstrap-customer-context.md` |

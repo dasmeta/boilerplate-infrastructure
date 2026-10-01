@@ -42,3 +42,11 @@ Validate the fork-ready template contract with:
 ```bash
 bash scripts/ci/run-template-tests.sh
 ```
+
+## Delivery platform requirements
+
+The [delivery platform vision](docs/requirements/delivery-platform-vision.md)
+records the target operator experience and requirements for successive
+improvement batches under DMVP-10650. Developer review is pending. Use it for
+planning; current execution authority is defined by the repository instructions,
+bindings, skills, and driver runbooks.
