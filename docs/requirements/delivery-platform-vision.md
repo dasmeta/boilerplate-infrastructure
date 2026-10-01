@@ -109,6 +109,48 @@ the beginning. The target capabilities may arrive through successive batches.
 An increment must accurately describe its assurance limits rather than claim
 the whole vision is already implemented.
 
+## Stakeholder review and feedback
+
+The delivery model must account for different ways of interacting with the
+system. Technical feasibility review alone is insufficient to validate the
+experience of delivery, support, account management, and customer operators.
+
+The participant roster and customer affiliations are tracked in
+[DMVP-10650](https://tutorbot.atlassian.net/browse/DMVP-10650). Review must include
+the following perspectives. These focuses are prompts to validate with the
+participants, not predefined permissions or an assumption that every role
+executes infrastructure changes.
+
+| Perspective | Review focus |
+| --- | --- |
+| Foundation development | Technical feasibility, implementation, maintainability, integration and enforcement boundaries. |
+| Delivery team leadership | Delivery coordination, planning, reviews and approvals, handoffs, operator effort, and predictable outcomes. |
+| Account management | Customer expectations, communication, visibility of progress and consequences, and coordination between customers and delivery/support. |
+| Support team leadership | Diagnosis, maintenance and incident-related requests, escalation, handoffs, recovery, and access to useful evidence. |
+| Customer development | Self-service speed, service/infrastructure changes, questions and gates, and interaction with existing CI/CD. |
+| Customer DevOps | Tool/process compatibility, operational control, infrastructure changes, and adoption effort. |
+| Frequent customer infrastructure contributors | Frequent change experience, iteration speed, clarity of standards/capabilities, and friction in the delivery workflow. |
+
+Collect feedback on the delivery model and visual workflow using representative
+requests from each participant's own work. Ask how they interact now, what they
+need to know or decide, where the proposed process adds waiting or confusion,
+which human interactions remain useful, and what would make the model practical
+for them.
+
+The team should nominate additional participants from other customers to cover
+different operating models and usage patterns. Record nominees, the perspective
+they add, and who coordinates their feedback in the ticket. Access and
+participation must use the agreed customer channels; the roster does not mean
+participants have already been contacted or accepted review assignments.
+
+Record feedback against the relevant workflow step, the concern or suggestion,
+and its disposition: incorporated, deferred with a linked gap/ticket, or declined
+with a rationale. Keep identifying information and customer-specific evidence
+in authorized systems. Make conflicts and missing feedback visible for the
+requirement owner and developer to resolve before final agreement. Participants
+provide stakeholder feedback; final requirement-owner agreement and developer
+review remain explicit, separate decisions.
+
 ## DMVP-10650 deliverables and completion
 
 1. Review this vision with the requirement owner and developer and record
@@ -155,8 +197,11 @@ the whole vision is already implemented.
     ticket links as a coherent set of repository documents discoverable from
     the repository index. Give internal delivery/support, developers, and the
     intended customer stakeholders an authorized route to review and provide
-    feedback. Record feedback disposition and requirement-owner/developer
-    agreement on the workflow steps and implementation order.
+    feedback. Collect feedback from the internal and customer participants
+    tracked in the ticket, invite additional customer perspectives nominated
+    by the team, and record feedback disposition and any missing participation.
+    Record requirement-owner/developer agreement on the workflow steps and
+    implementation order.
 
 Completion requires an agreed, documented visual workflow and implementation
 order, a grounded gap register, created and linked implementation tickets, and
