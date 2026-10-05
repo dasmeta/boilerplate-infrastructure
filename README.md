@@ -46,7 +46,10 @@ bash scripts/ci/run-template-tests.sh
 ## Delivery platform requirements
 
 The [delivery platform vision](docs/requirements/delivery-platform-vision.md)
-records the target operator experience and requirements for successive
-improvement batches under DMVP-10650. Developer review is pending. Use it for
-planning; current execution authority is defined by the repository instructions,
+defines the intended operator experience, scope, and quality commitments under
+DMVP-10650. Its current review is at Definition; detailed concerns are retained
+in the [planning-input register](docs/requirements/delivery-platform-planning-inputs.md)
+for later planning/task work. Review decisions are tracked in the ticket and PR.
+
+Current execution authority remains defined by repository instructions,
 bindings, skills, and driver runbooks.
