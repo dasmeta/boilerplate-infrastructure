@@ -133,6 +133,33 @@ increments.
 We are not selecting its stage model, review loops, records, tools, or approval
 placement here. Infrastructure delivery needs its own detailed design.
 
+## Definition decision: validate before enforcement
+
+Before the final delivery workflow is enforced, run a bounded proof of concept
+(PoC) that demonstrates what the proposed process feels like in daily work.
+Cover three representative paths: a routine low-risk change, a higher-risk
+production change, and an urgent incident. Use authorized safe trials or
+simulations appropriate to each path.
+
+Compare the proposed operator experience and effort with current practice.
+Demonstrate that routine work becomes easier while higher-risk work retains
+appropriate safeguards. The PoC should make visible what the assistant handles,
+what people must decide or do, and whether continuity, coordination, and
+service outcomes meet the intended commitments.
+
+Review the results with the requirement owner and relevant delivery, support,
+and development reviewers. Record the evidence, limits, remaining concerns,
+and a decision to adopt, revise, or run further validation before enforcement.
+A demonstration of selected paths does not prove every capability or customer
+configuration is ready.
+
+This is a Definition-level adoption commitment, not an additional universal
+stage for every delivery request. The detailed PoC scope, scenarios, baseline,
+acceptance criteria, execution authority, ownership, and tasks follow in
+planning. Existing operational authority remains in force during the trial;
+Definition approval alone neither authorizes a production change nor enforces
+the proposed workflow.
+
 ## Review and next stage
 
 Internal and customer perspectives are tracked in Jira. Review participants
@@ -146,6 +173,7 @@ status is recorded in the ticket and PR.
 
 After Definition agreement, produce and review the detailed workflow, gap
 assessment, evidence requirements, implementation batches, and tasks using the
-planning inputs. Keep current repository instructions, approval boundaries,
+planning inputs. Include the PoC and its pre-enforcement adoption decision in
+that plan. Keep current repository instructions, approval boundaries,
 skills, and driver runbooks authoritative until replacements are deliberately
 designed, reviewed, and released.
