@@ -39,6 +39,27 @@ customer context or restricted checklist material into this repository.
 | PLN-11 | Measurement and validation — DEL-05, DEL-06 | Establish comparable baselines for delivery time, useful diagnosis, operator minutes, approval waiting, failure/recovery, traceability, and customer outcomes. Record sources, sample/definitions, missing data, and collection work; define any automation denominator. Validate representative requests and distinguish walkthrough reasoning, simulated tests, and real operational evidence. |
 | PLN-12 | Ongoing process and roadmap ownership — DEL-08 | Assign owners for workflow maintenance, operator enablement, feedback, review cadence, retirement, and out-of-cycle improvement. Define readiness of implementation tickets, dependency/acceptance review, traceability, and governance of deferred/reordered work. Give external business/legal/customer dependencies owners and target dates. |
 
+## Required PoC before workflow enforcement
+
+The requirement owner's Definition decision requires a bounded PoC before the
+final workflow is enforced. Plan three representative paths: routine low-risk
+change, higher-risk production change, and urgent incident. Compare operator
+steps, effort, questions, and waiting with current practice.
+
+For each path, assess risk-level activities and classification responsibility;
+information the assistant can gather/record from existing systems without
+duplicate entry; human approval and incident substitutes; human/runbook
+fallback; conflicting or duplicate execution across operators/customer CI/CD;
+and service-health verification beyond a successful tool run.
+
+Define scope, safe environment/data/actions or simulations, accountable owner,
+baseline, acceptance criteria, evidence, and linked tasks during detailed
+planning. Review actual results and limitations, then record an adoption,
+revision, or further-validation decision before enforcement. The ticket's
+planning outputs must include this PoC plan and linked execution/acceptance
+work; Definition approval is not proof that the PoC has been performed.
+Implementation/testing occurs under the later authorized work.
+
 ## Candidate validation scenarios
 
 Support proposed four useful walkthroughs: authorized slow-database diagnosis
@@ -48,8 +69,8 @@ customer CI/CD. Delivery also asks for an explicit higher-risk example.
 
 Select suitable authorized real requests and safe simulations during planning.
 Record actual timings, operator questions, decisions, handoffs, verification,
-and recovery evidence. These are proposed scenarios, not completed tests or a
-new universal gate for every request.
+and recovery evidence. These additional scenarios complement the required three-path PoC; they are
+not completed tests or a new universal gate for every request.
 
 ## Overall ticket outputs retained for later stages
 
@@ -66,7 +87,8 @@ DMVP-10650 must still produce:
    with a named business owner, appropriate licensing input, technical impact,
    existing adopter implications, and transition work.
 7. Discoverable repository documentation, an authorized feedback route, and a
-   measurement/validation plan.
+   measurement/validation plan including the required PoC and linked work
+   before workflow enforcement.
 
 The established default stakeholder-review window is ten working days after a
 complete review packet is shared, with a named coordinator and recorded dates.
@@ -83,6 +105,8 @@ See [GitHub visibility guidance](https://docs.github.com/en/repositories/managin
 and [licensing guidance](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/licensing-a-repository).
 
 ## Feedback provenance
+
+- [Delivery PoC request and daily-work questions](https://das-meta.slack.com/archives/C08J12Q06JH/p1791269595085669?thread_ts=1790852409.494619&cid=C08J12Q06JH).
 
 - [Initial developer review](https://github.com/dasmeta/boilerplate-infrastructure/pull/9#pullrequestreview-5379527542)
   and [approval of the prior revision, with follow-ups](https://github.com/dasmeta/boilerplate-infrastructure/pull/9#pullrequestreview-5389480784).
