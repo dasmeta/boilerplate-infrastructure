@@ -42,7 +42,13 @@ customer context or restricted checklist material into this repository.
 ## Required PoC before workflow enforcement
 
 The requirement owner's Definition decision requires a bounded PoC before the
-final workflow is enforced. Plan three representative paths: routine low-risk
+final workflow is enforced. PoC discussion and design begin after Definition
+approval; completing Definition does not require a finished PoC design or trial.
+Tigran will lead the subsequent PoC planning and delivery, with input from
+relevant delivery, support, account-management, and customer perspectives.
+Participants should discuss detailed PoC questions with him.
+
+Plan three representative paths: routine low-risk
 change, higher-risk production change, and urgent incident. Compare operator
 steps, effort, questions, and waiting with current practice.
 
@@ -54,7 +60,13 @@ and service-health verification beyond a successful tool run.
 
 Define scope, safe environment/data/actions or simulations, accountable owner,
 baseline, acceptance criteria, evidence, and linked tasks during detailed
-planning. Review actual results and limitations, then record an adoption,
+planning. Preserve the additional delivery questions: measurable thresholds for
+adoption, revision, or further validation; representative scenario selection;
+comparison of engineer time, repeated questions, approval waiting, handoffs,
+and recovery; safe trial/simulation selection and authorization; who reviews
+results and decides adoption; and revision triggers if routine work becomes
+slower. Address these before running the PoC, not as Definition approval
+conditions. [Source feedback](https://das-meta.slack.com/archives/C08J12Q06JH/p1791271582327729?thread_ts=1790852409.494619&cid=C08J12Q06JH). Review actual results and limitations, then record an adoption,
 revision, or further-validation decision before enforcement. The ticket's
 planning outputs must include this PoC plan and linked execution/acceptance
 work; Definition approval is not proof that the PoC has been performed.
