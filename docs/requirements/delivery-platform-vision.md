@@ -154,9 +154,17 @@ A demonstration of selected paths does not prove every capability or customer
 configuration is ready.
 
 This is a Definition-level adoption commitment, not an additional universal
-stage for every delivery request. The detailed PoC scope, scenarios, baseline,
-acceptance criteria, execution authority, ownership, and tasks follow in
-planning. Existing operational authority remains in force during the trial;
+stage for every delivery request. Agree the validation requirement at Definition;
+discuss and design the PoC after Definition approval. PoC design or execution
+is not a prerequisite for completing Definition.
+
+Tigran, as the delivery foundation developer, will lead the subsequent PoC
+planning and delivery. Delivery, support, account management, and other relevant
+reviewers should discuss their scenarios and concerns with him. The detailed
+PoC scope, representative scenarios, baseline, measurable acceptance criteria,
+execution authority, result-review responsibilities, and tasks follow in
+planning. Leadership of this work does not replace the requirement owner's
+adoption decision or the operational authority required for a trial. Existing operational authority remains in force during the trial;
 Definition approval alone neither authorizes a production change nor enforces
 the proposed workflow.
 
