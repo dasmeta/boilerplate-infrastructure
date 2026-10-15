@@ -65,6 +65,16 @@ must work without assuming central access to customer or external copies.
 Existing external adopters must be considered in the access/distribution
 decision, which remains within this ticket's later scope.
 
+Infrastructure documentation is maintained as part of delivery. Keep the affected
+architecture and diagrams, resource/dependency descriptions, configuration,
+access model, and operational/recovery guidance aligned with the verified
+actual environment. AI maintains these records within the customer's agreed
+tools and data boundaries, including after partial changes, failures, and
+recovery. Documentation gaps, uncertainty, and responsible owners remain visible.
+A change ticket or execution log alone does not replace maintained infrastructure
+documentation. Exact update/review responsibilities and completion rules follow
+in planning.
+
 ## Desired operator experience
 
 An operator launches a configured assistant, such as Codex, and supplies a
@@ -121,6 +131,7 @@ retained in the planning-input register.
 | DEL-10 | Retain useful, accessible evidence of decisions, authorization, changes, and outcomes through agreed systems and customer data rules. |
 | DEL-11 | Protect customer data and secrets in AI processing, communications, logs, and retained evidence within the customer's agreed processing boundaries. |
 | DEL-12 | Keep work resumable and transferable, with understandable responsibility, progress, and consequential decisions across sessions and operators. |
+| DEL-13 | Maintain customer infrastructure documentation within the delivery workflow, aligned with the verified actual environment and outcomes. AI updates affected documentation in agreed systems; ownership, gaps, and uncertainty remain visible. |
 
 ## Lessons reused from related work
 
@@ -145,7 +156,8 @@ Compare the proposed operator experience and effort with current practice.
 Demonstrate that routine work becomes easier while higher-risk work retains
 appropriate safeguards. The PoC should make visible what the assistant handles,
 what people must decide or do, and whether continuity, coordination, and
-service outcomes meet the intended commitments.
+service outcomes meet the intended commitments. Include maintenance of the
+affected infrastructure documentation and visibility of any remaining gaps.
 
 Review the results with the requirement owner and relevant delivery, support,
 and development reviewers. Record the evidence, limits, remaining concerns,
