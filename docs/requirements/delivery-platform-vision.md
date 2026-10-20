@@ -98,6 +98,27 @@ Support must retain an authorized way to respond when the assistant or
 supporting systems are unavailable. These are desired operational outcomes;
 their concrete workflow and fallback mechanisms follow in planning.
 
+## Establish how release outcomes will be validated
+
+The workflow includes an explicit step before release/deployment to establish
+how a satisfactory result will be demonstrated, followed by verification of the
+actual outcome. Existing requirements and intended behavior may already be clear
+while the location, availability, or suitability of tests is unknown.
+
+AI discovers the relevant existing tests/checks, where they are maintained,
+how they can be run, and who owns them. Establish the evidence needed to show
+the intended outcome and that relevant existing service behavior still works,
+with effort proportional to risk, including for environment-only changes.
+Missing, undiscovered, inaccessible, or unsuitable tests must be visible, with
+an accountable decision on how to validate and handle the gap before execution.
+Retain the selected checks, results, and assurance limits; successful deployment
+or a lack of located tests does not by itself establish a satisfactory result.
+
+This defines a required workflow activity. Its placement within the detailed
+stages, tooling, responsibilities, and test approach follow in planning and
+implementation. Smoke tests are one possible approach to assess; no particular
+test type or suite is prescribed here.
+
 ## Concerns to resolve at Definition
 
 | ID | Concern | Vision commitment for approval |
@@ -132,6 +153,7 @@ retained in the planning-input register.
 | DEL-11 | Protect customer data and secrets in AI processing, communications, logs, and retained evidence within the customer's agreed processing boundaries. |
 | DEL-12 | Keep work resumable and transferable, with understandable responsibility, progress, and consequential decisions across sessions and operators. |
 | DEL-13 | Maintain customer infrastructure documentation within the delivery workflow, aligned with the verified actual environment and outcomes. AI updates affected documentation in agreed systems; ownership, gaps, and uncertainty remain visible. |
+| DEL-14 | Establish how a release/deployment will be validated before execution: discover relevant existing tests/checks and their owners/locations, make coverage gaps explicit, and agree evidence of a satisfactory outcome and preserved service behavior. Verify and retain actual results with assurance limits; select the test approach during planning/implementation. |
 
 ## Lessons reused from related work
 
@@ -158,6 +180,8 @@ appropriate safeguards. The PoC should make visible what the assistant handles,
 what people must decide or do, and whether continuity, coordination, and
 service outcomes meet the intended commitments. Include maintenance of the
 affected infrastructure documentation and visibility of any remaining gaps.
+Also validate how the workflow discovers existing tests/checks, handles missing
+or unknown coverage, and establishes and verifies a satisfactory release outcome.
 
 Review the results with the requirement owner and relevant delivery, support,
 and development reviewers. Record the evidence, limits, remaining concerns,
