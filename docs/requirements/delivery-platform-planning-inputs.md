@@ -39,6 +39,7 @@ customer context or restricted checklist material into this repository.
 | PLN-11 | Measurement and validation — DEL-05, DEL-06 | Establish comparable baselines for delivery time, useful diagnosis, operator minutes, approval waiting, failure/recovery, traceability, and customer outcomes. Record sources, sample/definitions, missing data, and collection work; define any automation denominator. Validate representative requests and distinguish walkthrough reasoning, simulated tests, and real operational evidence. |
 | PLN-12 | Ongoing process and roadmap ownership — DEL-08 | Assign owners for workflow maintenance, operator enablement, feedback, review cadence, retirement, and out-of-cycle improvement. Define readiness of implementation tickets, dependency/acceptance review, traceability, and governance of deferred/reordered work. Give external business/legal/customer dependencies owners and target dates. |
 | PLN-13 | Infrastructure documentation maintenance — DEL-13 | Plan documentation maintenance as part of delivery, covering affected architecture/diagrams, resources and dependencies, configuration, access model, and operational/recovery guidance. Bind authoritative documentation locations through customer configuration and link existing sources rather than duplicate records. Define AI update triggers after verified changes, partial execution, failures, recovery, and discovered drift; responsible owners and appropriate review; freshness/evidence links; and completion/exception handling for unavailable or incomplete documentation. Describe observed state rather than presenting an intended plan as deployed. Preserve customer-data/access boundaries and expose gaps with accountable follow-up. Include this behavior in the PoC. |
+| PLN-14 | Release validation preparation and outcome verification — DEL-14, DEL-06 | Design an explicit workflow activity before release/deployment to discover relevant existing tests/checks in their owning repositories/systems, their locations, run instructions, prerequisites/access, owners, and applicability to the change/environment. Distinguish absent coverage from unknown, inaccessible, or unsuitable coverage. Agree what evidence demonstrates the intended result and preservation of relevant service behavior using existing requirements; make gaps and the accountable validation/exception decision visible before execution. Define coordination with application/customer teams, risk-proportional validation selection, actual execution/result evidence, and handling of failed or inconclusive checks. Assess smoke, regression, integration, operational checks, or other approaches during implementation; no test type is selected by this proposal. Include environment-only changes and missing/unknown test coverage in the PoC. |
 
 ## Required PoC before workflow enforcement
 
@@ -60,6 +61,9 @@ fallback; conflicting or duplicate execution across operators/customer CI/CD;
 and service-health verification beyond a successful tool run. Validate that the
 affected infrastructure documentation reflects the observed environment and
 outcomes, including partial changes/recovery and visible documentation gaps.
+Within the representative paths, include release-validation preparation where
+existing test coverage must be discovered and where it is missing or unknown;
+show the selected validation approach, ownership, actual results, and limits.
 
 Define scope, safe environment/data/actions or simulations, accountable owner,
 baseline, acceptance criteria, evidence, and linked tasks during detailed
