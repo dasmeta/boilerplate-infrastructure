@@ -47,13 +47,29 @@ with released versions and opens a ticket when an upgrade applies. Missing
 module features found during delivery become sanitized issues on the module
 repository, then a release, then voluntary adoption.
 
+**Getting changes into customer repositories.** Most customer
+infrastructure repositories already started from this boilerplate. When
+boilerplate changes are merged, a released **sync prompt** lets any operator's
+AI assistant update a customer repository: it pulls only the
+boilerplate-owned files (skills, runbooks, schemas, CI, instructions), never
+overwrites customer-owned YAML or configuration, proposes any needed
+customer-file edits from release migration notes, and delivers everything as
+a reviewed PR. Older repositories without a recorded version are onboarded
+through bootstrap first.
+
+**Works with Codex, Claude Code, and Cursor.** `AGENTS.md` stays the single
+source of instructions; each tool's own entry file only points to it, and the
+same skills are exposed to all three.
+
 **Order of work.**
 
 1. **Measure today** — how long a small change, a big change, and an incident
    take now.
 2. **Batch 1: write the rules** — the flow above, approvals, what customer data
    AI may send to a model, the validation step, the documentation step, and
-   the module change contract. Rules and skills, not yet enforced.
+   the module change contract, plus the boilerplate sync prompt and the
+   Codex/Claude Code/Cursor setup that carry these rules into customer
+   repositories. Rules and skills, not yet enforced.
 3. **Trial (PoC)** — three cases: a small non-production change, a big
    production change, and an incident. Compare with today; the team decides
    to adopt, revise, or test further.
@@ -111,12 +127,16 @@ customer use.
 | CI | Template contract validation on GitHub, GitLab, Bitbucket; GitLab keeps a default-branch `apply` job | `.github/workflows/`, `.gitlab-ci.yml`, `bitbucket-pipelines.yml` |
 | Change planning | Interview-based plan with Standard/Elevated/Critical rigor tiers and Ready/Not Ready state | infra-governance `change-delivery-planner` |
 | Module upgrade guidance | Per-module guides exist for some modules (for example the EKS stability guide); no common contract | module repositories |
+| Template/fork file ownership | Upstream-owned versus fork-owned files and an adoption contract that forbids overwriting fork-owned context | `docs/runbooks/template-fork-contract.md` |
+| AI assistant entry points | `AGENTS.md` (read by Codex and Cursor); skills exposed through `.agents/skills` | `AGENTS.md`, `.agents/skills` |
 
 Not present today: a defined end-to-end delivery workflow, change records
 linked to Jira and CloudBrowser Announcements, a component register with
 pinned versus available module versions, release-validation preparation,
 documentation-maintenance triggers, agent identity and elevation model,
-durable resumable workflow state, baseline measurements, and a licence.
+durable resumable workflow state, baseline measurements, a licence,
+boilerplate releases with a recorded synced version per customer repository,
+a repeatable sync procedure, and Claude Code / Cursor entry points.
 
 ## P1 — Gap register
 
@@ -137,9 +157,11 @@ carries the detailed design. "Batch" is the proposed batch from P5.
 | G-10 MSP applicability and evidence not mapped | DEF-05 | PLN-10 | Tracked under DMVP-10788 for documentation | Parallel |
 | G-11 Infrastructure documentation not maintained by delivery | DEL-13 | PLN-13 | `knowledge_evidence` plane `planned` | B1 |
 | G-12 No release-validation preparation step | DEL-14 | PLN-14 | Not present | B1 |
-| G-13 No link between Jira delivery tickets and CloudBrowser Announcements | DEL-07, DEL-10 | PLN-02, PLN-06 | CB Announcements exist; approval controls unverified (DEV-411, DEV-2210, DEV-2211) | B1 (roles), B2 (integration) |
+| G-13 No link between Jira delivery tickets and CloudBrowser Announcements | DEL-07, DEL-10 | PLN-02, PLN-06 | CB Announcements exist; approval controls unverified (DEV-411, DEV-2210, DEV-2211) | B1 (roles; inventory current CB Announcement capabilities against DEV-411/2210/2211 and record gaps), B2 (integration) |
 | G-14 No process ownership, review cadence, or feedback route | DEL-08 | PLN-12 | None | B1 |
 | G-15 Repository has no licence; access decision open | — | Ticket output 6 | Public, forked, unlicensed | P7 |
+| G-16 No boilerplate releases, recorded synced version, or sync procedure; existing customer repositories cannot reliably adopt changes | DEL-02, DEL-08, DEL-09 | PLN-09 | Ownership split defined; no versions, migration notes, or sync prompt | B1 (prompt), B2 (lag reporting) |
+| G-17 Instructions and skills reach Codex only by convention; no Claude Code or Cursor entry points | DEL-03 | PLN-07 | `AGENTS.md` and `.agents/skills` only | B1 |
 
 ## P2 — Proposed workflow
 
@@ -237,6 +259,49 @@ customer data) → triage by module owner → change and release with contract �
 voluntary adoption in forks through the check job. Triage owner and expected
 turnaround are set in B2.
 
+### Boilerplate sync to customer repositories (G-16)
+
+Most customer infrastructure repositories already started from this
+boilerplate, so new workflow rules reach them only through a repeatable sync.
+
+- **Releases.** Tag boilerplate releases and keep a changelog. Each customer
+  repository records the boilerplate version it last synced from.
+- **Sync prompt.** A released, assistant-neutral prompt at a fixed path (for
+  example `docs/runbooks/boilerplate-sync.md`) that operators run against each
+  customer repository. It reads the recorded version and the changelog since
+  that version.
+- **What it may change.** Uses the ownership split in the template/fork
+  contract. Boilerplate-owned files (skills, schemas, scripts, tests,
+  runbooks, CI adapters, assistant instructions) are updated. Customer-owned
+  files (`WORKSPACE.md`, `config/*`, `metacloud.yaml`, `0-accounts/`,
+  `1-environments/`, `2-products/`) are never overwritten.
+- **Migration notes.** When a release needs customer-owned edits (for example
+  a new context field), it ships a migration note in the same format as the
+  module change contract. The prompt proposes those edits as a diff for human
+  approval.
+- **First sync.** A repository with no recorded version or an older layout is
+  onboarded through the bootstrap skill instead of a file sync.
+- **Output.** Always a PR in the customer repository with template tests and
+  `meta validate-yaml` passing. No generated output is edited and nothing is
+  applied; a person reviews and merges.
+- **Visibility.** In B2 the version-check job also reports boilerplate version
+  lag per customer repository, so adoption does not depend on memory.
+
+### Assistant support: Codex, Claude Code, Cursor (G-17)
+
+`AGENTS.md` remains the single source of repository instructions. Each
+supported tool gets only a thin entry point that refers to it:
+
+| Tool | Instructions | Skills |
+| --- | --- | --- |
+| Codex | `AGENTS.md` (native) | `.agents/skills` → `skills/` (exists) |
+| Claude Code | `CLAUDE.md` importing `@AGENTS.md` | `.claude/skills` → `skills/` |
+| Cursor | `AGENTS.md`; `.cursor/rules` entry referring to it if needed | Verify Cursor's skill discovery path before choosing |
+
+Skills keep the shared `SKILL.md` format. Repository text that names a single
+assistant is generalised to "the configured assistant". The PoC runs at least
+one path with an assistant other than Codex.
+
 ## P4 — PoC plan outline
 
 Lead: delivery foundation developer. Detailed scenarios, customers, and
@@ -259,9 +324,9 @@ questions retained in the planning-input register.
 | Batch | Outcome | Contents |
 | --- | --- | --- |
 | B0 | Baseline | Measure current practice for the three PoC paths (PLN-11) |
-| B1 | Workflow and contracts on paper, usable in the PoC | Workflow and record roles; approval record; AI data binding; credential model design; validation prep; documentation maintenance; module change contract; ownership |
-| PoC | Validate before enforcement | Three paths; adoption decision |
-| B2 | Enforcement and automation | Credential enforcement; resumable state; CB/Jira integration; component register and check job; module-gap route |
+| B1 | Workflow and contracts on paper, usable in the PoC | Workflow and record roles; approval record; AI data binding; credential model design; validation prep; documentation maintenance; module change contract; ownership; boilerplate releases and sync prompt; Codex/Claude Code/Cursor entry points |
+| PoC | Validate before enforcement | Three paths, at least one with a non-Codex assistant; adoption decision |
+| B2 | Enforcement and automation | Credential enforcement; resumable state; CB/Jira integration; component register and check job including boilerplate version lag; module-gap route |
 | B3+ | Later | Items deferred by P3 and PoC findings |
 
 Version labels (v2, v3, ...) are assigned only after checking actual release
