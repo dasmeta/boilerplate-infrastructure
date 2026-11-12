@@ -5,6 +5,68 @@ Tracking: [DMVP-10650](https://tutorbot.atlassian.net/browse/DMVP-10650)
 Definition: [Delivery platform vision](../requirements/delivery-platform-vision.md)
 Inputs: [Planning-input register](../requirements/delivery-platform-planning-inputs.md)
 
+## The plan in short
+
+**Goal.** One standard path from "someone asks for an infrastructure change"
+to "it is done, verified, and documented". AI does the routine work
+(gathering facts, preparing the change, checking, record keeping); people
+make the decisions. Small changes stay fast; risky ones get more care.
+
+**What exists today.** This repository can bootstrap a customer copy and make
+a YAML change through Terraform Cloud, Terramate, or Terragrunt. Everything
+around the change is missing: who approves, how the customer is told, how we
+prove it worked, how documentation is updated, how we learn that a module
+upgrade is due, and what happens when a change fails halfway.
+
+**How a change will flow** (example: an EKS module upgrade):
+
+1. **Ticket** — every change starts as a Jira ticket.
+2. **Look first** — AI gathers facts: what is deployed, versions, health.
+   The answer may be "no change needed" or "hand off to another team".
+3. **Rate the risk** — small, medium, or big; this sets how much process applies.
+4. **Plan** — YAML edits, steps, rollback. For module upgrades, the module
+   repository publishes a *change contract* saying exactly what to do
+   between versions.
+5. **Decide how to prove it worked** — find existing tests/checks; if none
+   exist, say so and decide how to validate.
+6. **Approve and announce** — for medium and big changes a person approves this
+   specific plan, and the customer is informed through a CloudBrowser
+   Maintenance announcement linked to the ticket.
+7. **Run** through the customer's selected tool.
+8. **Check the service really works**, not only that the apply succeeded;
+   roll back if it does not.
+9. **Update the customer's infrastructure documentation** and component
+   status, then close.
+
+Incidents take a shortcut: fix first, complete records afterwards. Production
+changes still need a human approval, with a backup approver.
+
+**Module side.** Module releases that need consumer action ship a change
+contract. Each customer copy compares the module versions pinned in its YAML
+with released versions and opens a ticket when an upgrade applies. Missing
+module features found during delivery become sanitized issues on the module
+repository, then a release, then voluntary adoption.
+
+**Order of work.**
+
+1. **Measure today** — how long a small change, a big change, and an incident
+   take now.
+2. **Batch 1: write the rules** — the flow above, approvals, what customer data
+   AI may send to a model, the validation step, the documentation step, and
+   the module change contract. Rules and skills, not yet enforced.
+3. **Trial (PoC)** — three cases: a small non-production change, a big
+   production change, and an incident. Compare with today; the team decides
+   to adopt, revise, or test further.
+4. **Batch 2: automate and enforce** — limited-rights AI access, the Jira and
+   CloudBrowser link, the version-check job, and safely resuming a
+   half-finished change.
+
+**Handled elsewhere.** MSP documentation and evidence continue in DMVP-10788.
+The repository licence and public/private decision needs a named business
+owner.
+
+The sections below hold the detail behind this summary.
+
 ## Purpose
 
 The Definition is agreed. This document is the working packet for the
