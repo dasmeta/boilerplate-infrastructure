@@ -23,10 +23,13 @@ upgrade is due, and what happens when a change fails halfway.
 1. **Ticket** — every change starts as a Jira ticket.
 2. **Look first** — AI gathers facts: what is deployed, versions, health.
    The answer may be "no change needed" or "hand off to another team".
-3. **Rate the risk** — small, medium, or big; this sets how much process applies.
-4. **Plan** — YAML edits, steps, rollback. For module upgrades, the module
-   repository publishes a *change contract* saying exactly what to do
-   between versions.
+3. **Rate the risk** — small, medium, or big overall, plus a rating per aspect
+   (availability, performance, security, cost, data) so the team knows which
+   impact to prepare for. The overall rating sets how much process applies.
+4. **Plan** — YAML edits, steps, rollback. New components use the newest
+   compatible module release, not a version copied from an older setup. For
+   module upgrades, the module repository publishes a *change contract*
+   saying exactly what to do between versions.
 5. **Decide how to prove it worked** — find existing tests/checks; if none
    exist, say so and decide how to validate.
 6. **Approve and announce** — for medium and big changes a person approves this
@@ -162,6 +165,8 @@ carries the detailed design. "Batch" is the proposed batch from P5.
 | G-15 Repository has no licence; access decision open | — | Ticket output 6 | Public, forked, unlicensed | P7 |
 | G-16 No boilerplate releases, recorded synced version, or sync procedure; existing customer repositories cannot reliably adopt changes | DEL-02, DEL-08, DEL-09 | PLN-09 | Ownership split defined; no versions, migration notes, or sync prompt | B1 (prompt), B2 (lag reporting) |
 | G-17 Instructions and skills reach Codex only by convention; no Claude Code or Cursor entry points | DEL-03 | PLN-07 | `AGENTS.md` and `.agents/skills` only | B1 |
+| G-18 New components can be added with outdated module versions, creating immediate upgrade work | DEL-01, DEL-09 | PLN-09 | Module policy prefers DasMeta modules but says nothing about which version | B1 |
+| G-19 Risk is rated by one overall level only; impact on availability, performance, security, cost, and data is not visible | DEL-06 | PLN-01, PLN-06 | `change-delivery-planner` tiers only | B1 |
 
 ## P2 — Proposed workflow
 
@@ -173,8 +178,8 @@ announcement linked to that ticket.
 flowchart TD
   A[Request: Jira ticket] --> B[Diagnose: gather evidence from bound systems]
   B -->|No change or handoff| Z1[Record finding and hand off to owner]
-  B --> C[Classify risk: Standard / Elevated / Critical]
-  C --> D[Plan change: YAML diff, module contract steps, rollback]
+  B --> C[Classify risk: overall tier plus per-aspect impact]
+  C --> D[Plan change: YAML diff, newest compatible module for new components, module contract steps, rollback]
   D --> E[Prepare validation: find existing checks, record gaps, agree evidence]
   E --> F{Approval for this plan, scope, environment, version}
   F -->|Elevated/Critical| G[Schedule: CB Maintenance announcement linked to ticket]
@@ -191,6 +196,27 @@ Incident variant: diagnosis and mitigation can start before the ticket is
 complete; human approval for production mutation still applies, through a
 named backup approver when the primary is unavailable (PLN-02 proposal).
 Records are completed afterwards.
+
+### Risk rating per aspect (G-19)
+
+The overall tier reuses the infra-governance `change-delivery-planner` tiers
+(Standard / Elevated / Critical). In addition, every plan rates each aspect
+so the team can prepare for, and inform about, the specific impact:
+
+| Aspect | What is assessed | Preparation when Medium or High |
+| --- | --- | --- |
+| Availability | Downtime, restarts, failover, blast radius | Maintenance window, announcement, rollback trigger |
+| Performance | Latency, throughput, capacity, scaling behaviour | Before/after metrics and the dashboards to watch |
+| Security | Access, exposure, IAM, secrets, network paths | Security review of the diff; access checked after the change |
+| Cost | Expected monthly cost change, new billable resources | Cost estimate in the plan; customer informed when material |
+| Data | Loss, integrity, migration, backup/restore needs | Backup or snapshot before change; restore path confirmed |
+
+Each aspect gets `None`, `Low`, `Medium`, or `High` with a one-line reason.
+The overall tier is at least as strict as the highest aspect rating. Medium
+and High aspects feed the validation step (what to check) and the customer
+announcement (expected impact). The aspect list is reviewed with delivery
+and support during B1; it can grow (for example compliance) without changing
+the format.
 
 ### Record roles
 
@@ -287,6 +313,23 @@ boilerplate, so new workflow rules reach them only through a repeatable sync.
 - **Visibility.** In B2 the version-check job also reports boilerplate version
   lag per customer repository, so adoption does not depend on memory.
 
+### Module version for new components (G-18)
+
+When a change adds something new (a component, environment, or service)
+rather than changing an existing setup, the assistant selects the newest
+released version of the module at planning time. It does not copy a version
+from another environment, an example, or an older customer setup.
+
+- **Compatibility first.** If the newest release needs Terraform, provider, or
+  related-module versions the customer repository does not meet (from the
+  module's change contract or release notes), use the newest compatible
+  release, or plan the prerequisite upgrade. Record the reason in the plan.
+- **Customer exceptions.** A customer standards binding may pin a version or
+  range; the assistant follows it and states that a newer release exists.
+- **Where it lives.** A `new_component_version` rule (default `latest-compatible`)
+  in the standards-binding module policy, enforced by the `infra-execution`
+  skill. The B2 version-check job then keeps existing components visible.
+
 ### Assistant support: Codex, Claude Code, Cursor (G-17)
 
 `AGENTS.md` remains the single source of repository instructions. Each
@@ -324,7 +367,7 @@ questions retained in the planning-input register.
 | Batch | Outcome | Contents |
 | --- | --- | --- |
 | B0 | Baseline | Measure current practice for the three PoC paths (PLN-11) |
-| B1 | Workflow and contracts on paper, usable in the PoC | Workflow and record roles; approval record; AI data binding; credential model design; validation prep; documentation maintenance; module change contract; ownership; boilerplate releases and sync prompt; Codex/Claude Code/Cursor entry points |
+| B1 | Workflow and contracts on paper, usable in the PoC | Workflow and record roles; approval record; AI data binding; credential model design; validation prep; documentation maintenance; module change contract; ownership; boilerplate releases and sync prompt; Codex/Claude Code/Cursor entry points; newest-compatible module rule for new components; per-aspect risk rating |
 | PoC | Validate before enforcement | Three paths, at least one with a non-Codex assistant; adoption decision |
 | B2 | Enforcement and automation | Credential enforcement; resumable state; CB/Jira integration; component register and check job including boilerplate version lag; module-gap route |
 | B3+ | Later | Items deferred by P3 and PoC findings |
