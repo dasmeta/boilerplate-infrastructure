@@ -80,6 +80,10 @@
       "additionalProperties": false,
       "required": ["plane", "status", "provider", "locator", "access_mode", "authority", "freshness", "owner"],
       "properties": {
+        "capabilities": {
+          "type": "array",
+          "items": { "$ref": "delivery-capability.schema.json" }
+        },
         "plane": {
           "type": "string",
           "enum": [

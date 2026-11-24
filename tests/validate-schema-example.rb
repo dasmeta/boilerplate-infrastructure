@@ -23,9 +23,15 @@ def type_matches?(value, type)
   end
 end
 
+sibling_schemas = {}
 validate = nil
 validate = lambda do |value, schema, path|
   if schema.key?("$ref")
+    if schema["$ref"].match?(/\A[a-z0-9-]+\.schema\.json\z/)
+      sibling = sibling_schemas[schema["$ref"]] ||= JSON.parse(File.read(File.join(File.dirname(schema_path), schema["$ref"])))
+      validate.call(value, sibling, path)
+      next
+    end
     target = schema["$ref"].delete_prefix("#/").split("/").reduce(root_schema) { |node, key| node.fetch(key) }
     validate.call(value, target, path)
     next
@@ -46,7 +52,13 @@ validate = lambda do |value, schema, path|
   end
 
   if value.is_a?(Hash)
-    Array(schema["required"]).each do |key|
+    required = Array(schema["required"])
+    if schema.key?("if")
+      conditions = schema.fetch("if").fetch("properties")
+      matches = conditions.all? { |key, rule| value[key] == rule.fetch("const") }
+      required += schema.fetch(matches ? "then" : "else").fetch("required")
+    end
+    required.each do |key|
       errors << "#{path}: missing required property #{key}" unless value.key?(key)
     end
 

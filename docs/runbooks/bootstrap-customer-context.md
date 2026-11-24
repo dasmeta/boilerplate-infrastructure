@@ -43,3 +43,26 @@ binding, driver, source, or file action changes.
 - Do not mark execution-ready while required access, approval, driver state, or
   evidence binding is missing.
 - Re-bootstrap or refresh bindings when systems, ownership, or standards change.
+
+## Routine-upgrade lookups
+
+Run `ruby scripts/bootstrap/delivery-bindings.rb --scope prod/example-service` from the customer checkout. The report uses exact scope names and obtains the customer identity from local context. It shows the request, service inventory, target environment, declared and observed version sources, release checks, announcement destination and infrastructure documentation. Each row identifies its plane and owner. Exit 0 means all locations are configured, 2 means at least one gap, and 1 means invalid input. The command reads local files. Connector authentication, permission to act, live versions and release outcomes require separate evidence.
+
+During refresh, add a `capabilities` array to the relevant proposal plane. To inspect the proposed locations before approval, add `--preview --proposal PATH`. After the confirmed populate step, copy the reviewed array to the same plane in customer context and retain the matching approved proposal. Active lookup checks that each entry matches. Legacy forks can run the report immediately and will see named gaps until they adopt the new fields.
+
+For example, a production release check in the assurance plane could be recorded as follows:
+
+```yaml
+capabilities:
+  - name: release_checks
+    scope: prod/example-service
+    owner: service-operations
+    status: bound
+    provider: git
+    locator: tests/smoke/README.md
+    operation: read
+    connector: git
+    release: 2.54.0
+```
+
+For unavailable checks use `status: gap` and a `reason` describing what the owner must supply. Explicit opt-outs use `disabled`; a binding needing refresh uses `stale`. Connector releases accept a version number, commit SHA or SHA-256 digest. The optional `mapping` object carries customer field names and lookup details. Keep credentials in the access system.

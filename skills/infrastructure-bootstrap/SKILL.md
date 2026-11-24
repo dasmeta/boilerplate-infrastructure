@@ -82,7 +82,12 @@ operator separately authorizes generation or execution.
 2. Run `meta validate-yaml --yaml-dir .`.
 3. Read every populated binding back and verify locator, authority, freshness,
    owner, access mode, status, and unresolved gaps.
-4. Record actual readiness. `partial` is correct when required context remains
+4. For routine upgrades, record scoped capabilities in the proposal and copy the
+   approved capability entries into their matching active planes during populate.
+   Use the [capability lookup](../../docs/runbooks/bootstrap-customer-context.md#routine-upgrade-lookups)
+   at proposal review and again against active context. Record disabled, stale
+   and unknown capabilities with their owner and reason.
+5. Record actual readiness. `partial` is correct when required context remains
    planned, stale, inaccessible, or a gap.
-5. Report evidence consulted, accepted conflicts, populated files, validation,
+6. Report evidence consulted, accepted conflicts, populated files, validation,
    approval token, readiness, and next action.

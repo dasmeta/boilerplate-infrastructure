@@ -65,6 +65,10 @@
       "required": ["status", "systems", "gaps"],
       "properties": {
         "status": { "$ref": "#/$defs/binding_status" },
+        "capabilities": {
+          "type": "array",
+          "items": { "$ref": "delivery-capability.schema.json" }
+        },
         "systems": {
           "type": "array",
           "items": { "$ref": "#/$defs/system_binding" }
