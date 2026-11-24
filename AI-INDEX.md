@@ -7,6 +7,7 @@
 | Repository role, authority, limits | `AGENTS.md` |
 | Delivery platform Definition: vision, scope, outcomes | `docs/requirements/delivery-platform-vision.md` |
 | Detailed review inputs for later planning/task stages | `docs/requirements/delivery-platform-planning-inputs.md` |
+| Proposed implementation plan for customer bootstrap bindings | `docs/plans/DEV-2356-customer-bootstrap-bindings.md` |
 | Template/fork ownership | `docs/runbooks/template-fork-contract.md` |
 | Development-orchestrator reuse boundary | `docs/runbooks/development-orchestrator-reuse.md` |
 | Bootstrap procedure | `docs/runbooks/bootstrap-customer-context.md` |
