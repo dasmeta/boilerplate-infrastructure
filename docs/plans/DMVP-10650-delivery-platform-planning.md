@@ -20,7 +20,9 @@ upgrade is due, and what happens when a change fails halfway.
 
 **How a change will flow** (example: an EKS module upgrade):
 
-1. **Ticket** — every change starts as a Jira ticket.
+1. **Ticket and change record** — every change starts as a Jira ticket.
+   Create an Announcement for an IaC change once the ticket is prioritized
+   and there is a usable expected window, even if the window is tentative.
 2. **Look first** — AI gathers facts: what is deployed, versions, health.
    The answer may be "no change needed" or "hand off to another team".
 3. **Rate the risk** — one risk model: Standard, Elevated, or Critical,
@@ -29,22 +31,22 @@ upgrade is due, and what happens when a change fails halfway.
    communication, validation, and evidence.
 4. **Plan** — YAML edits, steps, and recovery. New components use the newest
    compatible module release, not a version copied from an older setup. For
-   module upgrades, the module repository publishes a *change contract*
-   saying exactly what to do between versions.
+   module upgrades, use the module maintainers' tested guidance for the
+   applicable versions and assess it against the target environment.
 5. **Decide how to prove it worked** — find existing tests/checks. If a
    required test is missing or fails, the change needs an approved
    alternative check or explicit authorized risk acceptance; otherwise it is
    blocked.
-6. **Approve and announce** — for Elevated and Critical changes a person
-   approves this specific plan, and the customer is informed through a
-   CloudBrowser Maintenance announcement linked to the ticket.
+6. **Approve and communicate** — apply the approval and customer
+   communication rules for the risk level. Record applicable internal and
+   customer communications in the Announcement linked to the ticket.
 7. **Run** through the customer's selected tool.
 8. **Check the service really works**, not only that the apply succeeded. If
    it does not: roll back, roll forward, or repair, with escalation and
    reapproval when the plan changes. A change can end as failed; that state
    is recorded, not hidden.
-9. **Update the customer's infrastructure documentation** and component
-   status, then close.
+9. **Update the Announcement with the verified outcome**, update the
+   customer's infrastructure documentation and component status, then close.
 
 Every change leaves an **evidence package**: Jira is the index and links to
 the real evidence (approved plan, approver, PR, run and identity, test
@@ -137,7 +139,8 @@ business owner before any technical assessment is useful.
 
 Assessed against main at `353b3f3` (PR #9 merged), refreshed on 2026-11-19
 against the default branches of infra-governance (`861836e`) and the
-operations repository (`f25570d`). "Exists" means present in the repository
+operations repository (`f25570d`), and updated on 2026-11-25 for the two
+merged PoC inputs below (boilerplate `d3f25d6`, infra-governance `3b69fdc`). "Exists" means present in the repository
 today, not proven in customer use. Reuse these existing skills and workflows
 instead of building parallel versions.
 
@@ -152,6 +155,8 @@ instead of building parallel versions.
 | CI | Template contract validation on GitHub, GitLab, Bitbucket; GitLab keeps a default-branch `apply` job | `.github/workflows/`, `.gitlab-ci.yml`, `bitbucket-pipelines.yml` |
 | Change planning | Interview-based plan with Standard/Elevated/Critical rigor tiers and Ready/Not Ready state | infra-governance `change-delivery-planner` |
 | Module upgrade guidance | Per-module guides exist for some modules (for example the EKS stability guide); no common contract | module repositories |
+| Delivery bindings lookup | Bootstrap discovers scoped customer delivery bindings and validates them against a delivery capability schema (boilerplate PR #12) | `scripts/bootstrap/delivery-bindings.rb`, `schemas/delivery-capability.schema.json` |
+| Read-only diagnosis | Provider-neutral diagnostic skill (infra-governance PR #101, merged); not yet adopted by the DasMeta IaC consumer repository | infra-governance |
 | Change review | `change-reviewer` skill for reviewing pull requests and local changes | infra-governance |
 | Maintenance communication | Merged skill for drafting maintenance messages; existing onboarding, reconciliation, and publishing workflows | operations repository |
 | CloudBrowser AI context | Product context, MCP guidance, and client skills planned under DEV-2352 (not yet delivered) | DEV-2352 |
@@ -185,7 +190,7 @@ carries the detailed design. "Batch" is the proposed batch from P5.
 | G-10 MSP documentation package and full MSP readiness not mapped | DEF-05 | PLN-10 | Documentation package tracked under DMVP-10788; full readiness has no owner yet | Parallel |
 | G-11 Infrastructure documentation not maintained by delivery | DEL-13 | PLN-13 | `knowledge_evidence` plane `planned` | B1 |
 | G-12 No release-validation preparation step | DEL-14 | PLN-14 | Not present | B1 |
-| G-13 No link between Jira delivery tickets and CloudBrowser Announcements | DEL-07, DEL-10 | PLN-02, PLN-06 | CB Announcements exist; approval controls unverified (DEV-411, DEV-2210, DEV-2211) | B1 (roles; inventory current CB Announcement capabilities against DEV-411/2210/2211 and record gaps), B2 (integration) |
+| G-13 No consistent change history linked to Jira delivery tickets | DEL-07, DEL-10 | PLN-02, PLN-06, [DMVP-11096](https://tutorbot.atlassian.net/browse/DMVP-11096) | CB Announcements exist; approval controls unverified (DEV-411, DEV-2210, DEV-2211) | B1 (change-tracking basis and current capability review), B2 (integration) |
 | G-14 No process ownership, review cadence, or feedback route | DEL-08 | PLN-12 | None | B1 |
 | G-15 Repository has no licence; access decision open | — | Ticket output 6 | Public, forked, unlicensed | P7 |
 | G-16 No boilerplate releases, recorded synced version, or sync procedure; existing customer repositories cannot reliably adopt changes | DEL-02, DEL-08, DEL-09 | PLN-09 | Ownership split defined; no versions, migration notes, or sync prompt | B1 (prompt), B2 (lag reporting) |
@@ -198,13 +203,14 @@ carries the detailed design. "Batch" is the proposed batch from P5.
 
 ## P2 — Proposed workflow
 
-One flow; the risk level sets the required controls. Every request starts
-from a Jira ticket. Planned changes that affect customers also get a
-CloudBrowser Maintenance announcement linked to that ticket.
+Every request starts from a Jira ticket. Every IaC change in the delivery
+workflow gets an Announcement linked to that ticket. The risk level sets the
+required controls and customer communication.
 
 ```mermaid
 flowchart TD
   A[Request: Jira ticket] --> B[Diagnose: gather evidence from bound systems]
+  A -.-> T[Track each IaC change in one Announcement]
   B -->|No change or handoff| Z1[Record finding and hand off to owner]
   B --> C[Classify risk: Standard / Elevated / Critical from aspect ratings]
   C --> D[Plan change: YAML diff, newest compatible module for new components, module contract steps, recovery path]
@@ -213,8 +219,10 @@ flowchart TD
   E2 -->|No| X[Blocked]
   E2 -->|Yes| F
   E --> F{Approval for this plan, scope, environment, version}
-  F -->|Elevated/Critical| G[Schedule: CB Maintenance announcement linked to ticket]
-  F -->|Standard| H
+  F -->|Elevated/Critical| G[Schedule and communicate per the level rule]
+  F -->|Standard, customer-visible| G2[Customer communication per the level rule]
+  G2 --> H
+  F -->|Standard, not customer-visible| H
   G --> H[Execute through selected driver]
   H --> I[Verify actual outcome and service health]
   I -->|Fails or unknown| R[Recover: rollback, roll forward, or manual repair]
@@ -222,8 +230,39 @@ flowchart TD
   R --> I
   R -->|Cannot recover| FL[Failed: record state, escalate, follow-up ticket]
   I --> J[Update infrastructure documentation and component status]
-  J --> K[Close: evidence package complete, announcement completed, follow-ups]
+  J --> K[Close: evidence package complete, Announcement outcome recorded, follow-ups]
 ```
+
+### Change tracking and announcements (G-13)
+
+Use one published Announcement as the operational history for each change
+carried out through an IaC repository, including changes that need no customer
+notice. Create it when the work ticket is prioritized and the expected window
+is specific enough to plan around. An agreed window can follow a tentative
+one. Record publication is a technical state. Sending internal or customer
+messages follows the communication workflow.
+
+Each stage or skill contributes its update to the same record. Keep the
+planned and actual timing, postponements or cancellations, applicable
+customer agreements and execution approvals, internal and customer
+communications, and the verified outcome. Preserve failed, partial, and
+rolled-back attempts. Keep execution and communication status visible
+independently, and link the ticket, IaC PR or revision, run, and verification
+evidence for future diagnostics and audits.
+
+Module maintainers test reusable changes and publish guidance for the release
+or upgrade path, including change size, maintenance risk, impact, and
+recommended windows where available. A Solution can combine guidance across
+modules. The assigned IaC repository owner brings those changes into the
+target environment, assesses the guidance locally, and records the chosen
+window, approvals, execution evidence, and any deviations. Link the upstream
+guidance from the Announcement.
+
+Use the existing [Maintenance Checklist](https://tutorbot.atlassian.net/wiki/spaces/DO/pages/3987931138/Maintenance+Checklist)
+and [Maintenance Message Template](https://tutorbot.atlassian.net/wiki/spaces/DO/pages/3987800085/Maintenance+Message+Template)
+as references. DMVP-11096 tracks this basis and the related Confluence
+workflows. Detailed stage fields, triggers, approval and communication flows,
+and the structure of upstream guidance are follow-up work.
 
 ### Incident variant
 
@@ -253,9 +292,10 @@ to that level, not a second model.
 | Cost | Expected monthly cost change, new billable resources | Cost estimate in the plan; customer informed when material |
 | Data | Loss, integrity, migration, backup/restore needs | Backup or snapshot before change; restore path confirmed |
 
-**Level criteria.** Standard: no aspect above `Low` and non-production, or
-production with an easy, tested rollback. Elevated: any aspect `Medium`, or a
-production change. Critical: any aspect `High`, a hard or slow rollback, or
+**Level criteria.** Standard: no aspect above `Low`, and either the change is
+non-production, or it is production with an easy, tested rollback. Elevated:
+any aspect `Medium`, or a production change that does not meet every Standard
+condition. Critical: any aspect `High`, a hard or slow rollback, or
 broad or unclear blast radius. When in doubt, choose the stricter level.
 
 **What each level requires.**
@@ -263,8 +303,8 @@ broad or unclear blast radius. When in doubt, choose the stricter level.
 | Level | Approval | Customer communication | Validation | Evidence |
 | --- | --- | --- | --- | --- |
 | Standard | Reviewer approves the PR | None, unless customer-visible | Existing checks or a recorded alternative | Core evidence package |
-| Elevated | Named approver for this plan and version, separate from the executor | CB Maintenance announcement before and after | Agreed checks for every Medium aspect; rollback trigger defined | Core package plus aspect evidence |
-| Critical | Named approver plus requirement-owner or customer agreement as bound; separate executor | Announcement with window, impact, and customer acknowledgement where required | Pre-production run where possible; checks for every Medium/High aspect; stop conditions | Full package plus recovery rehearsal or justification |
+| Elevated | Named approver for this plan and version, separate from the executor | Customer notice before and after, recorded in the Announcement | Agreed checks for every Medium aspect; rollback trigger defined | Core package plus aspect evidence |
+| Critical | Named approver plus requirement-owner or customer agreement as bound; separate executor | Customer notice with window, impact, and acknowledgement where required | Pre-production run where possible; checks for every Medium/High aspect; stop conditions | Full package plus recovery rehearsal or justification |
 
 The aspect list and criteria are reviewed with delivery and support during B1;
 aspects can be added (for example compliance) without changing the format.
@@ -301,7 +341,7 @@ Jira is the index. It links to the real evidence; it does not replace it.
 | --- | --- |
 | Approved plan, risk level, aspect ratings | Plan document or ticket section |
 | Approver identity, decision, and time | Jira approval record |
-| Customer communication and acknowledgement where required | CB Maintenance announcement |
+| Operational change history, communications, and acknowledgement where required | Announcement linked to the delivery ticket |
 | PR and commit | Git |
 | Execution run and executing identity | IaC platform run |
 | Test and check results | CI, test system, or recorded manual check with output |
@@ -315,7 +355,7 @@ Jira is the index. It links to the real evidence; it does not replace it.
 | Record | Owns | Does not own |
 | --- | --- | --- |
 | Jira delivery ticket | Work ownership, plan, approval decision with identity and time, evidence index | Customer-facing schedule text |
-| CloudBrowser Maintenance announcement | Customer-facing schedule, window, impact, communications, link to ticket | Approval authority; a status of Scheduled or Completed is not approval or validation |
+| CloudBrowser Announcement | Operational change history, planned and actual timing, outcome, communications, and evidence links | Approval authority, IaC run evidence, or service-health verification |
 | Git PR in the customer fork | Declared intent diff and code review | Execution result |
 | IaC platform run | Plan, apply, state, run evidence | Service health |
 | Customer documentation location (bound in `knowledge_evidence`) | Current infrastructure documentation | Change history |
@@ -331,6 +371,7 @@ its only approver at Elevated or Critical level.
 | Customer impact, communication, consent | Account / Project Management |
 | PoC customer selection | Account / Project Management |
 | AWS opportunity and project linkage, expected value, adoption, case-study permission | Account / Project Management |
+| IaC adoption and change record | IaC repository owner, usually a delivery manager or an assigned developer or support owner |
 | Technical plan and execution | Delivery engineer (executor) |
 | Change approval | Named approver per risk level, separate from executor |
 | MSP validation | MSP-readiness owner |
@@ -338,7 +379,7 @@ its only approver at Elevated or Critical level.
 | Documentation review | Documentation reviewer named per customer |
 | AI and customer-data rules | AI/data owner |
 | Workflow, skills, boilerplate | Delivery foundation developer |
-| Module changes and contracts | Module development |
+| Module changes, tested release guidance, and contracts | Module maintainers |
 
 ## P3 — Planning-input dispositions
 
@@ -503,6 +544,14 @@ The PoC runs at least one path with an assistant other than Codex.
 Lead: delivery foundation developer. Detailed scenarios, customers, and
 evidence are recorded in Jira, not here.
 
+**Inputs and prerequisite.** Two reviewed inputs for the read-only workflow
+PoC are merged: the bootstrap delivery-bindings lookup (boilerplate PR #12) and
+the provider-neutral diagnostic skill (infra-governance PR #101). Consumer
+adoption and the end-to-end pilot are still pending. Before the pilot, the
+DasMeta IaC consumer repository must move from its older pinned governance
+revision to one that includes these skills and declare them; the owner of that
+step is to be named in Jira.
+
 **Production safety.** The PoC introduces no new AI production permissions
 before the credential, approval, audit, and access controls from B1/B2 are
 enforced. Early trials use simulation, non-production environments, or
@@ -511,7 +560,7 @@ human authority.
 
 | Path | Example shape | Must demonstrate |
 | --- | --- | --- |
-| Routine low-risk change | Non-production module patch upgrade | Ticket to close with minimal operator steps; validation prep including a missing test; evidence package; documentation update |
+| Routine low-risk change | Non-production module patch upgrade | Ticket to close with minimal operator steps; Announcement history even without a customer notice; validation prep including a missing test; evidence package; documentation update |
 | Higher-risk production change | Production module major upgrade using a change contract | Elevated/Critical requirements; approval bound to plan and version; CB Maintenance announcement linked to ticket; validation and recovery readiness; post-change verification |
 | Urgent incident | Production degradation needing an infrastructure fix | Fast investigation and containment; human authorization and minimum record before production change; backup approver path; fallback when AI or integrations are unavailable |
 
