@@ -235,10 +235,12 @@ flowchart TD
 
 ### Change tracking and announcements (G-13)
 
-Use one Announcement as the operational history for each change carried out
-through an IaC repository, including internal-only changes. Create it when
-the work ticket is prioritized and the expected window is specific enough to
-plan around. An agreed window can follow a tentative one.
+Use one published Announcement as the operational history for each change
+carried out through an IaC repository, including changes that need no customer
+notice. Create it when the work ticket is prioritized and the expected window
+is specific enough to plan around. An agreed window can follow a tentative
+one. Record publication is a technical state. Sending internal or customer
+messages follows the communication workflow.
 
 Each stage or skill contributes its update to the same record. Keep the
 planned and actual timing, postponements or cancellations, applicable
