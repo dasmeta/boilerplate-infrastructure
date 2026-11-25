@@ -45,7 +45,8 @@ rows = catalog.map do |name, plane|
   matches = Array(source["capabilities"]).select { |r| r["name"] == name && r["scope"] == scope }
   approved = Array(plan["capabilities"]).select { |r| r["name"] == name && r["scope"] == scope }
   fallback_owner = plan["owner"] || active.fetch("systems").first&.fetch("owner") || context.fetch("customer").fetch("accountable_owner")
-  result = {"name" => name, "scope" => scope, "plane" => plane, "owner" => fallback_owner}
+  owner = matches.one? ? matches.first.fetch("owner") : fallback_owner
+  result = {"name" => name, "scope" => scope, "plane" => plane, "owner" => owner}
   reason = if matches.empty?
     "No explicit binding for this capability and scope"
   elsif matches.size != 1

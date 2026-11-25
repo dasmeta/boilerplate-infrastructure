@@ -39,7 +39,7 @@ scope has sufficient readiness.
    delivery-orchestrator, data-platform, governance, module, and validation
    repositories relevant to the customer. Preserve authority and dependency
    boundaries.
-4. Draft `workspace/bootstrap/proposal.json` from
+4. For a refresh, use a separate draft path and pass that path to the validator until confirmation. For initial setup, draft `workspace/bootstrap/proposal.json` from
    `templates/bootstrap/proposal.example.json`. Populate all nine management
    planes and keep status `needs-input` while questions remain.
 5. Ask one focused question at a time for ambiguous customer identity, scope,
@@ -75,6 +75,10 @@ Then populate only the approved targets:
 Do not edit `_metacloud.tf`, `_terraform/`, or `_terragrunt/`. Generate those
 through the selected driver only after the context is execution-ready and the
 operator separately authorizes generation or execution.
+
+Commit the non-secret approved proposal at `workspace/bootstrap/proposal.json`
+together with the matching active context in the customer repository. A fresh
+checkout uses this tracked pair to establish which bindings were approved.
 
 ## Verification
 

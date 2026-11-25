@@ -35,6 +35,7 @@ jq '(.bindings[] | select(.plane=="operational_assurance").capabilities[0].provi
 mv "$tmp/change" "$proposal"
 test "$token" != "$("$validate" --proposal "$proposal" --print-token)"
 lookup_row gap --scope prod/example
+jq -e '.capabilities[] | select(.name=="release_checks") | .owner=="service-ops"' "$tmp/report" >/dev/null
 lookup_row proposed --scope prod/example --preview
 jq '.management_planes.operational_assurance.capabilities[0].provider="alternate"' "$context" > "$tmp/change"
 mv "$tmp/change" "$context"
@@ -64,6 +65,27 @@ jq --slurpfile proposals "$proposal" '
 ' "$tmp/base.json" > "$context"
 ruby "$lookup" --context "$context" --proposal "$proposal" --scope prod/example > "$tmp/report"
 jq -e '(.capabilities|length)==8 and all(.capabilities[]; .status=="configured")' "$tmp/report" >/dev/null
+# Publish the approved files with the normal lookup entrypoint, then use its
+# default paths in a new checkout with no access to the operator's draft.
+fork="$tmp/customer"
+mkdir -p "$fork/config" "$fork/workspace/bootstrap" "$fork/tests" "$fork/scripts"
+cp -R "$root/schemas" "$fork/"
+cp -R "$root/scripts/bootstrap" "$fork/scripts/"
+cp "$root/tests/validate-schema-example.rb" "$fork/tests/"
+cp "$root/.gitignore" "$fork/"
+cp "$proposal" "$fork/workspace/bootstrap/proposal.json"
+cp "$context" "$fork/config/customer-context.yaml"
+git init -q "$fork"
+git -C "$fork" add .
+git -C "$fork" -c user.name=Fixture -c user.email=fixture@example.invalid commit -qm bootstrap
+git clone --quiet --no-local "$fork" "$tmp/clone"
+ruby "$tmp/clone/scripts/bootstrap/delivery-bindings.rb" --scope prod/example > "$tmp/report"
+jq -e '(.capabilities|length)==8 and all(.capabilities[]; .status=="configured")' "$tmp/report" >/dev/null
+mv "$tmp/clone/workspace/bootstrap/proposal.json" "$tmp/withheld-proposal.json"
+rc=0
+ruby "$tmp/clone/scripts/bootstrap/delivery-bindings.rb" --scope prod/example > "$tmp/report" || rc=$?
+test "$rc" -eq 2
+jq -e 'all(.capabilities[]; .status=="gap" and .reason=="Active binding lacks a matching approved proposal")' "$tmp/report" >/dev/null
 jq '.status="ready" | .approval.confirmed=false' "$proposal" > "$tmp/change"
 mv "$tmp/change" "$proposal"
 lookup_row gap --scope prod/example
