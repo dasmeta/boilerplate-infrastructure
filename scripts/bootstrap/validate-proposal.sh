@@ -45,6 +45,11 @@ jq -e --argjson expected "$expected_planes" '
 ' "$PROPOSAL" >/dev/null || fail 'bindings must contain every management plane exactly once'
 
 jq -e '
+  [.bindings[] | .capabilities[]? | [.scope, .name]] as $keys
+  | ($keys | length) == ($keys | unique | length)
+' "$PROPOSAL" >/dev/null || fail 'duplicate capability and scope in proposal'
+
+jq -e '
   if (.status == "ready" or .status == "approved")
   then (.unresolved_questions | length) == 0
   else true

@@ -39,7 +39,7 @@ scope has sufficient readiness.
    delivery-orchestrator, data-platform, governance, module, and validation
    repositories relevant to the customer. Preserve authority and dependency
    boundaries.
-4. Draft `workspace/bootstrap/proposal.json` from
+4. For a refresh, use a separate draft path and pass that path to the validator until confirmation. For initial setup, draft `workspace/bootstrap/proposal.json` from
    `templates/bootstrap/proposal.example.json`. Populate all nine management
    planes and keep status `needs-input` while questions remain.
 5. Ask one focused question at a time for ambiguous customer identity, scope,
@@ -76,13 +76,22 @@ Do not edit `_metacloud.tf`, `_terraform/`, or `_terragrunt/`. Generate those
 through the selected driver only after the context is execution-ready and the
 operator separately authorizes generation or execution.
 
+Commit the non-secret approved proposal at `workspace/bootstrap/proposal.json`
+together with the matching active context in the customer repository. A fresh
+checkout uses this tracked pair to establish which bindings were approved.
+
 ## Verification
 
 1. Validate active context files against their schemas.
 2. Run `meta validate-yaml --yaml-dir .`.
 3. Read every populated binding back and verify locator, authority, freshness,
    owner, access mode, status, and unresolved gaps.
-4. Record actual readiness. `partial` is correct when required context remains
+4. For routine upgrades, record scoped capabilities in the proposal and copy the
+   approved capability entries into their matching active planes during populate.
+   Use the [capability lookup](../../docs/runbooks/bootstrap-customer-context.md#routine-upgrade-lookups)
+   at proposal review and again against active context. Record disabled, stale
+   and unknown capabilities with their owner and reason.
+5. Record actual readiness. `partial` is correct when required context remains
    planned, stale, inaccessible, or a gap.
-5. Report evidence consulted, accepted conflicts, populated files, validation,
+6. Report evidence consulted, accepted conflicts, populated files, validation,
    approval token, readiness, and next action.

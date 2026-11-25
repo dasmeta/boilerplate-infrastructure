@@ -21,6 +21,7 @@
 | Terragrunt lifecycle | `docs/runbooks/terragrunt.md` |
 | Bounded IaC execution | `skills/infra-execution/SKILL.md` |
 | Customer bootstrap/refresh | `skills/infrastructure-bootstrap/SKILL.md` |
+| Discover routine-upgrade bindings and gaps for a scope | `scripts/bootstrap/delivery-bindings.rb --scope SCOPE` |
 | Proposal validation | `scripts/bootstrap/validate-proposal.sh` |
 | Source-index validation | `scripts/bootstrap/validate-source-index.sh` |
 | Canonical IaC root | repository root |
