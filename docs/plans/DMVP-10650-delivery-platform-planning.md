@@ -137,7 +137,8 @@ business owner before any technical assessment is useful.
 
 Assessed against main at `353b3f3` (PR #9 merged), refreshed on 2026-11-19
 against the default branches of infra-governance (`861836e`) and the
-operations repository (`f25570d`). "Exists" means present in the repository
+operations repository (`f25570d`), and updated on 2026-11-25 for the two
+merged PoC inputs below (boilerplate `d3f25d6`, infra-governance `3b69fdc`). "Exists" means present in the repository
 today, not proven in customer use. Reuse these existing skills and workflows
 instead of building parallel versions.
 
@@ -152,6 +153,8 @@ instead of building parallel versions.
 | CI | Template contract validation on GitHub, GitLab, Bitbucket; GitLab keeps a default-branch `apply` job | `.github/workflows/`, `.gitlab-ci.yml`, `bitbucket-pipelines.yml` |
 | Change planning | Interview-based plan with Standard/Elevated/Critical rigor tiers and Ready/Not Ready state | infra-governance `change-delivery-planner` |
 | Module upgrade guidance | Per-module guides exist for some modules (for example the EKS stability guide); no common contract | module repositories |
+| Delivery bindings lookup | Bootstrap discovers scoped customer delivery bindings and validates them against a delivery capability schema (boilerplate PR #12) | `scripts/bootstrap/delivery-bindings.rb`, `schemas/delivery-capability.schema.json` |
+| Read-only diagnosis | Provider-neutral diagnostic skill (infra-governance PR #101, merged); not yet adopted by the DasMeta IaC consumer repository | infra-governance |
 | Change review | `change-reviewer` skill for reviewing pull requests and local changes | infra-governance |
 | Maintenance communication | Merged skill for drafting maintenance messages; existing onboarding, reconciliation, and publishing workflows | operations repository |
 | CloudBrowser AI context | Product context, MCP guidance, and client skills planned under DEV-2352 (not yet delivered) | DEV-2352 |
@@ -214,7 +217,9 @@ flowchart TD
   E2 -->|Yes| F
   E --> F{Approval for this plan, scope, environment, version}
   F -->|Elevated/Critical| G[Schedule: CB Maintenance announcement linked to ticket]
-  F -->|Standard| H
+  F -->|Standard, customer-visible| G2[Customer communication per the level rule]
+  G2 --> H
+  F -->|Standard, not customer-visible| H
   G --> H[Execute through selected driver]
   H --> I[Verify actual outcome and service health]
   I -->|Fails or unknown| R[Recover: rollback, roll forward, or manual repair]
@@ -253,9 +258,10 @@ to that level, not a second model.
 | Cost | Expected monthly cost change, new billable resources | Cost estimate in the plan; customer informed when material |
 | Data | Loss, integrity, migration, backup/restore needs | Backup or snapshot before change; restore path confirmed |
 
-**Level criteria.** Standard: no aspect above `Low` and non-production, or
-production with an easy, tested rollback. Elevated: any aspect `Medium`, or a
-production change. Critical: any aspect `High`, a hard or slow rollback, or
+**Level criteria.** Standard: no aspect above `Low`, and either the change is
+non-production, or it is production with an easy, tested rollback. Elevated:
+any aspect `Medium`, or a production change that does not meet every Standard
+condition. Critical: any aspect `High`, a hard or slow rollback, or
 broad or unclear blast radius. When in doubt, choose the stricter level.
 
 **What each level requires.**
@@ -502,6 +508,14 @@ The PoC runs at least one path with an assistant other than Codex.
 
 Lead: delivery foundation developer. Detailed scenarios, customers, and
 evidence are recorded in Jira, not here.
+
+**Inputs and prerequisite.** Two reviewed inputs for the read-only workflow
+PoC are merged: the bootstrap delivery-bindings lookup (boilerplate PR #12) and
+the provider-neutral diagnostic skill (infra-governance PR #101). Consumer
+adoption and the end-to-end pilot are still pending. Before the pilot, the
+DasMeta IaC consumer repository must move from its older pinned governance
+revision to one that includes these skills and declare them; the owner of that
+step is to be named in Jira.
 
 **Production safety.** The PoC introduces no new AI production permissions
 before the credential, approval, audit, and access controls from B1/B2 are
