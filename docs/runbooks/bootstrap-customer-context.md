@@ -66,3 +66,36 @@ capabilities:
 ```
 
 For unavailable checks use `status: gap` and a `reason` describing what the owner must supply. Explicit opt-outs use `disabled`; a binding needing refresh uses `stale`. Connector releases accept a version number, commit SHA or SHA-256 digest. The optional `mapping` object carries customer field names and lookup details. Keep credentials in the access system.
+
+## Delivery change tracking
+
+[DMVP-11096](https://tutorbot.atlassian.net/browse/DMVP-11096) defines one
+internal Announcement per prioritized IaC work item once it has a usable
+expected window. A tentative window qualifies. Keep later time changes,
+execution and verification outcomes, recovery, and communications as events
+on that record. Each stage contributes the facts and evidence it owns.
+
+Use the approved `delivery-change-announcement` skill from the customer
+repository's pinned Infra Governance release. Keep the shared skill in its
+governance distribution. The fork supplies the customer scope and system
+bindings.
+
+1. Run `ruby scripts/bootstrap/delivery-bindings.rb --scope SCOPE` from the
+   customer checkout. A report with gaps in other capabilities is still
+   usable for this task if the exact `announcement_destination` is configured
+   in active mode with update authority. A missing, pending, or read-only
+   destination is a gap for the binding owner.
+2. Use the configured connector and exact work-item link to locate internal
+   drafts. Verify that the connector and operator are permitted to create or
+   update a private draft as needed and read it back. Use the skill to
+   prepare and verify a single write. Keep publication and channel delivery
+   in their separate authorized workflows.
+3. Verify the same record ID and full history after each write, including the
+   work link, expected and revised timing, and outcome evidence. If this
+   cannot be verified, retain the outcome as unverified on the work item and
+   route any confirmed product limitation to its owner.
+
+Module maintainers supply tested version-specific guidance. The IaC owner
+applies it to the target environment and owns the actual adoption decisions
+and delivery record. Existing Operations templates guide communication;
+stage-specific implementation follows separately.
