@@ -135,9 +135,11 @@ business owner before any technical assessment is useful.
 
 ## P1 — Current-state assessment
 
-Assessed against main at `353b3f3` (PR #9 merged) and the infra-governance skills it
-references. "Exists" means present in the repository today, not proven in
-customer use.
+Assessed against main at `353b3f3` (PR #9 merged), refreshed on 2026-11-19
+against the default branches of infra-governance (`861836e`) and the
+operations repository (`f25570d`). "Exists" means present in the repository
+today, not proven in customer use. Reuse these existing skills and workflows
+instead of building parallel versions.
 
 | Area | Exists today | Evidence |
 | --- | --- | --- |
@@ -150,6 +152,9 @@ customer use.
 | CI | Template contract validation on GitHub, GitLab, Bitbucket; GitLab keeps a default-branch `apply` job | `.github/workflows/`, `.gitlab-ci.yml`, `bitbucket-pipelines.yml` |
 | Change planning | Interview-based plan with Standard/Elevated/Critical rigor tiers and Ready/Not Ready state | infra-governance `change-delivery-planner` |
 | Module upgrade guidance | Per-module guides exist for some modules (for example the EKS stability guide); no common contract | module repositories |
+| Change review | `change-reviewer` skill for reviewing pull requests and local changes | infra-governance |
+| Maintenance communication | Merged skill for drafting maintenance messages; existing onboarding, reconciliation, and publishing workflows | operations repository |
+| CloudBrowser AI context | Product context, MCP guidance, and client skills planned under DEV-2352 (not yet delivered) | DEV-2352 |
 | Template/fork file ownership | Upstream-owned versus fork-owned files and an adoption contract that forbids overwriting fork-owned context | `docs/runbooks/template-fork-contract.md` |
 | AI assistant entry points | `AGENTS.md` (read by Codex and Cursor); skills exposed through `.agents/skills` | `AGENTS.md`, `.agents/skills` |
 
@@ -189,6 +194,7 @@ carries the detailed design. "Batch" is the proposed batch from P5.
 | G-19 No single risk model with per-level requirements; aspect impact (availability, performance, security, cost, data) not visible | DEL-06 | PLN-01, PLN-06 | `change-delivery-planner` tiers only | B1 |
 | G-20 No defined evidence package per change | DEL-10 | PLN-06 | Completion report only | B1 |
 | G-21 No responsibility model or separation of duties across delivery, account management, support, and MSP | DEL-07, DEL-08 | PLN-02, PLN-12 | Not defined | B1 |
+| G-22 Shared skills are not portable: `change-delivery-planner` contains machine-specific absolute paths, and the upstream execution skill references an older template layout; this repository's execution skill is intentionally adapted | DEL-03, DEL-08 | PLN-07 | Reuse needs reviewed compatibility, not wholesale replacement | B1 |
 
 ## P2 — Proposed workflow
 
@@ -476,6 +482,21 @@ Each tool is a separately validated workstream before customer use:
 - **Security** — credentials the tool can reach and what it may execute.
 
 The PoC runs at least one path with an assistant other than Codex.
+
+### Boundary with related tickets
+
+- **DEV-2352** owns CloudBrowser product context, MCP guidance, and client
+  skills. Product semantics stay there; this plan binds them into delivery and
+  does not copy them.
+- **DEV-2356** plans the shared infrastructure-management foundation, the
+  broader Support, SRE, and Delivery integration, and customer skill
+  distribution without private source access or committed skill copies in
+  delivery repositories. It consumes this workflow and its PoC and agrees
+  interfaces with it. It does not take over the workflow implementation, and
+  there is no blocking dependency between the two.
+- Distribution of skills to customer repositories (part of G-17) therefore
+  follows the DEV-2356 route; this plan owns only the repository entry points
+  and the per-assistant validation above.
 
 ## P4 — PoC plan
 
