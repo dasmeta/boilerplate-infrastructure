@@ -45,20 +45,40 @@ are recorded. Availability is not approval.
 
 ## Workflow
 
+Run [delivery-stage tracking](../../docs/runbooks/bootstrap-customer-context.md#delivery-change-tracking)
+as part of this workflow. Once the Jira work item qualifies, save and sync
+the opening event. After each material stage outcome, call the same step
+again with that outcome. A pending Announcement update does not hold up the
+next stage.
+
 1. Restate outcome, environment, affected assets/stacks, risk, and requested
-   execution level.
+   execution level. Save the opening event once the priority and expected
+   window are established.
 2. Load bindings and compare asset-management, provider, IaC-platform, Git, and
-   standards evidence. Report conflicts rather than choosing silently.
+   standards evidence. Record the assessment, risk, conflicts, and any
+   no-change or handoff decision.
 3. Resolve only high-impact missing context: exposure/access, data sensitivity,
    recovery, scale/cost, monitoring, ownership, and approval.
-4. Select a compliant module and target YAML; record low-risk assumptions.
+4. Select a compliant module and target YAML. Record the plan, scope,
+   low-risk assumptions, and relevant version-specific guidance.
 5. Edit source YAML and directly related documentation. Keep cross-workspace
    links explicit.
 6. Run `meta validate-yaml` before generation.
 7. Regenerate and validate through the selected driver. Review generated output
-   but never edit it.
-8. Plan/apply only within confirmed authority, then collect remote execution
-   evidence separately.
+   but never edit it. Record the reviewed revision, verification plan, and
+   the disposition of any required check that cannot be run.
+8. Apply the delivery risk policy. Record each required approval, schedule
+   decision, agreement, and communication when its evidence is available.
+9. Plan or apply only within confirmed authority. Save the actual attempt
+   start as soon as the IaC platform provides it. Capture the outcome and
+   remote run evidence separately, including interrupted or partial attempts.
+   On resume, read the bound IaC platform for the actual attempt state before
+   recording missing evidence or proceeding with any authorized new action.
+10. Verify service health. Save the actual verification outcome, recovery
+    actions, and escalation or reapproval where applicable.
+11. Save the final disposition and reconcile the Announcement on completed,
+    canceled, handed-off, and failed paths when tracking has started. A
+    postponement records the reason and any new expected window.
 
 ## Driver routing
 
@@ -74,5 +94,6 @@ are recorded. Availability is not approval.
 
 Report changed intent, module decision/provenance, context sources/freshness,
 assumptions, approvals, local validation, generation, remote run evidence, and
-remaining risks. If stopped, identify the exact missing binding, approval,
-evidence, or module gap and next action.
+remaining risks. Include the Announcement ID and sync outcome, with a Jira
+gap if records still need to be synchronized. If stopped, identify the exact
+missing binding, approval, evidence, or module gap and next action.

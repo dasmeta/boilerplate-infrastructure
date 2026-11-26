@@ -76,26 +76,50 @@ execution and verification outcomes, recovery, and communications as events
 on that record. Each stage contributes the facts and evidence it owns.
 
 Use the approved `delivery-change-announcement` skill from the customer
-repository's pinned Infra Governance release. Keep the shared skill in its
-governance distribution. The fork supplies the customer scope and system
-bindings.
+repository's standards binding. Resolve its pinned Infra Governance release
+and verify the installed package includes `scripts/journal.py`. If the pin or
+package is unavailable, report a tracking gap and preserve stage evidence.
+The delivery workflow calls the skill itself as stages run.
 
 1. Run `ruby scripts/bootstrap/delivery-bindings.rb --scope SCOPE` from the
    customer checkout. A report with gaps in other capabilities is still
    usable for this task if the exact `announcement_destination` is configured
    in active mode with update authority. A missing, pending, or read-only
-   destination is a gap for the binding owner.
-2. Use the configured connector and exact work-item link to locate the
-   published Announcement. Verify the connector and operator can create or
-   update a published record for the approved audience and read it back. Use
-   the skill to prepare and verify a single write. Sending messages to
-   customers or internal channels follows the communication workflow.
-3. Verify the same published record ID and full history after each write,
-   including the work link, expected and revised timing, and outcome evidence. If this
-   cannot be verified, retain the outcome as unverified on the work item and
-   route any confirmed product limitation to its owner.
+   destination leaves Announcement sync pending. Record the gap and continue
+   within the delivery stage's existing controls.
+2. On each material outcome in the table below, save an event to the shared
+   skill's journal before making any Announcement call. Use an original
+   timestamp with offset and a stable identity from the stage evidence.
+   Resolve the same protected journal from the scoped work identity and the
+   evidence location via the shared skill. Carry the verified Announcement
+   ID forward. Reuse existing run or Jira evidence when resuming on a
+   different checkout.
+3. Read and verify the scoped published record through the configured
+   connector. Sync pending events through the shared skill and verify readback.
+   A failed publication or readback leaves the event pending. Retry pending
+   events from stored evidence at the next stage or on resume.
+4. At closeout, reconcile with a fresh lookup even if the last sync succeeded.
+   If any write remains pending or readback is unavailable, leave an explicit
+   **Announcement sync pending** note on the Jira work item with the event
+   IDs, reason, and run evidence. A sync retry does not repeat infrastructure
+   execution, approvals, or communications.
+
+| Stage | Save this outcome |
+| --- | --- |
+| Prioritize | Short change description, affected scope, and credible first window. Save once the work item is prioritized and timing is usable. |
+| Assess and plan | Risk, impact and expected downtime, plan or PR revision, and applicable Solution or module guidance. If assessment concludes no change is needed or hands off work, close any record already opened with the reason. |
+| Prepare validation | Agreed checks and evidence. Capture any approved alternative, risk acceptance, or blocker. |
+| Approve and schedule | Approval for the exact plan and revision, agreed or revised window, and customer agreement when required. Preserve each window. |
+| Communicate | Internal notice, customer notice, acknowledgement, or applicable no-notice outcome as distinct events. Keep delivery and communication status independent. |
+| Execute | Actual start and result of each IaC attempt, with the run and revision. Capture partial or unknown results. |
+| Verify and recover | Actual health checks and outcome, recovery action and verification, escalation, and any reapproval. |
+| Close | Final impact, disposition, follow-ups, and post-change communications. Save cancellations and postponements at the stage where they occur. |
 
 Module maintainers supply tested version-specific guidance. The IaC owner
 applies it to the target environment and owns the actual adoption decisions
-and delivery record. Existing Operations templates guide communication;
-stage-specific implementation follows separately.
+and delivery record. Apply the risk-level requirements for execution checks,
+approval, and communication. Use the approved Operations templates for
+communication and record the actual communications separately. The
+[Maintenance Checklist](https://tutorbot.atlassian.net/wiki/spaces/DO/pages/3987931138/Maintenance+Checklist)
+and [Maintenance Message Template](https://tutorbot.atlassian.net/wiki/spaces/DO/pages/3987800085/Maintenance+Message+Template)
+are the existing references.
