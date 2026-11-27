@@ -21,6 +21,8 @@
 | Terramate lifecycle | `docs/runbooks/terramate.md` |
 | Terragrunt lifecycle | `docs/runbooks/terragrunt.md` |
 | Bounded IaC execution | `skills/infra-execution/SKILL.md` |
+| End-to-end delivery from ticket to verified, documented closure | `skills/delivery-workflow/SKILL.md` |
+| Claude Code entry point (imports `AGENTS.md`) | `CLAUDE.md`, `.claude/skills` |
 | Customer bootstrap/refresh | `skills/infrastructure-bootstrap/SKILL.md` |
 | Discover routine-upgrade bindings and gaps for a scope | `scripts/bootstrap/delivery-bindings.rb --scope SCOPE` |
 | Record a published IaC delivery Announcement | [Delivery change tracking](docs/runbooks/bootstrap-customer-context.md#delivery-change-tracking) |

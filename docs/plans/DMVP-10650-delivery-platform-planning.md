@@ -113,7 +113,7 @@ The sections below hold the detail behind this summary.
 The Definition is agreed. This document is the working packet for the
 planning stage: current-state assessment, gap register, proposed workflow,
 dispositions of PLN-01 to PLN-14, the required PoC plan, and the proposed
-implementation batches. Each section is a proposal until the requirement owner
+implementation batches. Each section is a proposal until the delivery team
 and reviewers record agreement in the PR or ticket.
 
 Customer names, customer-specific scenarios, and PoC evidence stay in Jira and
@@ -127,7 +127,7 @@ other authorized systems. This repository is public.
 | P2 | Proposed workflow, variants, and record roles (1) | Delivery foundation developer, Delivery Team Lead | P1 |
 | P3 | PLN-01 to PLN-14 dispositions with owners and linked tickets | Item owners below | P1, P2 |
 | P4 | PoC plan for three paths, baseline, acceptance thresholds (7) | Delivery foundation developer (PoC lead) | P2 |
-| P5 | Implementation order, first batch, later batches, tickets (3, 4) | Delivery foundation developer, requirement owner | P3, P4 |
+| P5 | Implementation order, first batch, later batches, tickets (3, 4) | Delivery foundation developer, delivery team | P3, P4 |
 | P6 | Stakeholder review packet and coverage assessment (5) | Feedback coordination owner (to name) | P2–P5 |
 | P7 | Repository access/distribution decision (6) | Business owner (to name), legal input | Independent |
 
@@ -389,7 +389,7 @@ disposition.
 | Input | Proposed disposition | Owner | Notes |
 | --- | --- | --- | --- |
 | PLN-01 Workflow and routing | Incorporate in B1 | Delivery foundation developer | P2 above is the draft |
-| PLN-02 Authority and approval | Incorporate in B1 | Requirement owner, Delivery Team Lead | Per-level approval, backup approver, separation of duties, CB record roles |
+| PLN-02 Authority and approval | Incorporate in B1 | Delivery Team Lead | Per-level approval, backup approver, separation of duties, CB record roles |
 | PLN-03 Enforceable boundaries | Incorporate: design B1, enforce B2 | Delivery foundation developer | Agent credential model first, per developer review |
 | PLN-04 Customer data and AI safety | Incorporate in B1 | AI/data owner, security owner | New `ai_processing` binding in customer context |
 | PLN-05 Continuity and recovery | Incorporate: outcome states B1, resumable state B2 | Support Team Lead | Recovery outcomes above |
@@ -399,7 +399,7 @@ disposition.
 | PLN-09 Module and version compatibility | Incorporate: contract B1, check job B2 | Module development | See below |
 | PLN-10 MSP applicability and evidence | Route: documentation package to DMVP-10788; full MSP readiness to its own workstream | Account Manager (MSP), MSP-readiness owner | Not implemented by this repository |
 | PLN-11 Measurement | Incorporate in B0 | Baseline owner | Baseline before B1 |
-| PLN-12 Ongoing ownership | Incorporate in B1 | Requirement owner | Responsibilities table above |
+| PLN-12 Ongoing ownership | Incorporate in B1 | Delivery foundation developer | Responsibilities table above |
 | PLN-13 Documentation maintenance | Incorporate in B1 | Delivery foundation developer | |
 | PLN-14 Release validation | Incorporate in B1 | Delivery foundation developer, Delivery Team Lead | Validation rule above |
 
@@ -594,17 +594,19 @@ the delivery questions retained in the planning-input register.
 Version labels (v2, v3, ...) are assigned only after checking actual release
 history, per the planning-input register.
 
-## Owners to name and records to update
+## Owners and approvers
 
-Named in the planning review and recorded in DMVP-10650:
+Roles are held by as few people as possible; none needs a separate person.
 
-- Feedback coordination owner (P6)
-- Business owner for the licence and access decision (P7)
-- Baseline owner and where baseline data is recorded (B0)
-- PoC final decision-maker
-- MSP-readiness owner (full readiness, separate from DMVP-10788)
-- AI/data owner (PLN-04)
-- Customer-communications owner
+| Role | Held by |
+| --- | --- |
+| Implementation approvers (the people who use the delivery flow) | Delivery team: Delivery Team Lead and the delivery engineers |
+| MSP and AWS integration owner; MSP-readiness (full readiness, separate from DMVP-10788); customer-communications owner | Account Manager (MSP) |
+| Feedback coordination (P6), baseline owner and location (B0), AI/data owner (PLN-04), PoC lead | Delivery foundation developer |
+| PoC final decision-maker | Delivery team, after reviewing the trial results (to confirm) |
+| Business owner for the licence and access decision (P7) | Open; needed before customer distribution |
+
+Record the named people in DMVP-10650.
 
 Records:
 
@@ -612,3 +614,26 @@ Records:
 - After the plan is agreed, implementation tickets for B0, B1, the PoC, and
   the sync and multi-assistant workstreams are created and linked to
   DMVP-10650.
+
+## Implementation status
+
+Updated as batches land. "Done" means present in this repository, not proven
+in customer use.
+
+| B1 item | Status | Where |
+| --- | --- | --- |
+| Workflow, record roles, risk model, validation and recovery rules, incident variant, evidence package | Done | `skills/delivery-workflow/SKILL.md` |
+| Announcement change record (G-13) | Done (basis); stage updates in progress | Runbook "Delivery change tracking" (DMVP-11096); stage updates DMVP-11109 |
+| Delivery bindings lookup | Done | `scripts/bootstrap/delivery-bindings.rb` |
+| Responsibilities | Done | "Owners and approvers" above |
+| Claude Code entry point | Done | `CLAUDE.md`, `.claude/skills` |
+| Cursor entry point and per-assistant validation (G-17) | Open | — |
+| Newest-compatible module rule (G-18) | Done in workflow skill; not yet in `standards-binding` | `skills/delivery-workflow/SKILL.md` |
+| Approval record format (G-02) | Open | — |
+| AI customer-data binding (G-04) | Open; workflow uses a minimum-data rule until bound | — |
+| Credential model design (G-03) | Open | — |
+| Documentation-maintenance triggers (G-11) | Partial: workflow step only | `skills/delivery-workflow/SKILL.md` |
+| Module upgrade guidance (G-09) | Owned by module maintainers | Module repositories |
+| Boilerplate releases and sync prompt (G-16) | Open | — |
+| Shared skill portability (G-22) | Open | Infra Governance |
+| Baseline (B0) | Open | — |

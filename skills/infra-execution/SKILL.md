@@ -12,6 +12,10 @@ in this customer fork. This skill operates existing customer context; it does
 not bootstrap a customer, author shared Terraform modules, redefine governance,
 or edit generated Terraform.
 
+For a change that starts from a Jira ticket, follow
+`skills/delivery-workflow/SKILL.md`, which sequences risk rating, approval,
+validation, verification, and documentation around the steps below.
+
 ## Required context
 
 Read `AGENTS.md`, `AI-INDEX.md`, fork-local `WORKSPACE.md`, active customer and
