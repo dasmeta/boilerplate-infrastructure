@@ -85,6 +85,8 @@ for path in \
   config/infrastructure-source-index.json \
   config/standards-binding.yaml \
   schemas/bootstrap-proposal.schema.json \
+  skills/delivery-workflow/SKILL.md \
+  CLAUDE.md \
   skills/infra-execution/SKILL.md \
   skills/infra-execution/PROVENANCE.md \
   skills/infrastructure-bootstrap/SKILL.md \
@@ -118,6 +120,9 @@ ruby "$ROOT/tests/validate-schema-example.rb" \
   "$ROOT/config/infrastructure-source-index.json"
 
 grep -Fq '0-accounts/' "$ROOT/AGENTS.md"
+grep -Fqx '@AGENTS.md' "$ROOT/CLAUDE.md"
+test "$(readlink "$ROOT/.claude/skills")" = '../skills' || fail '.claude/skills must link to ../skills'
+grep -Fq 'name: delivery-workflow' "$ROOT/skills/delivery-workflow/SKILL.md"
 grep -Fq 'metacloud.yaml' "$ROOT/README.md"
 grep -Fq 'populate' "$ROOT/skills/infrastructure-bootstrap/SKILL.md"
 grep -Fq 'must not move' "$ROOT/skills/infrastructure-bootstrap/SKILL.md"
