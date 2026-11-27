@@ -614,3 +614,26 @@ Records:
 - After the plan is agreed, implementation tickets for B0, B1, the PoC, and
   the sync and multi-assistant workstreams are created and linked to
   DMVP-10650.
+
+## Implementation status
+
+Updated as batches land. "Done" means present in this repository, not proven
+in customer use.
+
+| B1 item | Status | Where |
+| --- | --- | --- |
+| Workflow, record roles, risk model, validation and recovery rules, incident variant, evidence package | Done | `skills/delivery-workflow/SKILL.md` |
+| Announcement change record (G-13) | Done (basis); stage updates in progress | Runbook "Delivery change tracking" (DMVP-11096); stage updates DMVP-11109 |
+| Delivery bindings lookup | Done | `scripts/bootstrap/delivery-bindings.rb` |
+| Responsibilities | Done | "Owners and approvers" above |
+| Claude Code entry point | Done | `CLAUDE.md`, `.claude/skills` |
+| Cursor entry point and per-assistant validation (G-17) | Open | — |
+| Newest-compatible module rule (G-18) | Done in workflow skill; not yet in `standards-binding` | `skills/delivery-workflow/SKILL.md` |
+| Approval record format (G-02) | Open | — |
+| AI customer-data binding (G-04) | Open; workflow uses a minimum-data rule until bound | — |
+| Credential model design (G-03) | Open | — |
+| Documentation-maintenance triggers (G-11) | Partial: workflow step only | `skills/delivery-workflow/SKILL.md` |
+| Module upgrade guidance (G-09) | Owned by module maintainers | Module repositories |
+| Boilerplate releases and sync prompt (G-16) | Open | — |
+| Shared skill portability (G-22) | Open | Infra Governance |
+| Baseline (B0) | Open | — |
